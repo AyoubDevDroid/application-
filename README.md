@@ -7,7 +7,9 @@ Un seul **moteur** (cours en fiches, lexique, jeux, examen blanc, XP, niveaux, �
 | ⚡ Électricien Pro | `contenus/electricien.js` | `dist/electricien.html` |
 | 🔥 Soudeur Pro | `contenus/soudeur.js` (petite appli : métier surtout pratique ; à faire relire) | `dist/soudeur.html` |
 | ❄️ Froid & Clim Pro | `contenus/froid-clim.js` (+ examen blanc attestation fluides ; à faire relire) | `dist/froid-clim.html` |
+| 💶 Paie Pro | `contenus/paie.js` (chiffres 2026, à mettre à jour chaque 1er janvier ; à faire relire) | `dist/paie.html` |
 | 📐 Maths 6e | `contenus/maths-6e.js` | `dist/maths-6e.html` |
+| 🎯 Maths 3e Brevet | `contenus/maths-3e.js` (+ brevet blanc express) | `dist/maths-3e.html` |
 
 Les fichiers de `dist/` s'ouvrent directement dans un navigateur, sur ordinateur ou téléphone.
 

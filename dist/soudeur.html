@@ -376,9 +376,10 @@ function calcQ1(g){
   else if(g.op==='−'){if(b>a)[a,b]=[b,a];r=a-b;txt=`${a} − ${b}`}
   else if(g.op==='×'){r=a*b;txt=`${a} × ${b}`}
   else{r=a;a=a*b;txt=`${a} ÷ ${b}`}
-  const opts=new Set([r]),d=[1,-1,2,-2,10,-10,b,-b];
-  for(const x of shuf(d)){if(opts.size>=4)break;if(r+x>=0)opts.add(r+x)}
-  let k=3;while(opts.size<4)opts.add(r+k++);
+  const opts=new Set([r]),d=[1,-1,2,-2,10,-10].concat(g.op==='×'||g.op==='÷'?[b,-b]:[]);
+  const nums=txt.match(/\d+/g).map(Number),ok=v=>v>=0&&!nums.includes(v);
+  for(const x of shuf(d)){if(opts.size>=4)break;if(ok(r+x))opts.add(r+x)}
+  let k=3;while(opts.size<4){if(ok(r+k))opts.add(r+k);k++}
   const ch=[...opts].map(String);
   return ['calc',txt+' = ?',ch,0,`${txt} = ${r}`];
 }
