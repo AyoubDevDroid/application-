@@ -18,22 +18,40 @@ Constat : les applis existantes visent les **certifications réglementaires** (C
 
 ## 2. Métiers prioritaires (titres pros sans appli dédiée)
 
-Critères : beaucoup de stagiaires chaque année · métier en tension (recrutement facile = stagiaires motivés) · contenu théorique assez riche pour un quiz · pas d'appli existante.
+**Premier filtre : y a-t-il vraiment quelque chose à apprendre ?**
+Une appli ne remplace pas le geste. On ne garde que les titres où le stagiaire doit **retenir** des choses : normes, règles, calculs, vocabulaire, procédures. Le bon signe, c'est une **épreuve écrite ou un QCM** (questionnaire professionnel, attestation réglementaire) ou un **entretien technique** où le jury pose des questions de connaissances.
 
-| # | Titre professionnel | Pourquoi | Priorité |
+Autres critères : beaucoup de stagiaires chaque année · métier en tension · pas d'appli existante.
+
+### ✅ À faire : beaucoup de théorie
+
+| # | Titre professionnel | Ce qu'il y a à apprendre | Priorité |
 |---|---|---|---|
-| 1 | **Électricien d'équipement du bâtiment** | Prototype fait | ✅ Fait |
-| 2 | **Soudeur assembleur industriel / Soudeur TIG-EE** | Métier en tension n°1 de l'industrie, rien en appli | ✅ Contenu écrit (à faire relire) |
-| 3 | **Assistant de vie aux familles (ADVF)** | Un des plus gros volumes de stagiaires, public souvent sur téléphone, aucune appli | 🔴 Haute |
-| 4 | **Agent de propreté et d'hygiène** | Gros volume, protocoles (dosage, codes couleur, ordre des tâches) parfaits pour les jeux | 🔴 Haute |
-| 5 | **Préparateur de commandes en entrepôt / Agent magasinier** | Logistique en tension ; les applis CACES ne couvrent pas le reste du titre | 🔴 Haute |
-| 6 | **Installateur thermique et sanitaire (plombier-chauffagiste)** | Bâtiment en tension, beaucoup de normes et de diamètres à mémoriser | 🟠 Moyenne |
-| 7 | **Plaquiste / Peintre en bâtiment / Carreleur / Maçon** | BTP, une appli par titre, contenu proche (réutilisable) | 🟠 Moyenne |
-| 8 | **Cuisinier / Agent de restauration** | HACCP, températures, allergènes : idéal pour vrai/faux | 🟠 Moyenne |
-| 9 | **Secrétaire assistant / Comptable assistant / Gestionnaire de paie** | Tertiaire : gros volumes, vocabulaire dense (lexique) | 🟠 Moyenne |
-| 10 | **Technicien froid et climatisation** | Très en tension, attestation fluides frigorigènes | 🟢 Ensuite |
-| 11 | **Technicien d'assistance informatique (TAI)** | Les applis IT générales ne suivent pas le référentiel du titre | 🟢 Ensuite |
-| 12 | **Mécanicien automobile / Électromécanicien** | Industrie en tension | 🟢 Ensuite |
+| 1 | **Électricien d'équipement du bâtiment** | Normes NF C 15-100 / 18-510, calculs (U = R × I), schémas, habilitation | ✅ Fait |
+| 2 | **Technicien froid et climatisation** | Thermodynamique, circuit frigorifique, fluides, réglementation. **L'attestation fluides frigorigènes est un QCM de 60 questions (42/60 minimum)** : l'appli colle exactement à l'examen | 🔴 Haute |
+| 3 | **Gestionnaire de paie** | Cotisations, brut → net, congés, absences, conventions collectives : que de la connaissance et du calcul | 🔴 Haute |
+| 4 | **Comptable assistant / Secrétaire comptable** | Plan comptable, écritures, TVA, rapprochement bancaire | 🔴 Haute |
+| 5 | **Technicien d'assistance informatique (TAI) / Technicien systèmes et réseaux (TSSR)** | Modèle OSI, adresses IP, sous-réseaux, commandes, matériel | 🔴 Haute |
+| 6 | **Électrotechnicien / Technicien de maintenance industrielle / Automaticien** | Moteurs, schémas, pneumatique, automates, méthodes de maintenance | 🟠 Moyenne |
+| 7 | **Installateur thermique et sanitaire** | Règles gaz, diamètres, pentes, calculs de puissance, schémas hydrauliques | 🟠 Moyenne |
+| 8 | **Assistant de vie aux familles (ADVF)** | Entretien technique de 50 min : hygiène, nutrition, pathologies du grand âge, droits de la personne, développement de l'enfant, premiers secours | 🟠 Moyenne |
+| 9 | **Secrétaire assistant / Assistant ressources humaines / Assistant commercial** | Droit du travail, procédures, courriers, vocabulaire | 🟠 Moyenne |
+| 10 | **Formateur professionnel d'adultes** | Pédagogie, ingénierie de formation, réglementation | 🟢 Ensuite |
+| 11 | **Cuisinier / Agent de restauration** | Seulement la partie HACCP, allergènes et températures → une petite appli « Hygiène en cuisine » | 🟢 Ensuite |
+
+### ⚠️ Limite : surtout pratique
+
+| Titre | Pourquoi |
+|---|---|
+| **Soudeur** | L'examen est surtout une épreuve pratique. Il y a un peu de théorie (procédés, sécurité, défauts) : l'appli est déjà écrite, on peut la publier en petite appli, mais on n'en fait pas d'autres de ce type. |
+
+### ❌ On ne fait pas : trop manuel
+
+Plaquiste, peintre, carreleur, maçon, agent de propreté et d'hygiène, préparateur de commandes (la partie théorique, c'est le CACES, déjà couvert par d'autres applis). Ces métiers s'apprennent avec les mains : une appli n'apporterait presque rien.
+
+### Idée pour la suite
+
+Pour la paie, la compta et les réseaux, un jeu **« exercice de calcul métier »** serait un vrai plus (calculer un salaire net, une TVA, un masque de sous-réseau). Le moteur a déjà le Calcul mental pour les maths : on pourra l'étendre à ces calculs.
 
 ## 3. Scolaire : maths de la 6e au bac
 
@@ -51,6 +69,11 @@ Le marché est concurrencé, donc :
 - **Autre revenu possible** : vendre une version sans pub aux centres de formation (licence par centre). Souvent plus rentable que la pub.
 
 ## Sources
+
+- [Attestation d'aptitude fluides frigorigènes : QCM de 60 questions (France Travail)](https://candidat.francetravail.fr/formations/detail/2475421/true)
+- [Programme attestation fluides (CAPEB)](https://www.capeb.fr/www/capeb/media//gard/document/PROGRAMME%20AAF.pdf)
+- [Titre pro Gestionnaire de paie révisé (Legisocial)](https://www.legisocial.fr/actualites-sociales/6099-arrete-revise-titre-gestionnaire-paie.html)
+- [Examen ADVF : épreuves (Walter Learning)](https://walter-learning.com/blog/gestion-et-administration/tp-advf/examen-advf)
 
 - [AFPA – les formations industrielles les plus demandées](https://travail-industrie.com/blog/article-titre/formations-afpa-industrielles-plus-demandees-reconversion)
 - [AFPA – les formations évoluent pour l'industrie](https://www.afpa.fr/actualites/les-formations-evoluent-pour-repondre-aux-besoins-des-metiers-de-l-industrie)

@@ -5,7 +5,7 @@ Un seul **moteur** (cours en fiches, lexique, 4 jeux, XP, niveaux, étoiles, con
 | Appli | Contenu | Appli prête à ouvrir |
 |---|---|---|
 | ⚡ Électricien Pro | `contenus/electricien.js` | `dist/electricien.html` |
-| 🔥 Soudeur Pro | `contenus/soudeur.js` (à faire relire par un formateur) | `dist/soudeur.html` |
+| 🔥 Soudeur Pro | `contenus/soudeur.js` (petite appli : métier surtout pratique ; à faire relire) | `dist/soudeur.html` |
 | 📐 Maths 6e | `contenus/maths-6e.js` | `dist/maths-6e.html` |
 
 Les fichiers de `dist/` s'ouvrent directement dans un navigateur, sur ordinateur ou téléphone.
@@ -46,6 +46,6 @@ Le build refuse un contenu incohérent (mot-clé absent du lexique, module incon
 
 ## Documents
 
-- `docs/ETUDE-MARCHE.md` — métiers sans appli, concurrence, priorités
+- `docs/ETUDE-MARCHE.md` — métiers sans appli et avec de la théorie à apprendre, concurrence, priorités
 - `docs/PLANNING.md` — planning semaine par semaine
 - `docs/PUBLICITE.md` — règles pub (RGPD, mineurs, Play Store)
