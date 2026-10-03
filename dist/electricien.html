@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Électricien Pro</title>
+<style>
+:root{--bg:#10142a;--card:#1c2244;--card2:#252c58;--pri:#ffc83d;--pri2:#d99a00;--acc:#3db5ff;--ok:#2ed47a;--ko:#ff5470;--txt:#fff;--mut:#a9b0d6}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+.app{max-width:480px;margin:0 auto;padding:16px 16px 96px;min-height:100vh}
+.screen{display:none;flex-direction:column;gap:14px;animation:fade .3s}
+.screen.on{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1{font-size:26px}h2{font-size:21px}h3{font-size:17px}
+.mut{color:var(--mut);font-size:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pill{background:rgba(255,255,255,.08);padding:6px 12px;border-radius:99px;font-weight:700;font-size:14px;white-space:nowrap}
+.back{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:2px 8px 2px 0}
+.hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#1b1640;border-radius:22px;padding:18px;display:flex;gap:14px;align-items:center}
+.hero .ic{font-size:54px;animation:zap 2.5s infinite}
+@keyframes zap{0%,90%,100%{transform:none}93%{transform:rotate(-12deg) scale(1.1)}96%{transform:rotate(10deg)}}
+.hero b{font-size:22px;display:block}
+.bar{height:10px;background:rgba(0,0,0,.15);border-radius:99px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:#1b1640;border-radius:99px;transition:width .5s}
+.card{background:var(--card);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.word{background:var(--card2);border-left:4px solid var(--acc)}
+.row{display:flex;gap:12px;align-items:center;cursor:pointer;border:none;background:var(--card);color:#fff;border-radius:18px;padding:14px;text-align:left;width:100%;font-size:16px}
+.row .ic{font-size:30px;width:48px;height:48px;border-radius:14px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.row .tx{flex:1}.row .tx b{display:block}.row .tx span{font-size:13px;color:var(--mut)}
+.row .ok{color:var(--ok);font-weight:900}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.game{border:none;border-radius:20px;padding:18px 10px;color:#1b1640;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;gap:6px}
+.game .e{font-size:38px}.game small{font-weight:600;font-size:12px;opacity:.8}
+.game:active,.btn:active,.ans:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+.btn{border:none;border-radius:16px;padding:15px;font-size:17px;font-weight:800;color:#1b1640;background:var(--pri);box-shadow:0 5px 0 var(--pri2);cursor:pointer;width:100%}
+.btn.ghost{background:var(--card2);color:#fff;box-shadow:none}
+/* fiche */
+.sec{background:var(--card);border-radius:18px;padding:16px}
+.sec h3{margin-bottom:8px;color:var(--pri)}
+.sec p,.sec li{line-height:1.55;font-size:15.5px}
+.sec ul{padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.key{background:rgba(255,200,61,.12);border:1px solid rgba(255,200,61,.35);border-radius:16px;padding:14px}
+.key h3{color:var(--pri);margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card2);border:none;color:var(--acc);padding:8px 12px;border-radius:99px;font-weight:700;font-size:14px;cursor:pointer}
+/* lexique */
+.search{width:100%;padding:14px 16px;border-radius:16px;border:2px solid var(--card2);background:var(--card);color:#fff;font-size:16px;outline:none}
+.search:focus{border-color:var(--pri)}
+.lex{background:var(--card);border-radius:16px;padding:14px;cursor:pointer}
+.lex b{color:var(--pri)}.lex p{margin-top:6px;line-height:1.5;display:none;font-size:15px}
+.lex.open p{display:block}
+/* jeux */
+.prog{flex:1;height:12px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.qcard{background:#fff;color:#10142a;border-radius:22px;padding:24px 18px;text-align:center;font-size:21px;font-weight:800;line-height:1.35;min-height:130px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.shake{animation:shake .4s}
+@keyframes shake{25%,75%{transform:translateX(-9px)}50%{transform:translateX(9px)}}
+.ans{border:none;border-radius:16px;padding:16px;font-size:16px;font-weight:700;color:#fff;background:var(--card);box-shadow:0 4px 0 #0a0d1d;cursor:pointer;text-align:left;width:100%}
+.ans.ok{background:var(--ok);box-shadow:0 4px 0 #1a9a56}
+.ans.ko{background:var(--ko);box-shadow:0 4px 0 #c23250}
+.ans.dim{opacity:.4}
+.ex{background:var(--card2);border-radius:16px;padding:14px;font-size:15px;line-height:1.5;display:none}
+.ex.on{display:block;animation:fade .3s}
+.vf{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vf button{border:none;border-radius:18px;padding:22px;font-size:22px;font-weight:900;color:#fff;cursor:pointer}
+.timer{height:6px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.timer i{display:block;height:100%;background:var(--pri);width:100%}
+.match{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}
+.match .col{display:flex;flex-direction:column;gap:10px}
+.tile{border:2px solid transparent;border-radius:14px;padding:12px 10px;background:var(--card);color:#fff;font-size:14px;font-weight:700;cursor:pointer;min-height:58px;text-align:left;transition:.2s}
+.tile.sel{border-color:var(--pri);background:var(--card2)}
+.tile.done{background:var(--ok);opacity:0;transform:scale(.9);pointer-events:none;transition:.5s .3s}
+.tile.bad{animation:shake .4s;border-color:var(--ko)}
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{background:var(--ok);color:#10142a;border-radius:14px;padding:12px;font-weight:800;animation:fade .3s}
+.step.empty{background:transparent;border:2px dashed var(--card2);color:var(--mut);font-weight:600}
+.big{font-size:90px;text-align:center}
+.stars{font-size:44px;text-align:center;color:var(--pri);letter-spacing:6px}
+.float{position:fixed;font-weight:900;font-size:22px;color:var(--pri);pointer-events:none;animation:up 1s forwards;z-index:9}
+@keyframes up{to{transform:translateY(-60px);opacity:0}}
+/* nav */
+nav{position:fixed;bottom:0;left:0;right:0;background:#0b0e20;border-top:1px solid var(--card2);display:flex;justify-content:center;z-index:5}
+nav .in{display:flex;max-width:480px;width:100%}
+nav button{flex:1;background:none;border:none;color:var(--mut);padding:10px 0 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button span{font-size:22px}
+nav button.on{color:var(--pri)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;z-index:20}
+.modal.on{display:flex}
+.modal .in{background:var(--card);width:100%;max-width:480px;margin:0 auto;border-radius:22px 22px 0 0;padding:20px 16px 28px;display:flex;flex-direction:column;gap:10px;animation:fade .25s}
+.pub{background:repeating-linear-gradient(45deg,var(--card),var(--card) 10px,var(--card2) 10px,var(--card2) 20px);border-radius:14px;min-height:60px;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px;font-weight:700;letter-spacing:1px}
+.pub.full{position:fixed;inset:0;z-index:40;border-radius:0;flex-direction:column;gap:16px;font-size:14px}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
+</style>
+</head>
+<body>
+<canvas id="cf"></canvas>
+<div class="app">
+
+<section class="screen on" id="home">
+  <div class="top"><h1 id="appName"></h1><span class="pill" id="xpP"></span></div>
+  <div class="hero"><div class="ic" id="appIc"></div><div style="flex:1"><b>Ta progression</b><span id="progTx"></span><div class="bar"><i id="progBar"></i></div></div></div>
+  <div class="card word"><span class="mut">💡 Mot du jour</span><h3 id="wotdM"></h3><p id="wotdD" style="line-height:1.5"></p></div>
+  <h2>Continuer</h2>
+  <div id="nextMod"></div>
+  <h2>Défi rapide</h2>
+  <button class="btn" onclick="startQuiz()">⚡ Quiz express (10 questions)</button>
+</section>
+
+<section class="screen" id="cours">
+  <h1>📚 Cours</h1><p class="mut" id="sousTitre"></p>
+  <div id="modList" style="display:flex;flex-direction:column;gap:10px"></div>
+</section>
+
+<section class="screen" id="fiche"><div id="ficheBody" style="display:flex;flex-direction:column;gap:14px"></div></section>
+
+<section class="screen" id="jeux">
+  <h1>🎮 Jeux</h1><p class="mut">Apprends en jouant. Chaque partie rapporte de l'XP.</p>
+  <div class="grid">
+    <button class="game" style="background:#ffc83d" onclick="startQuiz()"><span class="e">❓</span>Quiz<small>QCM + explications</small></button>
+    <button class="game" style="background:#3db5ff" onclick="startVF()"><span class="e">⏱️</span>Vrai / Faux<small>Contre la montre</small></button>
+    <button class="game" style="background:#2ed47a" onclick="startMatch()"><span class="e">🔗</span>Associer<small>Mot ↔ définition</small></button>
+    <button class="game" style="background:#ff8fab" onclick="startOrdre()"><span class="e">🪜</span>Dans l'ordre<small>Les bonnes étapes</small></button>
+    <button class="game" id="calcBtn" style="background:#b18cff;display:none" onclick="startCalc()"><span class="e">🧮</span>Calcul mental<small>Réponds vite</small></button>
+  </div>
+  <div class="card"><span class="mut">🏆 Meilleurs scores</span><div id="best" style="line-height:1.8"></div></div>
+</section>
+
+<section class="screen" id="lexique">
+  <h1>📖 Lexique</h1>
+  <input class="search" id="q" placeholder="Rechercher un mot-clé…" oninput="renderLex()">
+  <div id="lexList" style="display:flex;flex-direction:column;gap:8px"></div>
+</section>
+
+<section class="screen" id="play"><div id="playBody" style="display:flex;flex-direction:column;gap:14px"></div></section>
+</div>
+
+<nav><div class="in">
+  <button data-t="home" class="on" onclick="tab('home')"><span>🏠</span>Accueil</button>
+  <button data-t="cours" onclick="tab('cours')"><span>📚</span>Cours</button>
+  <button data-t="jeux" onclick="tab('jeux')"><span>🎮</span>Jeux</button>
+  <button data-t="lexique" onclick="tab('lexique')"><span>📖</span>Lexique</button>
+</div></nav>
+<div class="modal" id="modal" onclick="if(event.target===this)this.classList.remove('on')"><div class="in" id="modalIn"></div></div>
+
+<script>
+/* =====================================================================
+   CONTENU — c'est la seule partie à changer pour un autre métier
+   ===================================================================== */
+/* Électricien Pro — contenu (titre pro Électricien d'équipement du bâtiment) */
+const C={
+ id:'electricien',app:'Électricien Pro',icon:'⚡',
+ sousTitre:'Les modules du titre professionnel, en fiches courtes.',
+ pub:{actif:true,toutesLes:3},
+ modules:[
+  {id:'bases',i:'🔌',t:'Les bases de l\'électricité',d:'Tension, courant, résistance, puissance',
+   s:[{h:'Les 4 grandeurs',l:['<b>Tension (U)</b> en volts (V) : la « pression » qui pousse le courant.','<b>Intensité (I)</b> en ampères (A) : la quantité de courant qui circule.','<b>Résistance (R)</b> en ohms (Ω) : ce qui freine le courant.','<b>Puissance (P)</b> en watts (W) : l\'énergie consommée par seconde.']},
+      {h:'Les 2 formules à connaître',l:['<b>Loi d\'Ohm : U = R × I</b>','<b>Puissance : P = U × I</b>','Exemple : un radiateur de 2 300 W en 230 V consomme I = 2300 ÷ 230 = <b>10 A</b>.']},
+      {h:'Le réseau en France',l:['Monophasé : <b>230 V – 50 Hz</b> (logements).','Triphasé : <b>400 V</b> entre phases (gros équipements, ateliers).']}],
+   k:['Tension','Intensité','Résistance','Puissance','Loi d\'Ohm']},
+  {id:'secu',i:'🦺',t:'Sécurité & habilitation',d:'NF C 18-510, consignation, domaines de tension',
+   s:[{h:'Les domaines de tension (alternatif)',l:['<b>TBT</b> : jusqu\'à 50 V.','<b>BT</b> : de 50 V à 1 000 V.','<b>HTA / HTB</b> : au-delà de 1 000 V.']},
+      {h:'L\'habilitation électrique',l:['Obligatoire pour travailler sur ou près d\'installations électriques (norme <b>NF C 18-510</b>).','<b>B0</b> : non-électricien, travaux non électriques en zone à risque.','<b>BR</b> : interventions générales en basse tension (dépannage, raccordement).','<b>BC</b> : réaliser une consignation.','<b>B1 / B2</b> : exécutant / chargé de travaux électriques.']},
+      {h:'La consignation',l:['1. <b>Séparer</b> l\'installation de sa source.','2. <b>Condamner</b> l\'organe de séparation (cadenas).','3. <b>Identifier</b> l\'ouvrage sur lequel on travaille.','4. <b>Vérifier l\'absence de tension</b> (VAT).','5. <b>Mettre à la terre et en court-circuit</b> si nécessaire.']}],
+   k:['Habilitation','Consignation','VAT','EPI']},
+  {id:'protec',i:'🛡️',t:'Protections & tableau',d:'Disjoncteurs, différentiels, NF C 15-100',
+   s:[{h:'Qui protège quoi ?',l:['<b>Disjoncteur divisionnaire</b> : protège les <b>câbles</b> contre les surcharges et les courts-circuits.','<b>Interrupteur différentiel 30 mA</b> : protège les <b>personnes</b> contre les fuites de courant.','<b>Disjoncteur de branchement</b> : à l\'entrée du logement, coupe tout.']},
+      {h:'Sections et calibres (NF C 15-100)',l:['Éclairage : <b>1,5 mm²</b> → disjoncteur <b>16 A</b>.','Prises (max 12) : <b>2,5 mm²</b> → <b>20 A</b>.','Lave-linge, four, chauffe-eau : circuit spécialisé <b>2,5 mm²</b> → <b>20 A</b>.','Plaque de cuisson : <b>6 mm²</b> → <b>32 A</b>.']},
+      {h:'Les couleurs des fils',l:['<b>Vert/jaune</b> : terre (PE) — réservé, jamais autre chose.','<b>Bleu</b> : neutre.','<b>Phase</b> : rouge, marron, noir…']}],
+   k:['Disjoncteur','Différentiel','Terre','Neutre','Phase','Court-circuit']},
+  {id:'schemas',i:'💡',t:'Schémas & montages',d:'Simple allumage, va-et-vient, télérupteur',
+   s:[{h:'Les montages d\'éclairage',l:['<b>Simple allumage</b> : 1 interrupteur commande 1 point lumineux.','<b>Va-et-vient</b> : 2 interrupteurs commandent le même point (couloir, escalier).','<b>Télérupteur</b> : 3 boutons poussoirs ou plus commandent le même point.','<b>Minuterie</b> : la lumière s\'éteint seule après un temps réglé.']},
+      {h:'La règle d\'or',l:['L\'interrupteur coupe toujours la <b>phase</b>, jamais le neutre.']}],
+   k:['Va-et-vient','Télérupteur','Phase']},
+  {id:'mesure',i:'📟',t:'Mesures & contrôle',d:'Multimètre, VAT, pince ampèremétrique',
+   s:[{h:'Bien brancher ses appareils',l:['<b>Voltmètre</b> : en <b>parallèle</b> (aux bornes).','<b>Ampèremètre</b> : en <b>série</b> (dans le circuit).','<b>Pince ampèremétrique</b> : autour d\'<b>un seul</b> conducteur.']},
+      {h:'Le VAT',l:['Vérificateur d\'Absence de Tension : on le <b>teste avant et après</b> la mesure pour être sûr qu\'il fonctionne.','Un multimètre <b>ne remplace pas</b> un VAT.']}],
+   k:['VAT','Multimètre']}
+ ],
+ lexique:[
+  ['Tension','Différence de potentiel entre deux points, en volts (V). Symbole U.'],
+  ['Intensité','Quantité de courant qui circule, en ampères (A). Symbole I.'],
+  ['Résistance','Opposition au passage du courant, en ohms (Ω). Symbole R.'],
+  ['Puissance','Énergie consommée par seconde, en watts (W). P = U × I.'],
+  ['Loi d\'Ohm','U = R × I : la tension égale la résistance multipliée par l\'intensité.'],
+  ['Phase','Conducteur sous tension (230 V par rapport au neutre). Rouge, marron ou noir.'],
+  ['Neutre','Conducteur de retour du courant. Toujours bleu.'],
+  ['Terre','Conducteur de protection (PE) qui évacue les fuites vers le sol. Toujours vert/jaune.'],
+  ['Disjoncteur','Appareil qui coupe automatiquement un circuit en cas de surcharge ou de court-circuit.'],
+  ['Différentiel','Appareil qui coupe dès qu\'il détecte une fuite de courant (30 mA pour protéger les personnes).'],
+  ['Court-circuit','Contact direct entre phase et neutre : courant énorme, risque d\'incendie.'],
+  ['Surcharge','Trop d\'appareils sur un circuit : le courant dépasse ce que le câble supporte.'],
+  ['Habilitation','Autorisation donnée par l\'employeur pour travailler sur ou près d\'installations électriques.'],
+  ['Consignation','Ensemble des étapes pour mettre une installation hors tension en toute sécurité.'],
+  ['VAT','Vérificateur d\'Absence de Tension : appareil obligatoire avant toute intervention.'],
+  ['EPI','Équipements de Protection Individuelle : gants isolants, écran facial, chaussures…'],
+  ['Va-et-vient','Montage où 2 interrupteurs commandent le même point lumineux.'],
+  ['Télérupteur','Relais commandé par plusieurs boutons poussoirs pour un même éclairage.'],
+  ['Multimètre','Appareil de mesure : tension, intensité, résistance, continuité.'],
+  ['NF C 15-100','Norme qui fixe les règles des installations électriques basse tension dans les logements.'],
+  ['NF C 18-510','Norme qui encadre la prévention du risque électrique et l\'habilitation.'],
+  ['TGBT','Tableau Général Basse Tension : tableau principal d\'un bâtiment.']
+ ],
+ quiz:[
+  ['bases','Quelle est l\'unité de la tension ?',['Le volt (V)','L\'ampère (A)','Le watt (W)','L\'ohm (Ω)'],0,'La tension se mesure en volts.'],
+  ['bases','Un radiateur de 2 300 W en 230 V consomme…',['10 A','23 A','5 A','100 A'],0,'I = P ÷ U = 2300 ÷ 230 = 10 A.'],
+  ['bases','La loi d\'Ohm s\'écrit…',['U = R × I','P = R × I','I = U × R','R = U × I'],0,'U = R × I.'],
+  ['bases','La tension du réseau domestique en France est…',['230 V','110 V','400 V','12 V'],0,'230 V monophasé, 50 Hz.'],
+  ['bases','En triphasé, la tension entre deux phases est…',['400 V','230 V','690 V','110 V'],0,'400 V entre phases, 230 V entre phase et neutre.'],
+  ['secu','Quelle norme encadre l\'habilitation électrique ?',['NF C 18-510','NF C 15-100','ISO 9001','NF EN 60204'],0,'La NF C 18-510 encadre la prévention du risque électrique.'],
+  ['secu','Quelle habilitation pour un dépannage en basse tension ?',['BR','B0','H0','BC'],0,'BR = interventions générales en BT.'],
+  ['secu','Après avoir séparé et condamné, on…',['Identifie l\'ouvrage','Coupe le neutre','Retire ses gants','Remet sous tension'],0,'Ordre : séparer, condamner, identifier, VAT, MALT-CC.'],
+  ['secu','Le domaine BT en alternatif va de…',['50 V à 1 000 V','0 à 50 V','1 000 à 5 000 V','230 à 400 V'],0,'Basse tension : 50 V à 1 000 V en alternatif.'],
+  ['secu','Que veut dire EPI ?',['Équipement de Protection Individuelle','Élément de Protection Intérieure','Essai de Prise Isolée','Équipement Pour Installation'],0,'Gants isolants, écran facial, etc.'],
+  ['protec','Qui protège les personnes contre les fuites de courant ?',['Le différentiel 30 mA','Le disjoncteur divisionnaire','Le fusible','Le télérupteur'],0,'Le différentiel détecte la fuite et coupe.'],
+  ['protec','Le disjoncteur divisionnaire protège surtout…',['Les câbles','Les personnes','Le compteur','La prise de terre'],0,'Il protège les câbles des surcharges et courts-circuits.'],
+  ['protec','Section et calibre pour un circuit d\'éclairage ?',['1,5 mm² / 16 A','2,5 mm² / 32 A','6 mm² / 32 A','1 mm² / 10 A'],0,'Éclairage : 1,5 mm² protégé en 16 A.'],
+  ['protec','Section pour une plaque de cuisson ?',['6 mm²','1,5 mm²','2,5 mm²','4 mm²'],0,'Plaque de cuisson : 6 mm² en 32 A.'],
+  ['protec','Quelle couleur pour le neutre ?',['Bleu','Vert/jaune','Rouge','Noir'],0,'Le neutre est toujours bleu.'],
+  ['protec','Le fil vert/jaune est…',['La terre','Le neutre','Une phase','Au choix'],0,'Vert/jaune = terre, uniquement.'],
+  ['schemas','2 interrupteurs pour une même lampe, c\'est un…',['Va-et-vient','Simple allumage','Double allumage','Télérupteur'],0,'Va-et-vient : couloir, escalier.'],
+  ['schemas','Pour 4 points de commande d\'un même éclairage on utilise…',['Un télérupteur','Un va-et-vient','Un simple allumage','Un différentiel'],0,'À partir de 3 points : télérupteur.'],
+  ['schemas','L\'interrupteur doit couper…',['La phase','Le neutre','La terre','Les deux'],0,'On coupe toujours la phase.'],
+  ['mesure','Un voltmètre se branche…',['En parallèle','En série','Autour du câble','Sur la terre'],0,'Le voltmètre se branche aux bornes, en parallèle.'],
+  ['mesure','Un ampèremètre se branche…',['En série','En parallèle','Sur le neutre seul','Hors tension'],0,'L\'ampèremètre est dans le circuit, en série.'],
+  ['mesure','La pince ampèremétrique se place autour…',['D\'un seul conducteur','De tout le câble','Du disjoncteur','De la prise'],0,'Autour du câble entier, les courants s\'annulent : la pince affiche 0.'],
+  ['mesure','Avant et après la VAT, on doit…',['Tester le VAT','Couper le différentiel','Mesurer la terre','Changer les piles'],0,'On vérifie que le VAT fonctionne avant et après.']
+ ],
+ vf:[
+  ['Le fil vert/jaune peut servir de phase si on manque de fil.',false,'Jamais : vert/jaune = terre uniquement.'],
+  ['Un différentiel 30 mA protège les personnes.',true,'C\'est son rôle principal.'],
+  ['L\'interrupteur coupe le neutre.',false,'Il coupe la phase.'],
+  ['P = U × I.',true,'Puissance = tension × intensité.'],
+  ['Un multimètre peut remplacer un VAT.',false,'Le VAT est obligatoire pour la vérification d\'absence de tension.'],
+  ['Le neutre est bleu.',true,'Toujours bleu.'],
+  ['Un ampèremètre se branche en parallèle.',false,'En série.'],
+  ['La plaque de cuisson se câble en 6 mm².',true,'6 mm² protégé en 32 A.'],
+  ['L\'habilitation B0 permet de faire du dépannage électrique.',false,'B0 = non-électricien. Le dépannage, c\'est BR.'],
+  ['En France, la fréquence du réseau est de 50 Hz.',true,'230 V – 50 Hz.'],
+  ['Le disjoncteur protège les câbles contre les surcharges.',true,'Surcharges et courts-circuits.'],
+  ['La TBT va jusqu\'à 50 V en alternatif.',true,'Très Basse Tension : ≤ 50 V AC.'],
+  ['Un va-et-vient utilise 3 interrupteurs.',false,'2 interrupteurs. Au-delà : télérupteur.'],
+  ['Il faut tester le VAT avant et après la mesure.',true,'Pour être sûr qu\'il marche.']
+ ],
+ ordre:[
+  {t:'La consignation électrique',s:['Séparer','Condamner','Identifier','Vérifier l\'absence de tension','Mettre à la terre et en court-circuit']},
+  {t:'Remplacer une prise de courant',s:['Couper le disjoncteur du circuit','Vérifier l\'absence de tension','Démonter l\'ancienne prise','Raccorder phase, neutre et terre','Fixer la nouvelle prise','Remettre sous tension et tester']}
+ ]
+};
+
+
+/* =====================================================================
+   MOTEUR (commun à toutes les apps métier)
+   ===================================================================== */
+const $=id=>document.getElementById(id);
+const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=rand(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
+const P={xp:0,read:new Set(),best:{quiz:0,vf:0,match:0,ordre:null,calc:0},parties:0};
+/* sauvegarde de la progression (une clé par app) */
+const KEY='appmetier_'+(C.id||C.app);
+function save(){try{localStorage.setItem(KEY,JSON.stringify({xp:P.xp,read:[...P.read],best:P.best,parties:P.parties}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){P.xp=d.xp||0;P.read=new Set(d.read||[]);Object.assign(P.best,d.best||{});P.parties=d.parties||0}}catch(e){}}
+/* thème : couleurs propres à chaque app (facultatif) */
+function theme(){const th=C.theme||{};Object.keys(th).forEach(k=>document.documentElement.style.setProperty('--'+k,th[k]))}
+let G={};
+
+function tab(t){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  show(t);
+  if(t==='home')renderHome();if(t==='cours')renderMods();if(t==='lexique')renderLex();if(t==='jeux')renderBest();
+}
+function show(id){clearInterval(G.tm);document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
+
+/* accueil */
+function renderHome(){
+  $('appName').textContent=C.app;$('appIc').textContent=C.icon;$('xpP').textContent='⚡ '+P.xp+' XP';
+  const n=P.read.size,t=C.modules.length;$('progTx').textContent=`${n} / ${t} modules lus · Niveau ${Math.floor(P.xp/150)+1}`;$('progBar').style.width=(n/t*100)+'%';
+  const w=C.lexique[new Date().getDate()%C.lexique.length];$('wotdM').textContent=w[0];$('wotdD').textContent=w[1];
+  const m=C.modules.find(m=>!P.read.has(m.id))||C.modules[0];
+  $('nextMod').innerHTML=modRow(m);
+}
+function modRow(m){return `<button class="row" onclick="openFiche('${m.id}')"><span class="ic">${m.i}</span><span class="tx"><b>${m.t}</b><span>${m.d}</span></span>${P.read.has(m.id)?'<span class="ok">✓</span>':'<span class="mut">›</span>'}</button>`}
+function renderMods(){$('modList').innerHTML=C.modules.map(modRow).join('')}
+
+/* fiche */
+function openFiche(id){
+  const m=C.modules.find(x=>x.id===id);P.read.add(id);save();
+  $('ficheBody').innerHTML=`<div class="top"><button class="back" onclick="tab('cours')">←</button><span class="pill">${m.i} Module</span></div>
+   <h1>${m.t}</h1><p class="mut">${m.d}</p>
+   ${m.s.map(s=>`<div class="sec"><h3>${s.h}</h3><ul>${s.l.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}
+   <div class="key"><h3>🔑 Mots-clés</h3><div class="chips">${m.k.map(k=>`<button class="chip" onclick="def('${k.replace(/'/g,"\\'")}')">${k}</button>`).join('')}</div></div>
+   <button class="btn" onclick="startQuiz('${m.id}')">🎯 S'entraîner sur ce module</button>`;
+  show('fiche');
+}
+function def(k){const w=C.lexique.find(x=>x[0]===k);$('modalIn').innerHTML=`<span class="mut">📖 Lexique</span><h2>${k}</h2><p style="line-height:1.55">${w?w[1]:''}</p><button class="btn ghost" onclick="$('modal').classList.remove('on')">Fermer</button>`;$('modal').classList.add('on')}
+
+/* lexique */
+function renderLex(){
+  const q=($('q').value||'').toLowerCase();
+  $('lexList').innerHTML=C.lexique.filter(w=>(w[0]+w[1]).toLowerCase().includes(q)).sort((a,b)=>a[0].localeCompare(b[0])).map(w=>`<div class="lex" onclick="this.classList.toggle('open')"><b>${w[0]}</b><p>${w[1]}</p></div>`).join('')||'<p class="mut">Aucun résultat.</p>';
+}
+function renderBest(){const b=P.best;$('best').innerHTML=`❓ Quiz : ${b.quiz}/10<br>⏱️ Vrai/Faux : ${b.vf}/10<br>🔗 Associer : ${b.match?b.match+' s':'—'}<br>🪜 Dans l'ordre : ${b.ordre===null?'—':b.ordre+' erreur(s)'}`+(C.calcul?`<br>🧮 Calcul mental : ${b.calc}/10`:'')}
+
+/* ----- QUIZ ----- */
+function startQuiz(mod){
+  let pool=C.quiz.filter(q=>!mod||q[0]===mod);
+  G={type:'quiz',list:shuf(pool).slice(0,10),i:0,score:0};G.n=G.list.length;show('play');quizQ();
+}
+function quizQ(){
+  const q=G.list[G.i];const order=shuf(q[2].map((t,i)=>({t,i})));
+  $('playBody').innerHTML=head()+`<div class="qcard" id="qc">${q[1]}</div>
+   <div style="display:flex;flex-direction:column;gap:10px">${order.map(o=>`<button class="ans" data-i="${o.i}" onclick="quizA(this)">${o.t}</button>`).join('')}</div>
+   <div class="ex" id="ex"></div>`;
+}
+function quizA(b){
+  const q=G.list[G.i],bs=[...document.querySelectorAll('.ans')];if(bs[0].disabled)return;bs.forEach(x=>x.disabled=true);
+  const ok=+b.dataset.i===q[3];
+  bs.forEach(x=>{if(+x.dataset.i===q[3])x.classList.add('ok');else if(x!==b)x.classList.add('dim')});
+  if(ok){G.score++;gain(10,b)}else{b.classList.add('ko');shake('qc')}
+  $('ex').innerHTML=(ok?'✅ ':'❌ ')+q[4]+`<button class="btn" style="margin-top:12px" onclick="nextQ(quizQ)">Continuer</button>`;$('ex').classList.add('on');
+}
+
+/* ----- VRAI / FAUX ----- */
+function startVF(){G={type:'vf',list:shuf(C.vf).slice(0,10),i:0,score:0};G.n=G.list.length;show('play');vfQ()}
+function vfQ(){
+  const q=G.list[G.i];
+  $('playBody').innerHTML=head()+`<div class="timer"><i id="tb"></i></div><div class="qcard" id="qc">${q[0]}</div>
+   <div class="vf"><button style="background:var(--ok)" onclick="vfA(true)">VRAI</button><button style="background:var(--ko)" onclick="vfA(false)">FAUX</button></div><div class="ex" id="ex"></div>`;
+  const t0=Date.now(),D=8000;clearInterval(G.tm);
+  G.tm=setInterval(()=>{const p=1-(Date.now()-t0)/D;$('tb').style.width=Math.max(0,p*100)+'%';if(p<=0)vfA(null)},50);
+}
+function vfA(v){
+  clearInterval(G.tm);const q=G.list[G.i];const bs=document.querySelectorAll('.vf button');if(bs[0].disabled)return;bs.forEach(b=>b.disabled=true);
+  const ok=v===q[1];if(ok){G.score++;gain(10,bs[v?0:1])}else shake('qc');
+  $('ex').innerHTML=(ok?'✅ Bien vu ! ':v===null?'⏰ Trop lent ! ':'❌ ')+`C'est <b>${q[1]?'VRAI':'FAUX'}</b>. ${q[2]}<button class="btn" style="margin-top:12px" onclick="nextQ(vfQ)">Continuer</button>`;$('ex').classList.add('on');
+}
+
+/* ----- ASSOCIER ----- */
+function startMatch(){
+  const pairs=shuf(C.lexique).slice(0,5);G={type:'match',pairs,left:shuf(pairs.map((p,i)=>({t:p[0],i}))),right:shuf(pairs.map((p,i)=>({t:p[1],i}))),sel:null,done:0,err:0,t0:Date.now()};
+  show('play');
+  $('playBody').innerHTML=`<div class="top"><button class="back" onclick="tab('jeux')">✕</button><b>🔗 Associe chaque mot</b><span class="pill" id="mt">0/5</span></div>
+  <div class="match"><div class="col">${G.left.map(x=>`<button class="tile" data-k="L" data-i="${x.i}" onclick="pickT(this)">${x.t}</button>`).join('')}</div>
+  <div class="col">${G.right.map(x=>`<button class="tile" data-k="R" data-i="${x.i}" onclick="pickT(this)" style="font-weight:500;font-size:13px">${x.t}</button>`).join('')}</div></div>`;
+}
+function pickT(b){
+  if(!G.sel||G.sel.dataset.k===b.dataset.k){document.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');G.sel=b;return}
+  const a=G.sel;G.sel=null;a.classList.remove('sel');
+  if(a.dataset.i===b.dataset.i){a.classList.add('done');b.classList.add('done');G.done++;gain(10,b);$('mt').textContent=G.done+'/5';
+    if(G.done===5){const s=Math.round((Date.now()-G.t0)/1000);if(!P.best.match||s<P.best.match)P.best.match=s;setTimeout(()=>end(5-Math.min(G.err,5),5,`en ${s} s · ${G.err} erreur(s)`),800)}}
+  else{G.err++;[a,b].forEach(x=>{x.classList.remove('bad');void x.offsetWidth;x.classList.add('bad')})}
+}
+
+/* ----- DANS L'ORDRE ----- */
+function startOrdre(){
+  const o=C.ordre[rand(0,C.ordre.length-1)];G={type:'ordre',o,k:0,err:0};show('play');
+  $('playBody').innerHTML=`<div class="top"><button class="back" onclick="tab('jeux')">✕</button><b>🪜 Dans l'ordre</b><span class="pill" id="oe">0 erreur</span></div>
+  <div class="card"><span class="mut">Remets les étapes dans le bon ordre</span><h3>${o.t}</h3></div>
+  <div class="steps" id="st">${o.s.map((_,i)=>`<div class="step empty">${i+1}.</div>`).join('')}</div>
+  <div style="display:flex;flex-direction:column;gap:8px" id="pool">${shuf(o.s.map((t,i)=>({t,i}))).map(x=>`<button class="ans" data-i="${x.i}" onclick="ordA(this)">${x.t}</button>`).join('')}</div>`;
+}
+function ordA(b){
+  if(+b.dataset.i===G.k){const s=$('st').children[G.k];s.className='step';s.textContent=(G.k+1)+'. '+b.textContent;b.remove();gain(5,s);G.k++;
+    if(G.k===G.o.s.length){P.best.ordre=P.best.ordre===null?G.err:Math.min(P.best.ordre,G.err);setTimeout(()=>end(Math.max(0,G.o.s.length-G.err),G.o.s.length,G.err+' erreur(s)'),600)}}
+  else{G.err++;$('oe').textContent=G.err+' erreur'+(G.err>1?'s':'');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake','ko');setTimeout(()=>b.classList.remove('ko'),400)}
+}
+
+/* ----- CALCUL MENTAL (si C.calcul est défini) ----- */
+/* C.calcul = [{op:'+',a:[min,max],b:[min,max]}, …]  op : + − × ÷ */
+function calcQ1(g){
+  let a=rand(...g.a),b=rand(...g.b),r,txt;
+  if(g.op==='+'){r=a+b;txt=`${a} + ${b}`}
+  else if(g.op==='−'){if(b>a)[a,b]=[b,a];r=a-b;txt=`${a} − ${b}`}
+  else if(g.op==='×'){r=a*b;txt=`${a} × ${b}`}
+  else{r=a;a=a*b;txt=`${a} ÷ ${b}`}
+  const opts=new Set([r]),d=[1,-1,2,-2,10,-10,b,-b];
+  for(const x of shuf(d)){if(opts.size>=4)break;if(r+x>=0)opts.add(r+x)}
+  let k=3;while(opts.size<4)opts.add(r+k++);
+  const ch=[...opts].map(String);
+  return ['calc',txt+' = ?',ch,0,`${txt} = ${r}`];
+}
+function startCalc(){G={type:'calc',list:Array.from({length:10},()=>calcQ1(C.calcul[rand(0,C.calcul.length-1)])),i:0,score:0};G.n=10;show('play');quizQ()}
+
+/* ----- PUB -----
+   Dans le navigateur on affiche un emplacement réservé.
+   Dans l'appli Android (Capacitor + AdMob), définir window.PUB = {banniere(el), interstitiel(fin)}
+   et ces fonctions seront appelées à la place. */
+function pubBanniere(){if(!C.pub||!C.pub.actif)return '';return '<div class="pub" id="pubB">PUBLICITÉ</div>'}
+function pubInterstitiel(suite){
+  if(!C.pub||!C.pub.actif||P.parties%(C.pub.toutesLes||3)!==0)return suite();
+  if(window.PUB&&window.PUB.interstitiel)return window.PUB.interstitiel(suite);
+  const d=document.createElement('div');d.className='pub full';d.innerHTML='PUBLICITÉ<button class="btn" style="width:auto;padding:12px 26px">Continuer</button>';
+  d.querySelector('button').onclick=()=>{d.remove();suite()};document.body.appendChild(d);
+}
+
+/* ----- commun ----- */
+function head(){return `<div class="top"><button class="back" onclick="tab('jeux')">✕</button><div class="prog"><i style="width:${G.i/G.n*100}%"></i></div><span class="pill">${G.score} ✓</span></div>`}
+function nextQ(f){G.i++;if(G.i>=G.n){if(G.score>P.best[G.type])P.best[G.type]=G.score;end(G.score,G.n,G.score+' / '+G.n+' bonnes réponses')}else f()}
+function end(sc,n,txt){P.parties++;save();pubInterstitiel(()=>endScreen(sc,n,txt))}
+function endScreen(sc,n,txt){
+  const r=sc/n,stars=r>=.9?3:r>=.6?2:r>0?1:0;if(stars>=2)confetti();
+  show('play');
+  $('playBody').innerHTML=`<div style="height:30px"></div><div class="big">${stars===3?'🏆':stars===2?'🎉':'💪'}</div>
+  <h1 style="text-align:center">${stars===3?'Parfait !':stars===2?'Bien joué !':'Continue comme ça !'}</h1>
+  <div class="stars">${'★'.repeat(stars)}${'☆'.repeat(3-stars)}</div><p class="mut" style="text-align:center;font-size:16px">${txt}</p>
+  <div style="height:20px"></div><button class="btn" onclick="tab('jeux')">Autre jeu</button><button class="btn ghost" onclick="tab('cours')">Revoir les cours</button>${pubBanniere()}`;
+  if(window.PUB&&window.PUB.banniere&&$('pubB'))window.PUB.banniere($('pubB'));
+}
+function gain(x,el){P.xp+=x;save();const r=el.getBoundingClientRect(),d=document.createElement('div');d.className='float';d.textContent='+'+x+' XP';d.style.left=(r.left+r.width/2-35)+'px';d.style.top=(r.top)+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1000);beep(1)}
+function shake(id){const e=$(id);e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake');beep(0)}
+let AC;function beep(ok){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;o.connect(g);g.connect(AC.destination);o.type='triangle';
+ if(ok){o.frequency.setValueAtTime(660,t);o.frequency.setValueAtTime(990,t+.08)}else{o.frequency.setValueAtTime(220,t);o.frequency.linearRampToValueAtTime(140,t+.25)}
+ g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.start(t);o.stop(t+.3)}catch(e){}}
+function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const cols=['#ffc83d','#2ed47a','#3db5ff','#ff5470'];
+ const ps=Array.from({length:120},()=>({x:c.width/2,y:c.height/3,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,s:rand(5,10),c:cols[rand(0,3)],r:0}));let f=0;
+ (function l(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.vy+=.4;p.x+=p.vx;p.y+=p.vy;p.r+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore()});if(++f<110)requestAnimationFrame(l);else x.clearRect(0,0,c.width,c.height)})()}
+/* démarrage */
+document.title=C.app;$('sousTitre').textContent=C.sousTitre||'';
+if(C.calcul)$('calcBtn').style.display='';
+theme();load();renderHome();
+</script>
+</body>
+</html>
