@@ -37,6 +37,9 @@ docs/                  étude des métiers, planning, règles pub
    - `ordre` — `{t:'Titre',s:['Étape 1','Étape 2',…]}`
    - `examen` *(facultatif)* — ajoute un examen blanc chronométré : `{titre:'Examen blanc',questions:60,seuil:42,minutes:60}`. Les questions sont tirées du quiz ; s'il y en a moins que `questions`, le seuil et la durée sont réduits en proportion
    - `calcul` *(facultatif, pour les maths)* — active le jeu Calcul mental : `[{op:'×',a:[2,10],b:[2,10]}]`, `op` parmi `+ − × ÷`
+   - `C.fiches` *(fortement conseillé)* — les fiches « wiki » : une entrée par module, ajoutée après le bloc `C` (voir la fin de `contenus/electricien.js`) :
+     `intro` (chapeau), `retenir` (résumé), et `s:[…]` pour compléter chaque partie avec `p` (paragraphe d'explication), `ex` (exemple concret), `att` (attention), `info` (le savais-tu ?), `q` (mini-question `['Question',['Bonne','Faux','Faux'],0,'Explication']`) et `fig` (schéma animé)
+   - Schémas animés `fig` : `{type:'cycle',etapes:[…],centre:'…'}` · `{type:'flux',etapes:['A',['B','valeur']]}` · `{type:'barres',items:[['Libellé',valeur,'unité']]}` · `{type:'chiffres',items:[[valeur,'unité','légende']]}` · `{type:'svg',svg:'<svg…>'}` (classes animées : `flow`, `glow`, `spin`, `pop`, `draw`, `appear`), + `legende`
 3. Fabriquer : `node build.js plaquiste` (ou `node build.js` pour toutes)
 
 Le build refuse un contenu incohérent (mot-clé absent du lexique, module inconnu dans le quiz, pas assez de questions…) et dit quoi corriger.
@@ -47,6 +50,8 @@ Le build refuse un contenu incohérent (mot-clé absent du lexique, module incon
 - **Couleurs par appli** via `theme`.
 - **Emplacements pub** (bannière sur l'écran de résultats + plein écran toutes les N parties), prêts pour AdMob.
 - **Jeu Calcul mental** pour les applis de maths.
+- **Fiches wiki** : sommaire, barre de lecture, explications, encadrés, schémas animés, mini-questions (+5 XP), « À retenir », module suivant, +20 XP par fiche terminée.
+- **Série de jours 🔥 et objectif du jour** (50 XP) sur l'accueil, pour revenir chaque jour.
 - **Examen blanc** : chronométré, sans correction pendant l'épreuve, verdict admis / pas encore, puis correction de chaque erreur.
 
 ## Documents
@@ -54,3 +59,14 @@ Le build refuse un contenu incohérent (mot-clé absent du lexique, module incon
 - `docs/ETUDE-MARCHE.md` — métiers sans appli et avec de la théorie à apprendre, concurrence, priorités
 - `docs/PLANNING.md` — planning semaine par semaine
 - `docs/PUBLICITE.md` — règles pub (RGPD, mineurs, Play Store)
+
+## Reprendre le travail (Windows + VS Code)
+
+```
+git clone https://github.com/AyoubDevDroid/application-.git
+cd application-
+git checkout claude/electricien-pro-metier-apps-ccq2a9
+node build.js
+```
+
+Il faut [Node.js](https://nodejs.org) (version LTS). Ensuite, double-cliquer sur un fichier de `dist/` pour l'ouvrir dans le navigateur.

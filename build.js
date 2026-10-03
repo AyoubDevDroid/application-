@@ -44,7 +44,20 @@ function check(C) {
   if (C.lexique.length < 5) pb.push('il faut au moins 5 mots dans le lexique (jeu Associer)');
   if (C.quiz.length < 10) pb.push('il faut au moins 10 questions de quiz');
   if (C.vf.length < 10) pb.push('il faut au moins 10 vrai/faux');
-  const dups = C.lexique.map(w => w[0]).filter((w, i, a) => a.indexOf(w) !== i);
+  const FIGS = ['cycle', 'flux', 'barres', 'chiffres', 'svg'];
+  const checkFig = (f, w) => { if (f && !FIGS.includes(f.type)) pb.push(`${w} : schéma de type inconnu « ${f.type} »`); };
+  C.modules.forEach(m => m.s.forEach((s, i) => checkFig(s.fig, `module ${m.id}, partie ${i + 1}`)));
+  for (const [id, F] of Object.entries(C.fiches || {})) {
+    const m = C.modules.find(x => x.id === id);
+    if (!m) { pb.push(`fiches : module inconnu « ${id} »`); continue; }
+    if ((F.s || []).length > m.s.length) pb.push(`fiches.${id} : ${F.s.length} parties pour ${m.s.length} dans le module`);
+    (F.s || []).forEach((s, i) => {
+      const w = `fiches.${id}, partie ${i + 1}`;
+      if (s.q && (!Array.isArray(s.q[1]) || s.q[1].length < 2 || s.q[2] >= s.q[1].length || !s.q[3])) pb.push(`${w} : mini-question invalide (format : [question,[réponses],0,explication])`);
+      checkFig(s.fig, w);
+    });
+  }
+  const dups =C.lexique.map(w => w[0]).filter((w, i, a) => a.indexOf(w) !== i);
   if (dups.length) pb.push('mots en double dans le lexique : ' + dups.join(', '));
   return pb;
 }

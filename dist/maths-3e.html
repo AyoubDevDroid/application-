@@ -90,6 +90,65 @@ nav button.on{color:var(--pri)}
 .modal .in{background:var(--card);width:100%;max-width:480px;margin:0 auto;border-radius:22px 22px 0 0;padding:20px 16px 28px;display:flex;flex-direction:column;gap:10px;animation:fade .25s}
 .pub{background:repeating-linear-gradient(45deg,var(--card),var(--card) 10px,var(--card2) 10px,var(--card2) 20px);border-radius:14px;min-height:60px;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px;font-weight:700;letter-spacing:1px}
 .pub.full{position:fixed;inset:0;z-index:40;border-radius:0;flex-direction:column;gap:16px;font-size:14px}
+/* fiches wiki */
+.rbar{position:fixed;top:0;left:0;right:0;height:4px;z-index:6;background:transparent}
+.rbar i{display:block;height:100%;width:0;background:var(--pri);transition:width .1s}
+.fhero{display:flex;gap:14px;align-items:center}
+.fhero .fic{font-size:52px;width:76px;height:76px;border-radius:22px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px) rotate(-4deg)}}
+.chapo{font-size:17px;line-height:1.6;border-left:4px solid var(--pri);padding:4px 0 4px 14px}
+.toc{display:flex;flex-direction:column;gap:6px;background:var(--card);border-radius:16px;padding:12px}
+.toc b{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+.toc button{background:none;border:none;color:var(--acc);text-align:left;font-size:15px;font-weight:700;cursor:pointer;padding:4px 0}
+.sh{display:flex;gap:10px;align-items:center;margin-bottom:10px}.sh h3{margin:0!important}
+.num{width:30px;height:30px;border-radius:10px;background:var(--pri);color:#10142a;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec>p{line-height:1.65;font-size:15.5px;margin-bottom:10px}
+.box{border-radius:14px;padding:12px 14px;margin-top:12px;font-size:15px;line-height:1.55}
+.box>b{display:block;margin-bottom:4px}
+.box ul{padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.box.ex2{background:rgba(61,181,255,.12);border:1px solid rgba(61,181,255,.35)}
+.box.att{background:rgba(255,84,112,.12);border:1px solid rgba(255,84,112,.4)}
+.box.info{background:rgba(177,140,255,.13);border:1px solid rgba(177,140,255,.4)}
+.box.ret{background:rgba(46,212,122,.12);border:1px solid rgba(46,212,122,.4);margin-top:0}
+.mq{margin-top:12px;background:var(--card2);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.mq>b{font-size:13px;color:var(--pri)}.mq p{font-weight:700;line-height:1.45}
+.mq .ans{padding:11px 14px;font-size:15px;box-shadow:0 3px 0 #0a0d1d}
+.mq .ex{display:none}.mq .ex.on{display:block}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:var(--ok);color:#10142a;font-weight:900;padding:12px 18px;border-radius:99px;z-index:50;animation:toast 2.6s forwards;white-space:nowrap}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-20px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.day{display:flex;gap:12px;align-items:center}
+.day .fl{font-size:34px}.day .fl.off{filter:grayscale(1);opacity:.5}
+/* figures animées */
+.fig{margin-top:12px;background:var(--card2);border-radius:14px;padding:14px 12px 12px;position:relative}
+.fig .rej{position:absolute;top:6px;right:8px;background:none;border:none;color:var(--mut);font-size:12px;font-weight:700;cursor:pointer;z-index:2}
+.fig .leg{text-align:center;color:var(--mut);font-size:13px;margin-top:8px}
+.fig svg{display:block;width:100%;max-width:340px;margin:0 auto;height:auto}
+.cyc{position:relative;width:100%;max-width:310px;aspect-ratio:1;margin:0 auto}
+.cyc svg{position:absolute;inset:0;max-width:none}
+.cyc .n{position:absolute;transform:translate(-50%,-50%);background:var(--card);border:2px solid var(--c,var(--acc));border-radius:12px;padding:6px 8px;font-size:12px;font-weight:700;text-align:center;width:max-content;max-width:42%;transition:.35s;line-height:1.3}
+.cyc .n.on{background:var(--c,var(--acc));color:#10142a;transform:translate(-50%,-50%) scale(1.12);box-shadow:0 0 18px var(--c,var(--acc))}
+.cyc .ctr{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;font-weight:800;font-size:13px;color:var(--mut);max-width:34%}
+.flx{display:flex;flex-direction:column;gap:4px}
+.flx .b{background:var(--card);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:14px;opacity:0}
+.flx .b b{color:var(--pri);white-space:nowrap}
+.flx .b.fin{background:var(--pri);color:#10142a}.flx .b.fin b{color:#10142a}
+.flx .a{text-align:center;color:var(--pri);opacity:0;font-size:15px;line-height:1.1;font-weight:900}
+.go .flx .b,.go .flx .a{animation:fade .45s forwards}
+.brs{display:flex;flex-direction:column;gap:10px}
+.brs .r{font-size:13px;font-weight:700;display:flex;justify-content:space-between}
+.brs .t{height:14px;background:var(--card);border-radius:99px;overflow:hidden;margin-top:4px}
+.brs .t i{display:block;height:100%;width:0;background:var(--c,var(--pri));border-radius:99px;transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.chf{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.chf div{background:var(--card);border-radius:12px;padding:12px 8px;text-align:center}
+.chf b{display:block;font-size:24px;color:var(--pri)}.chf span{font-size:12px;color:var(--mut);line-height:1.3;display:block;margin-top:2px}
+/* classes d'animation utilisables dans les SVG du contenu */
+.flow{animation:flow 1s linear infinite}@keyframes flow{to{stroke-dashoffset:-16}}
+.glow{animation:glow 1.6s ease-in-out infinite}@keyframes glow{50%{opacity:.55}}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 4s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.go .pop{transform-box:fill-box;transform-origin:center;animation:pop .5s cubic-bezier(.3,1.6,.5,1) backwards}@keyframes pop{from{transform:scale(0);opacity:0}}
+.go .draw{stroke-dasharray:600;animation:draw 1.4s ease-out backwards}@keyframes draw{from{stroke-dashoffset:600}}
+.go .appear{animation:fade .5s backwards}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
 </style>
 </head>
@@ -100,6 +159,7 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
 <section class="screen on" id="home">
   <div class="top"><h1 id="appName"></h1><span class="pill" id="xpP"></span></div>
   <div class="hero"><div class="ic" id="appIc"></div><div style="flex:1"><b>Ta progression</b><span id="progTx"></span><div class="bar"><i id="progBar"></i></div></div></div>
+  <div class="card" id="dayCard"></div>
   <div class="card word"><span class="mut">💡 Mot du jour</span><h3 id="wotdM"></h3><p id="wotdD" style="line-height:1.5"></p></div>
   <h2>Continuer</h2>
   <div id="nextMod"></div>
@@ -276,11 +336,12 @@ const C={
 const $=id=>document.getElementById(id);
 const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=rand(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
-const P={xp:0,read:new Set(),best:{quiz:0,vf:0,match:0,ordre:null,calc:0,exam:0},parties:0};
+const P={xp:0,read:new Set(),best:{quiz:0,vf:0,match:0,ordre:null,calc:0,exam:0},parties:0,fin:new Set(),mq:new Set(),serie:0,jour:'',xpJour:0};
+let FX=[];const OBJ=50;
 /* sauvegarde de la progression (une clé par app) */
 const KEY='appmetier_'+(C.id||C.app);
-function save(){try{localStorage.setItem(KEY,JSON.stringify({xp:P.xp,read:[...P.read],best:P.best,parties:P.parties}))}catch(e){}}
-function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){P.xp=d.xp||0;P.read=new Set(d.read||[]);Object.assign(P.best,d.best||{});P.parties=d.parties||0}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({xp:P.xp,read:[...P.read],best:P.best,parties:P.parties,fin:[...P.fin],mq:[...P.mq],serie:P.serie,jour:P.jour,xpJour:P.xpJour}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){P.xp=d.xp||0;P.read=new Set(d.read||[]);Object.assign(P.best,d.best||{});P.parties=d.parties||0;P.fin=new Set(d.fin||[]);P.mq=new Set(d.mq||[]);P.serie=d.serie||0;P.jour=d.jour||'';P.xpJour=d.xpJour||0}}catch(e){}}
 /* thème : couleurs propres à chaque app (facultatif) */
 function theme(){const th=C.theme||{};Object.keys(th).forEach(k=>document.documentElement.style.setProperty('--'+k,th[k]))}
 let G={};
@@ -290,7 +351,7 @@ function tab(t){
   show(t);
   if(t==='home')renderHome();if(t==='cours')renderMods();if(t==='lexique')renderLex();if(t==='jeux')renderBest();
 }
-function show(id){clearInterval(G.tm);document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
+function show(id){clearInterval(G.tm);FX.forEach(clearInterval);FX=[];if($('rb'))$('rb').style.width=0;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
 
 /* accueil */
 function renderHome(){
@@ -299,20 +360,82 @@ function renderHome(){
   const w=C.lexique[new Date().getDate()%C.lexique.length];$('wotdM').textContent=w[0];$('wotdD').textContent=w[1];
   const m=C.modules.find(m=>!P.read.has(m.id))||C.modules[0];
   $('nextMod').innerHTML=modRow(m);
+  const auj=P.jour===today(),xj=auj?P.xpJour:0,s=auj||P.jour===today(-1)?P.serie:0;
+  $('dayCard').innerHTML=`<div class="day"><span class="fl ${auj?'':'off'}">🔥</span><div style="flex:1"><b>${s} jour${s>1?'s':''} de suite</b><div class="mut">${auj?'Bravo, tu as appris aujourd\'hui !':'Apprends aujourd\'hui pour garder ta série.'}</div></div></div>
+   <div class="mut" style="display:flex;justify-content:space-between;margin-top:6px"><span>🎯 Objectif du jour</span><b style="color:#fff">${Math.min(xj,OBJ)} / ${OBJ} XP</b></div><div class="prog" style="flex:none"><i style="width:${Math.min(100,xj/OBJ*100)}%"></i></div>`;
 }
 function modRow(m){return `<button class="row" onclick="openFiche('${m.id}')"><span class="ic">${m.i}</span><span class="tx"><b>${m.t}</b><span>${m.d}</span></span>${P.read.has(m.id)?'<span class="ok">✓</span>':'<span class="mut">›</span>'}</button>`}
 function renderMods(){$('modList').innerHTML=C.modules.map(modRow).join('')}
 
 /* fiche */
 function openFiche(id){
-  const m=C.modules.find(x=>x.id===id);P.read.add(id);save();
-  $('ficheBody').innerHTML=`<div class="top"><button class="back" onclick="tab('cours')">←</button><span class="pill">${m.i} Module</span></div>
-   <h1>${m.t}</h1><p class="mut">${m.d}</p>
-   ${m.s.map(s=>`<div class="sec"><h3>${s.h}</h3><ul>${s.l.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}
+  const m=C.modules.find(x=>x.id===id),F=(C.fiches||{})[id]||{},k=C.modules.indexOf(m),nx=C.modules[k+1];
+  P.read.add(id);save();
+  const S=m.s.map((s,i)=>Object.assign({},s,(F.s||[])[i]||{}));
+  const mots=(JSON.stringify(S)+(F.intro||'')).replace(/<[^>]+>/g,' ').split(/\s+/).length,min=Math.max(1,Math.round(mots/170));
+  $('ficheBody').innerHTML=`<div class="rbar"><i id="rb"></i></div>
+   <div class="top"><button class="back" onclick="tab('cours')">←</button><span class="pill">Module ${k+1} / ${C.modules.length}</span></div>
+   <div class="fhero"><span class="fic">${m.i}</span><div><h1>${m.t}</h1><p class="mut">${m.d}</p><span class="mut">⏱ ${min} min de lecture · ${S.length} parties${P.fin.has(id)?' · ✅ lue':''}</span></div></div>
+   ${F.intro?`<p class="chapo">${F.intro}</p>`:''}
+   ${S.length>1?`<div class="toc"><b>Sommaire</b>${S.map((s,i)=>`<button onclick="$('s${i}').scrollIntoView({behavior:'smooth',block:'start'})">${i+1}. ${s.h}</button>`).join('')}</div>`:''}
+   ${S.map((s,i)=>`<div class="sec" id="s${i}"><div class="sh"><span class="num">${i+1}</span><h3>${s.h}</h3></div>
+     ${s.p?`<p>${s.p}</p>`:''}${s.l?`<ul>${s.l.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+     ${s.fig?figHTML(s.fig):''}
+     ${s.ex?`<div class="box ex2"><b>💡 Exemple concret</b>${s.ex}</div>`:''}
+     ${s.att?`<div class="box att"><b>⚠️ Attention</b>${s.att}</div>`:''}
+     ${s.info?`<div class="box info"><b>🤓 Le savais-tu ?</b>${s.info}</div>`:''}
+     ${s.q?mqHTML(s.q,id+':'+i):''}</div>`).join('')}
+   ${F.retenir?`<div class="box ret"><b>📌 À retenir</b><ul>${F.retenir.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}
    <div class="key"><h3>🔑 Mots-clés</h3><div class="chips">${m.k.map(k=>`<button class="chip" onclick="def('${k.replace(/'/g,"\\'")}')">${k}</button>`).join('')}</div></div>
-   <button class="btn" onclick="startQuiz('${m.id}')">🎯 S'entraîner sur ce module</button>`;
+   <div id="finF"></div>
+   <button class="btn" onclick="startQuiz('${m.id}')">🎯 S'entraîner sur ce module</button>
+   ${nx?`<button class="btn ghost" onclick="openFiche('${nx.id}')">Module suivant : ${nx.i} ${nx.t} →</button>`:`<button class="btn ghost" onclick="tab('cours')">🎉 Tous les modules vus — retour aux cours</button>`}`;
   show('fiche');
+  document.querySelectorAll('#ficheBody .fig').forEach(f=>watch(f,()=>playFig(f)));
+  watch($('finF'),()=>{if(!P.fin.has(id)){P.fin.add(id);gain(20,$('finF'));toast('📖 Fiche terminée ! +20 XP')}});
 }
+/* barre de lecture */
+addEventListener('scroll',()=>{const r=$('rb');if(!r||!$('fiche').classList.contains('on'))return;const h=document.documentElement.scrollHeight-innerHeight;r.style.width=(h>0?Math.min(100,scrollY/h*100):100)+'%'},{passive:true});
+function watch(el,f){if(!('IntersectionObserver' in window))return f();const o=new IntersectionObserver(e=>{if(e[0].isIntersecting){o.disconnect();f()}},{threshold:.35});o.observe(el)}
+function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2700)}
+
+/* mini-question dans la fiche : [question,[bonne,faux,…],0,explication] */
+function mqHTML(q,key){const o=shuf(q[1].map((t,i)=>({t,i})));
+  return `<div class="mq" data-k="${key}"><b>✋ Vérifie que tu as compris</b><p>${q[0]}</p>${o.map(x=>`<button class="ans" data-i="${x.i}" onclick="mqA(this)">${x.t}</button>`).join('')}<div class="ex"></div></div>`}
+function mqA(b){const box=b.closest('.mq'),k=box.dataset.k,[mid,si]=k.split(':'),m=C.modules.find(x=>x.id===mid);
+  const s=Object.assign({},m.s[si],((C.fiches||{})[mid]||{s:[]}).s[si]||{}),q=s.q,bs=[...box.querySelectorAll('.ans')];if(bs[0].disabled)return;bs.forEach(x=>x.disabled=true);
+  const ok=+b.dataset.i===q[2];bs.forEach(x=>{if(+x.dataset.i===q[2])x.classList.add('ok');else if(x!==b)x.classList.add('dim')});
+  if(ok){if(!P.mq.has(k)){P.mq.add(k);gain(5,b)}else beep(1)}else{b.classList.add('ko');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');beep(0)}
+  const e=box.querySelector('.ex');e.innerHTML=(ok?'✅ ':'❌ ')+q[3];e.classList.add('on');}
+
+/* ----- FIGURES ANIMÉES -----
+   fig:{type:'cycle',etapes:['A','B',['C','#ff5470']],centre:'…'}   étapes en boucle
+   fig:{type:'flux',etapes:['A',['B','valeur'],…],ops:['− 5','÷ 3']}  étapes qui apparaissent une à une
+   fig:{type:'barres',items:[['Libellé',valeur,'unité','#couleur'],…]}  barres comparées
+   fig:{type:'chiffres',items:[[valeur,'unité','légende'],…]}          chiffres clés qui défilent
+   fig:{type:'svg',svg:'<svg…>'}  dessin libre (classes : flow, glow, spin, pop, draw, appear)
+   + legende:'…' (facultatif) */
+function figHTML(f){let h='';
+  if(f.type==='cycle'){const n=f.etapes.length,T=n*1.6;
+    h=`<div class="cyc" data-n="${n}"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="var(--card)" stroke-width="3"/><circle cx="50" cy="50" r="38" fill="none" stroke="var(--pri)" stroke-width="1.2" stroke-dasharray="3 5" class="flow" opacity=".7"/><circle r="3" fill="var(--pri)"><animateMotion dur="${T}s" repeatCount="indefinite" path="M50,12 A38,38 0 1,1 49.99,12"/></circle></svg>
+     ${f.etapes.map((e,i)=>{const [t,c]=Array.isArray(e)?e:[e],a=(-90+i*360/n)*Math.PI/180;return `<div class="n" style="left:${50+38*Math.cos(a)}%;top:${50+38*Math.sin(a)}%;${c?'--c:'+c:''}">${t}</div>`}).join('')}
+     ${f.centre?`<div class="ctr">${f.centre}</div>`:''}</div>`}
+  else if(f.type==='flux'){h=`<div class="flx">${f.etapes.map((e,i)=>{const [t,v]=Array.isArray(e)?e:[e];return (i?`<div class="a" style="animation-delay:${i*.7-.35}s">↓ ${(f.ops||[])[i-1]||''}</div>`:'')+`<div class="b ${i===f.etapes.length-1?'fin':''}" style="animation-delay:${i*.7}s"><span>${t}</span>${v?`<b>${v}</b>`:''}</div>`}).join('')}</div>`}
+  else if(f.type==='barres'){const mx=Math.max(...f.items.map(x=>x[1]));h=`<div class="brs">${f.items.map(x=>`<div><div class="r"><span>${x[0]}</span><span><span class="cnt" data-v="${x[1]}">0</span>${x[2]?' '+x[2]:''}</span></div><div class="t"><i data-w="${Math.max(1.5,x[1]/mx*100)}" style="${x[3]?'--c:'+x[3]:''}"></i></div></div>`).join('')}</div>`}
+  else if(f.type==='chiffres'){h=`<div class="chf">${f.items.map(x=>`<div><b><span class="cnt" data-v="${x[0]}">0</span>${x[1]?' '+x[1]:''}</b><span>${x[2]||''}</span></div>`).join('')}</div>`}
+  else if(f.type==='svg')h=f.svg;
+  return `<div class="fig" data-t="${f.type}"><button class="rej" onclick="playFig(this.parentNode)">↻ Rejouer</button>${h}${f.legende?`<div class="leg">${f.legende}</div>`:''}</div>`}
+function playFig(f){
+  f.classList.remove('go');void f.offsetWidth;f.classList.add('go');
+  const t=f.dataset.t;
+  if(t==='cycle'){const ns=[...f.querySelectorAll('.n')],n=ns.length;let i=0;const st=()=>{ns.forEach((x,j)=>x.classList.toggle('on',j===i%n));i++};
+    FX.forEach(x=>{if(x.f===f)clearInterval(x)});st();const iv=setInterval(st,1600);iv.f=f;FX.push(iv);
+    const an=f.querySelector('animateMotion');if(an&&an.beginElement)an.beginElement()}
+  if(t==='barres')f.querySelectorAll('.t i').forEach(i=>{i.style.width=0;void i.offsetWidth;i.style.width=i.dataset.w+'%'});
+  f.querySelectorAll('.cnt').forEach(countUp);
+}
+function countUp(el){const v=+el.dataset.v,d=(el.dataset.v.split('.')[1]||'').length,t0=performance.now(),D=1100;
+  (function s(t){const p=Math.min(1,(t-t0)/D),e=1-Math.pow(1-p,3);el.textContent=(v*e).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});if(p<1)requestAnimationFrame(s)})(t0)}
 function def(k){const w=C.lexique.find(x=>x[0]===k);$('modalIn').innerHTML=`<span class="mut">📖 Lexique</span><h2>${k}</h2><p style="line-height:1.55">${w?w[1]:''}</p><button class="btn ghost" onclick="$('modal').classList.remove('on')">Fermer</button>`;$('modal').classList.add('on')}
 
 /* lexique */
@@ -448,6 +571,11 @@ function pubInterstitiel(suite){
   d.querySelector('button').onclick=()=>{d.remove();suite()};document.body.appendChild(d);
 }
 
+/* ----- série de jours & objectif du jour ----- */
+function today(d=0){const t=new Date(Date.now()+d*864e5);return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()}
+function jour(x){if(P.jour!==today()){P.serie=P.jour===today(-1)?P.serie+1:1;P.jour=today();P.xpJour=0;if(P.serie>1)setTimeout(()=>toast('🔥 '+P.serie+' jours de suite !'),400)}
+  const av=P.xpJour;P.xpJour+=x;if(av<OBJ&&P.xpJour>=OBJ){setTimeout(()=>{toast('🎯 Objectif du jour atteint !');confetti()},300)}}
+
 /* ----- commun ----- */
 function head(){return `<div class="top"><button class="back" onclick="tab('jeux')">✕</button><div class="prog"><i style="width:${G.i/G.n*100}%"></i></div><span class="pill">${G.score} ✓</span></div>`}
 function nextQ(f){G.i++;if(G.i>=G.n){if(G.score>P.best[G.type])P.best[G.type]=G.score;end(G.score,G.n,G.score+' / '+G.n+' bonnes réponses')}else f()}
@@ -461,7 +589,7 @@ function endScreen(sc,n,txt){
   <div style="height:20px"></div><button class="btn" onclick="tab('jeux')">Autre jeu</button><button class="btn ghost" onclick="tab('cours')">Revoir les cours</button>${pubBanniere()}`;
   if(window.PUB&&window.PUB.banniere&&$('pubB'))window.PUB.banniere($('pubB'));
 }
-function gain(x,el){P.xp+=x;save();const r=el.getBoundingClientRect(),d=document.createElement('div');d.className='float';d.textContent='+'+x+' XP';d.style.left=(r.left+r.width/2-35)+'px';d.style.top=(r.top)+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1000);beep(1)}
+function gain(x,el){P.xp+=x;jour(x);save();const r=el.getBoundingClientRect(),d=document.createElement('div');d.className='float';d.textContent='+'+x+' XP';d.style.left=(r.left+r.width/2-35)+'px';d.style.top=(r.top)+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1000);beep(1)}
 function shake(id){const e=$(id);e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake');beep(0)}
 let AC;function beep(ok){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;o.connect(g);g.connect(AC.destination);o.type='triangle';
  if(ok){o.frequency.setValueAtTime(660,t);o.frequency.setValueAtTime(990,t+.08)}else{o.frequency.setValueAtTime(220,t);o.frequency.linearRampToValueAtTime(140,t+.25)}
