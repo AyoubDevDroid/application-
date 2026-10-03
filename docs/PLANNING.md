@@ -20,7 +20,7 @@ Seuls les métiers **avec de la théorie à apprendre** sont au planning (voir `
 | Semaine | Dates | Métier | Maths | Autre |
 |---|---|---|---|---|
 | S1 | 5 – 9 oct. | Électricien ✅ · Soudeur ✅ (petite appli, à relire) | Maths 6e ✅ | Moteur commun ✅ · ouvrir le compte Google Play (25 $) · page « politique de confidentialité » |
-| S2 | 12 – 16 oct. | **Technicien froid et climatisation** (+ QCM attestation fluides) | — | Empaqueter en appli Android (Capacitor) · brancher AdMob + consentement RGPD |
+| S2 | 12 – 16 oct. | Froid & climatisation ✅ (+ examen blanc attestation fluides, à relire) | — | Empaqueter en appli Android (Capacitor) · brancher AdMob + consentement RGPD |
 | S3 | 19 – 23 oct. | **Gestionnaire de paie** | **Maths 3e – Brevet** | Lancer le **test fermé** Google Play (12 testeurs pendant 14 jours, obligatoire pour un nouveau compte) : stagiaires et formateurs |
 | S4 | 26 – 30 oct. | **Comptable assistant** | — | Suite du test fermé · corriger les retours |
 

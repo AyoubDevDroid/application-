@@ -1,11 +1,12 @@
 # Applis métier & scolaires
 
-Un seul **moteur** (cours en fiches, lexique, 4 jeux, XP, niveaux, étoiles, confettis) et un **fichier de contenu** par appli.
+Un seul **moteur** (cours en fiches, lexique, jeux, examen blanc, XP, niveaux, étoiles, confettis) et un **fichier de contenu** par appli.
 
 | Appli | Contenu | Appli prête à ouvrir |
 |---|---|---|
 | ⚡ Électricien Pro | `contenus/electricien.js` | `dist/electricien.html` |
 | 🔥 Soudeur Pro | `contenus/soudeur.js` (petite appli : métier surtout pratique ; à faire relire) | `dist/soudeur.html` |
+| ❄️ Froid & Clim Pro | `contenus/froid-clim.js` (+ examen blanc attestation fluides ; à faire relire) | `dist/froid-clim.html` |
 | 📐 Maths 6e | `contenus/maths-6e.js` | `dist/maths-6e.html` |
 
 Les fichiers de `dist/` s'ouvrent directement dans un navigateur, sur ordinateur ou téléphone.
@@ -32,6 +33,7 @@ docs/                  étude des métiers, planning, règles pub
    - `quiz` — `['idModule','Question',['Bonne réponse','Faux','Faux','Faux'],0,'Explication']` (la bonne réponse en premier, le moteur mélange)
    - `vf` — `['Affirmation',true/false,'Explication']`
    - `ordre` — `{t:'Titre',s:['Étape 1','Étape 2',…]}`
+   - `examen` *(facultatif)* — ajoute un examen blanc chronométré : `{titre:'Examen blanc',questions:60,seuil:42,minutes:60}`. Les questions sont tirées du quiz ; s'il y en a moins que `questions`, le seuil et la durée sont réduits en proportion
    - `calcul` *(facultatif, pour les maths)* — active le jeu Calcul mental : `[{op:'×',a:[2,10],b:[2,10]}]`, `op` parmi `+ − × ÷`
 3. Fabriquer : `node build.js plaquiste` (ou `node build.js` pour toutes)
 
@@ -43,6 +45,7 @@ Le build refuse un contenu incohérent (mot-clé absent du lexique, module incon
 - **Couleurs par appli** via `theme`.
 - **Emplacements pub** (bannière sur l'écran de résultats + plein écran toutes les N parties), prêts pour AdMob.
 - **Jeu Calcul mental** pour les applis de maths.
+- **Examen blanc** : chronométré, sans correction pendant l'épreuve, verdict admis / pas encore, puis correction de chaque erreur.
 
 ## Documents
 

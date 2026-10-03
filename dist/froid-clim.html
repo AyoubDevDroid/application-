@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>/*__TITRE__*/</title>
+<title>Froid & Clim Pro</title>
 <style>
 :root{--bg:#10142a;--card:#1c2244;--card2:#252c58;--pri:#ffc83d;--pri2:#d99a00;--acc:#3db5ff;--ok:#2ed47a;--ko:#ff5470;--txt:#fff;--mut:#a9b0d6}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -148,7 +148,143 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
 /* =====================================================================
    CONTENU — c'est la seule partie à changer pour un autre métier
    ===================================================================== */
-/*__CONTENU__*/
+/* Froid & Clim Pro — contenu (titre pro Technicien d'intervention en froid commercial et climatisation
+   + préparation de l'attestation d'aptitude à la manipulation des fluides frigorigènes)
+   À faire relire par un formateur froid avant publication (réglementation et valeurs de PRP). */
+const C={
+ id:'froidclim',app:'Froid & Clim Pro',icon:'❄️',
+ sousTitre:'Le titre pro et l\'attestation fluides frigorigènes, en fiches courtes.',
+ theme:{pri:'#6fe3ff',pri2:'#1fa6c9',acc:'#ffc83d'},
+ pub:{actif:true,toutesLes:3},
+ examen:{titre:'Examen blanc attestation fluides',questions:60,seuil:42,minutes:60},
+ modules:[
+  {id:'thermo',i:'🌡️',t:'Les bases du froid',d:'Chaleur, pression, changement d\'état',
+   s:[{h:'Le principe du froid',l:['Faire du froid, c\'est <b>enlever de la chaleur</b> à un endroit pour la rejeter ailleurs.','Un liquide qui <b>s\'évapore absorbe</b> de la chaleur (comme la sueur sur la peau).','Une vapeur qui <b>se condense rejette</b> de la chaleur.']},
+      {h:'Pression et température',l:['La température d\'ébullition dépend de la <b>pression</b> : plus la pression est basse, plus le fluide bout à basse température.','<b>Pression absolue = pression relative (lue au manomètre) + 1 bar</b> environ (pression atmosphérique).','En kelvins : <b>K = °C + 273</b>. Un écart de 1 K = un écart de 1 °C.']},
+      {h:'Chaleur sensible et latente',l:['<b>Chaleur sensible</b> : fait varier la température, sans changement d\'état.','<b>Chaleur latente</b> : provoque un changement d\'état, à température constante.','Le circuit frigorifique utilise surtout la chaleur <b>latente</b> : c\'est elle qui transporte le plus d\'énergie.']}],
+   k:['Évaporation','Condensation','Pression absolue','Chaleur latente','Chaleur sensible']},
+  {id:'circuit',i:'🔄',t:'Le circuit frigorifique',d:'Compresseur, condenseur, détendeur, évaporateur',
+   s:[{h:'Les 4 organes principaux',l:['<b>Compresseur</b> : aspire la vapeur basse pression et la refoule en haute pression, chaude.','<b>Condenseur</b> : la vapeur HP se condense en liquide et <b>rejette la chaleur</b> dehors.','<b>Détendeur</b> : fait chuter la pression du liquide (HP → BP).','<b>Évaporateur</b> : le liquide BP s\'évapore et <b>absorbe la chaleur</b> de la pièce ou de la chambre froide.']},
+      {h:'Les accessoires',l:['<b>Filtre déshydrateur</b> : sur la ligne liquide, retient l\'humidité et les impuretés.','<b>Voyant liquide</b> : montre la présence de bulles et d\'humidité.','<b>Bouteille anti-coup de liquide</b> : sur l\'aspiration, protège le compresseur.','<b>Pressostats HP et BP</b> : arrêtent le compresseur si la pression est anormale.']},
+      {h:'Surchauffe et sous-refroidissement',l:['<b>Surchauffe</b> = température à l\'aspiration − température d\'évaporation. Elle garantit qu\'il n\'arrive que de la vapeur au compresseur (souvent 5 à 8 K).','<b>Sous-refroidissement</b> = température de condensation − température du liquide en sortie de condenseur. Il garantit que le détendeur reçoit du liquide sans bulles.']},
+      {h:'La pompe à chaleur',l:['Même circuit, mais on utilise la chaleur rejetée par le condenseur pour <b>chauffer</b>.','La <b>vanne 4 voies</b> inverse le cycle : chaud l\'hiver, froid l\'été.','<b>COP</b> = chaleur produite ÷ énergie électrique consommée. COP 4 : 1 kWh consommé → 4 kWh de chaleur.']}],
+   k:['Compresseur','Condenseur','Détendeur','Évaporateur','Filtre déshydrateur','Surchauffe','Sous-refroidissement','COP']},
+  {id:'fluides',i:'🧪',t:'Fluides & environnement',d:'CFC, HCFC, HFC, HFO, naturels, PRP',
+   s:[{h:'Les familles de fluides',l:['<b>CFC</b> (ex. R12) et <b>HCFC</b> (ex. R22) : détruisent la couche d\'ozone. <b>Interdits</b> (plus de recharge en R22 depuis 2015).','<b>HFC</b> (R134a, R410A, R404A, R32) : pas d\'effet sur l\'ozone mais fort effet de serre. En réduction progressive (règlement européen F-Gas).','<b>HFO</b> (R1234yf, R1234ze) : effet de serre très faible.','<b>Fluides naturels</b> : R290 (propane), R744 (CO₂), R717 (ammoniac).']},
+      {h:'Mesurer l\'impact',l:['<b>PAO</b> (ODP) : potentiel d\'appauvrissement de la couche d\'ozone.','<b>PRP</b> (GWP) : potentiel de réchauffement planétaire, comparé au CO₂ (PRP = 1).','Exemples de PRP : R404A ≈ 3 922 · R410A ≈ 2 088 · R134a ≈ 1 430 · R32 = 675 · R290 = 3 · R744 = 1.','<b>Tonnes équivalent CO₂ = charge (kg) × PRP ÷ 1 000</b>.']},
+      {h:'Sécurité des fluides',l:['Classe <b>A1</b> : peu toxique, non inflammable (R410A, R134a).','Classe <b>A2L</b> : faiblement inflammable (R32, R1234yf).','Classe <b>A3</b> : très inflammable (R290 propane).','Classe <b>B2L</b> : toxique et faiblement inflammable (R717 ammoniac).']},
+      {h:'Mélanges',l:['Un fluide <b>zéotrope</b> (ex. R407C) a un <b>glissement de température</b> : il ne bout pas à température constante.','Les mélanges (R407C, R404A, R410A) se chargent <b>en phase liquide</b>, sinon la composition change.']}],
+   k:['PRP','PAO','HFC','HFO','Zéotrope','Tonne équivalent CO₂']},
+  {id:'regle',i:'📜',t:'Réglementation',d:'Attestations, contrôles d\'étanchéité, fiche d\'intervention',
+   s:[{h:'Deux attestations différentes',l:['<b>Attestation de capacité</b> : délivrée à l\'<b>entreprise</b> (organisme agréé).','<b>Attestation d\'aptitude</b> : délivrée à la <b>personne</b> qui manipule les fluides, après un examen théorique (QCM) et pratique.','<b>Catégorie I</b> : toutes les opérations sur tous les équipements. <b>Catégorie V</b> : climatisation des véhicules.']},
+      {h:'Les contrôles d\'étanchéité',l:['Obligatoires à partir de <b>5 tonnes équivalent CO₂</b> de fluide.','≥ 5 t éq. CO₂ : tous les <b>12 mois</b>.','≥ 50 t éq. CO₂ : tous les <b>6 mois</b>.','≥ 500 t éq. CO₂ : tous les <b>3 mois</b>, et détecteur de fuite permanent obligatoire.','Avec un détecteur permanent, la fréquence est divisée par deux (24, 12, 6 mois).']},
+      {h:'Les interdits et obligations',l:['<b>Dégazage volontaire interdit</b> : on récupère toujours le fluide.','Chaque intervention avec manipulation de fluide donne lieu à une <b>fiche d\'intervention</b> (Cerfa 15497).','Une fuite détectée doit être <b>réparée</b> puis l\'étanchéité <b>recontrôlée</b>.']}],
+   k:['Attestation d\'aptitude','Attestation de capacité','Contrôle d\'étanchéité','Fiche d\'intervention','Dégazage']},
+  {id:'interv',i:'🛠️',t:'Interventions & mesures',d:'Manifold, azote, tirage au vide, charge, récupération',
+   s:[{h:'Le matériel',l:['<b>Manifold</b> : manomètre <b>BP bleu</b> et <b>HP rouge</b>, flexibles pour se raccorder au circuit.','<b>Pompe à vide</b> et <b>vacuomètre</b> : pour tirer au vide et mesurer le vide.','<b>Station de récupération</b> et <b>bouteille de récupération</b> : pour récupérer le fluide.','<b>Balance</b> : on charge et on récupère toujours au poids.']},
+      {h:'Tester l\'étanchéité',l:['On met le circuit sous pression avec de l\'<b>azote déshydraté</b> (OFN).','<b>Jamais d\'oxygène ni d\'air comprimé</b> : risque d\'explosion avec l\'huile, humidité.','Recherche de fuite : <b>détecteur électronique</b> ou <b>produit moussant</b>.','Pendant le brasage : <b>balayage d\'azote</b> dans le tube pour éviter la calamine (oxydation).']},
+      {h:'Tirage au vide et charge',l:['Le <b>tirage au vide</b> enlève l\'air et l\'<b>humidité</b> du circuit (l\'eau bout à basse pression).','On vérifie que le vide <b>tient</b> une fois la pompe isolée.','On charge la quantité indiquée par le fabricant, <b>au poids</b>.','Une bouteille de récupération ne se remplit <b>jamais à plus de 80 %</b> : le liquide se dilate.']}],
+   k:['Manifold','Tirage au vide','Azote','Station de récupération']}
+ ],
+ lexique:[
+  ['Évaporation','Passage de l\'état liquide à l\'état vapeur. Absorbe de la chaleur : c\'est ce qui produit le froid.'],
+  ['Condensation','Passage de l\'état vapeur à l\'état liquide. Rejette de la chaleur.'],
+  ['Pression absolue','Pression mesurée par rapport au vide. ≈ pression relative du manomètre + 1 bar.'],
+  ['Chaleur latente','Chaleur qui fait changer d\'état un corps, sans changer sa température.'],
+  ['Chaleur sensible','Chaleur qui fait varier la température d\'un corps, sans changer son état.'],
+  ['Compresseur','Organe qui aspire la vapeur basse pression et la refoule en haute pression. Le « cœur » du circuit.'],
+  ['Condenseur','Échangeur où la vapeur HP se condense en liquide en rejetant sa chaleur.'],
+  ['Détendeur','Organe qui fait chuter la pression du liquide et règle le débit vers l\'évaporateur.'],
+  ['Évaporateur','Échangeur où le fluide BP s\'évapore en absorbant la chaleur du milieu à refroidir.'],
+  ['Filtre déshydrateur','Filtre placé sur la ligne liquide qui retient l\'humidité et les impuretés.'],
+  ['Surchauffe','Écart entre la température à l\'aspiration et la température d\'évaporation. Protège le compresseur.'],
+  ['Sous-refroidissement','Écart entre la température de condensation et la température du liquide en sortie de condenseur.'],
+  ['COP','Coefficient de performance : chaleur produite ÷ énergie électrique consommée.'],
+  ['PRP','Potentiel de Réchauffement Planétaire (GWP), comparé au CO₂ qui vaut 1.'],
+  ['PAO','Potentiel d\'Appauvrissement de la couche d\'Ozone (ODP). Nul pour les HFC.'],
+  ['HFC','Hydrofluorocarbures (R134a, R410A, R32…) : sans effet sur l\'ozone mais à fort effet de serre.'],
+  ['HFO','Hydrofluoro-oléfines (R1234yf, R1234ze) : fluides à très faible PRP.'],
+  ['Zéotrope','Mélange de fluides qui a un glissement de température. Se charge en phase liquide.'],
+  ['Tonne équivalent CO₂','Charge (kg) × PRP ÷ 1 000. Sert à fixer la fréquence des contrôles d\'étanchéité.'],
+  ['Attestation d\'aptitude','Certificat personnel obligatoire pour manipuler les fluides frigorigènes.'],
+  ['Attestation de capacité','Certificat de l\'entreprise qui l\'autorise à intervenir sur les équipements frigorifiques.'],
+  ['Contrôle d\'étanchéité','Recherche de fuites obligatoire et périodique selon la charge en t éq. CO₂.'],
+  ['Fiche d\'intervention','Document Cerfa à remplir à chaque intervention avec manipulation de fluide.'],
+  ['Dégazage','Rejet volontaire de fluide dans l\'atmosphère. Strictement interdit.'],
+  ['Manifold','Jeu de manomètres (BP bleu, HP rouge) et de vannes pour intervenir sur le circuit.'],
+  ['Tirage au vide','Opération qui enlève l\'air et l\'humidité du circuit avec une pompe à vide.'],
+  ['Azote','Gaz inerte et sec utilisé pour tester l\'étanchéité et balayer les tubes pendant le brasage.'],
+  ['Station de récupération','Appareil qui transfère le fluide du circuit vers une bouteille de récupération.']
+ ],
+ quiz:[
+  ['thermo','Un liquide qui s\'évapore…',['Absorbe de la chaleur','Rejette de la chaleur','Ne change rien','Se refroidit sans échange'],0,'L\'évaporation absorbe de la chaleur : c\'est le principe du froid.'],
+  ['thermo','Quand la pression baisse, la température d\'ébullition…',['Baisse','Monte','Ne change pas','Double'],0,'À basse pression, un fluide bout à basse température.'],
+  ['thermo','Le manomètre indique 4 bar. La pression absolue est d\'environ…',['5 bar','4 bar','3 bar','8 bar'],0,'Pression absolue ≈ relative + 1 bar.'],
+  ['thermo','0 °C en kelvins, c\'est…',['273 K','0 K','100 K','−273 K'],0,'K = °C + 273.'],
+  ['thermo','La chaleur qui change l\'état sans changer la température s\'appelle…',['Chaleur latente','Chaleur sensible','Chaleur spécifique','Surchauffe'],0,'Latente = changement d\'état.'],
+  ['thermo','Le circuit frigorifique transporte surtout de la chaleur…',['Latente','Sensible','Électrique','Mécanique'],0,'Les changements d\'état transportent beaucoup d\'énergie.'],
+  ['circuit','Quel organe rejette la chaleur à l\'extérieur ?',['Le condenseur','L\'évaporateur','Le détendeur','Le filtre déshydrateur'],0,'Le condenseur rejette la chaleur en condensant la vapeur.'],
+  ['circuit','Quel organe produit le froid dans la pièce ?',['L\'évaporateur','Le condenseur','Le compresseur','Le pressostat'],0,'Le fluide s\'y évapore en absorbant la chaleur.'],
+  ['circuit','Le détendeur sert à…',['Faire chuter la pression','Comprimer la vapeur','Filtrer l\'humidité','Inverser le cycle'],0,'Il fait passer le liquide de HP à BP.'],
+  ['circuit','Le compresseur aspire…',['De la vapeur basse pression','Du liquide haute pression','Du liquide basse pression','De l\'huile seulement'],0,'Il ne doit aspirer que de la vapeur.'],
+  ['circuit','Où place-t-on le filtre déshydrateur ?',['Sur la ligne liquide','Sur l\'aspiration','Dans le compresseur','Sur le refoulement'],0,'Avant le détendeur, sur la ligne liquide.'],
+  ['circuit','La surchauffe protège…',['Le compresseur','Le condenseur','Le détendeur','Le voyant'],0,'Elle garantit qu\'aucun liquide n\'arrive au compresseur.'],
+  ['circuit','T aspiration = 10 °C, T évaporation = 3 °C. La surchauffe est de…',['7 K','13 K','3 K','10 K'],0,'10 − 3 = 7 K.'],
+  ['circuit','T condensation = 45 °C, T liquide en sortie = 40 °C. Le sous-refroidissement est de…',['5 K','85 K','40 K','45 K'],0,'45 − 40 = 5 K.'],
+  ['circuit','Dans une pompe à chaleur, quel organe inverse le cycle ?',['La vanne 4 voies','Le détendeur','Le pressostat BP','Le voyant liquide'],0,'Chaud l\'hiver, froid l\'été.'],
+  ['circuit','Une PAC consomme 2 kWh et produit 7 kWh de chaleur. Son COP est…',['3,5','5','9','0,3'],0,'COP = 7 ÷ 2 = 3,5.'],
+  ['circuit','Des bulles dans le voyant liquide indiquent souvent…',['Un manque de fluide','Un excès d\'huile','Un compresseur neuf','Un bon fonctionnement'],0,'Le liquide n\'est pas pur : souvent manque de charge.'],
+  ['fluides','Le R22 est un…',['HCFC','HFC','HFO','Fluide naturel'],0,'Il détruit la couche d\'ozone : interdit en recharge.'],
+  ['fluides','Le R410A est un…',['HFC','HCFC','CFC','HFO'],0,'Mélange de HFC (R32 + R125).'],
+  ['fluides','Le R744, c\'est…',['Le CO₂','Le propane','L\'ammoniac','Un HFO'],0,'R744 = dioxyde de carbone.'],
+  ['fluides','Le R290, c\'est…',['Le propane','Le CO₂','L\'ammoniac','Un HFC'],0,'Très inflammable : classe A3.'],
+  ['fluides','Le R717, c\'est…',['L\'ammoniac','Le propane','Le CO₂','Un CFC'],0,'Toxique : classe B2L.'],
+  ['fluides','Le PRP du CO₂ vaut…',['1','0','100','1 000'],0,'Le CO₂ sert de référence.'],
+  ['fluides','Les HFC ont un PAO…',['Nul','Très élevé','Égal à 1','Négatif'],0,'Ils ne détruisent pas l\'ozone, mais réchauffent la planète.'],
+  ['fluides','Le R32 est classé…',['A2L','A1','A3','B2L'],0,'Faiblement inflammable.'],
+  ['fluides','Un mélange zéotrope se charge…',['En phase liquide','En phase vapeur','Peu importe','Seulement à chaud'],0,'Sinon la composition du mélange change.'],
+  ['fluides','5 kg de R410A (PRP 2 088) représentent environ…',['10,4 t éq. CO₂','2,1 t éq. CO₂','104 t éq. CO₂','1 t éq. CO₂'],0,'5 × 2 088 ÷ 1 000 = 10,44.'],
+  ['fluides','Lequel a le PRP le plus faible ?',['R1234yf','R134a','R410A','R404A'],0,'Les HFO ont un PRP très faible.'],
+  ['regle','L\'attestation d\'aptitude est délivrée…',['À la personne','À l\'entreprise','Au client','À l\'équipement'],0,'L\'attestation de capacité, elle, concerne l\'entreprise.'],
+  ['regle','La catégorie V de l\'attestation concerne…',['La climatisation des véhicules','Tous les équipements','Les chambres froides','Les PAC uniquement'],0,'Catégorie V = véhicules.'],
+  ['regle','La catégorie I permet…',['Toutes les opérations sur tous les équipements','Seulement le contrôle d\'étanchéité','Seulement les véhicules','Seulement la récupération'],0,'C\'est la catégorie la plus complète.'],
+  ['regle','À partir de quelle charge le contrôle d\'étanchéité est-il obligatoire ?',['5 t éq. CO₂','2 kg','50 t éq. CO₂','1 t éq. CO₂'],0,'Seuil : 5 tonnes équivalent CO₂.'],
+  ['regle','Une installation de 60 t éq. CO₂ sans détecteur permanent est contrôlée tous les…',['6 mois','12 mois','3 mois','24 mois'],0,'≥ 50 t éq. CO₂ : tous les 6 mois.'],
+  ['regle','Le détecteur de fuite permanent est obligatoire à partir de…',['500 t éq. CO₂','5 t éq. CO₂','50 t éq. CO₂','2 kg'],0,'≥ 500 t éq. CO₂.'],
+  ['regle','Le dégazage volontaire est…',['Interdit','Autorisé en dessous de 2 kg','Autorisé avec le CO₂','Autorisé en extérieur'],0,'On récupère toujours le fluide.'],
+  ['regle','Après chaque manipulation de fluide, on remplit…',['Une fiche d\'intervention','Un bon de livraison','Un permis de feu','Rien'],0,'Cerfa 15497.'],
+  ['interv','Pour tester l\'étanchéité, on utilise…',['De l\'azote déshydraté','De l\'oxygène','De l\'air comprimé','Du fluide neuf'],0,'Jamais d\'oxygène : risque d\'explosion avec l\'huile.'],
+  ['interv','Sur un manifold, le manomètre BP est…',['Bleu','Rouge','Jaune','Vert'],0,'BP bleu, HP rouge.'],
+  ['interv','Le tirage au vide sert à enlever…',['L\'air et l\'humidité','L\'huile','Le fluide','La calamine'],0,'L\'humidité bout et part à basse pression.'],
+  ['interv','Pendant le brasage d\'un tube, on fait…',['Un balayage d\'azote','Un tirage au vide','Une charge de fluide','Un dégazage'],0,'Évite la calamine à l\'intérieur du tube.'],
+  ['interv','Une bouteille de récupération se remplit au maximum à…',['80 %','100 %','50 %','95 %'],0,'Le liquide se dilate avec la chaleur.'],
+  ['interv','La charge en fluide se fait…',['Au poids, avec une balance','Au jugé','À la pression seulement','Au volume'],0,'On charge la quantité indiquée par le fabricant.']
+ ],
+ vf:[
+  ['L\'évaporateur rejette la chaleur dehors.',false,'C\'est le condenseur. L\'évaporateur absorbe la chaleur.'],
+  ['Le compresseur ne doit aspirer que de la vapeur.',true,'Le liquide peut le casser (coup de liquide).'],
+  ['On peut tester l\'étanchéité à l\'oxygène.',false,'Jamais : azote déshydraté uniquement.'],
+  ['Le dégazage est autorisé pour les petites charges.',false,'Il est toujours interdit.'],
+  ['Le R22 ne peut plus être utilisé pour recharger une installation.',true,'Interdit depuis 2015.'],
+  ['Les HFC détruisent la couche d\'ozone.',false,'PAO nul, mais fort PRP.'],
+  ['Le R290 est très inflammable.',true,'Propane : classe A3.'],
+  ['Le R410A se charge en phase liquide.',true,'C\'est un mélange.'],
+  ['La pression absolue est plus faible que la pression relative.',false,'Absolue = relative + 1 bar environ.'],
+  ['La surchauffe protège le compresseur.',true,'Elle évite l\'arrivée de liquide.'],
+  ['Une bouteille de récupération peut être remplie à 100 %.',false,'80 % maximum.'],
+  ['L\'attestation d\'aptitude est personnelle.',true,'Elle est délivrée au technicien.'],
+  ['Le tirage au vide enlève l\'humidité du circuit.',true,'À basse pression, l\'eau s\'évapore.'],
+  ['Un COP de 3 signifie qu\'1 kWh consommé donne 3 kWh de chaleur.',true,'COP = chaleur produite ÷ énergie consommée.'],
+  ['Le manomètre HP du manifold est bleu.',false,'HP rouge, BP bleu.'],
+  ['Le PRP du CO₂ est égal à 1.',true,'C\'est la référence.']
+ ],
+ ordre:[
+  {t:'Le cycle frigorifique',s:['Compression de la vapeur','Condensation (rejet de chaleur)','Détente (chute de pression)','Évaporation (absorption de chaleur)']},
+  {t:'Mettre en service une installation neuve',s:['Tester l\'étanchéité à l\'azote','Tirer au vide','Vérifier que le vide tient','Charger le fluide au poids','Démarrer et mesurer surchauffe et sous-refroidissement','Remplir la fiche d\'intervention']},
+  {t:'Récupérer le fluide d\'une installation',s:['Peser la bouteille de récupération vide','Raccorder la station et la bouteille','Récupérer le fluide','Peser la bouteille pleine (80 % max)','Remplir la fiche d\'intervention']}
+ ]
+};
+
 
 /* =====================================================================
    MOTEUR (commun à toutes les apps métier)

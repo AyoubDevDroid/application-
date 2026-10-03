@@ -123,6 +123,7 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
     <button class="game" style="background:#ff8fab" onclick="startOrdre()"><span class="e">🪜</span>Dans l'ordre<small>Les bonnes étapes</small></button>
     <button class="game" id="calcBtn" style="background:#b18cff;display:none" onclick="startCalc()"><span class="e">🧮</span>Calcul mental<small>Réponds vite</small></button>
   </div>
+  <button class="btn" id="examBtn" style="display:none" onclick="startExam()"></button>
   <div class="card"><span class="mut">🏆 Meilleurs scores</span><div id="best" style="line-height:1.8"></div></div>
 </section>
 
@@ -268,7 +269,7 @@ const C={
 const $=id=>document.getElementById(id);
 const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=rand(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
-const P={xp:0,read:new Set(),best:{quiz:0,vf:0,match:0,ordre:null,calc:0},parties:0};
+const P={xp:0,read:new Set(),best:{quiz:0,vf:0,match:0,ordre:null,calc:0,exam:0},parties:0};
 /* sauvegarde de la progression (une clé par app) */
 const KEY='appmetier_'+(C.id||C.app);
 function save(){try{localStorage.setItem(KEY,JSON.stringify({xp:P.xp,read:[...P.read],best:P.best,parties:P.parties}))}catch(e){}}
@@ -312,7 +313,7 @@ function renderLex(){
   const q=($('q').value||'').toLowerCase();
   $('lexList').innerHTML=C.lexique.filter(w=>(w[0]+w[1]).toLowerCase().includes(q)).sort((a,b)=>a[0].localeCompare(b[0])).map(w=>`<div class="lex" onclick="this.classList.toggle('open')"><b>${w[0]}</b><p>${w[1]}</p></div>`).join('')||'<p class="mut">Aucun résultat.</p>';
 }
-function renderBest(){const b=P.best;$('best').innerHTML=`❓ Quiz : ${b.quiz}/10<br>⏱️ Vrai/Faux : ${b.vf}/10<br>🔗 Associer : ${b.match?b.match+' s':'—'}<br>🪜 Dans l'ordre : ${b.ordre===null?'—':b.ordre+' erreur(s)'}`+(C.calcul?`<br>🧮 Calcul mental : ${b.calc}/10`:'')}
+function renderBest(){const b=P.best;$('best').innerHTML=`❓ Quiz : ${b.quiz}/10<br>⏱️ Vrai/Faux : ${b.vf}/10<br>🔗 Associer : ${b.match?b.match+' s':'—'}<br>🪜 Dans l'ordre : ${b.ordre===null?'—':b.ordre+' erreur(s)'}`+(C.calcul?`<br>🧮 Calcul mental : ${b.calc}/10`:'')+(C.examen?`<br>📝 Examen blanc : ${b.exam?b.exam+' / '+examN():'—'}`:'')}
 
 /* ----- QUIZ ----- */
 function startQuiz(mod){
@@ -394,6 +395,39 @@ function calcQ1(g){
 }
 function startCalc(){G={type:'calc',list:Array.from({length:10},()=>calcQ1(C.calcul[rand(0,C.calcul.length-1)])),i:0,score:0};G.n=10;show('play');quizQ()}
 
+/* ----- EXAMEN BLANC (si C.examen est défini) -----
+   C.examen = {titre, questions:60, seuil:42, minutes:60}
+   Questions tirées de tout le quiz, pas de correction pendant l'épreuve, verdict + corrections à la fin. */
+function examN(){return Math.min(C.examen.questions,C.quiz.length)}
+function examSeuil(){return Math.ceil(C.examen.seuil/C.examen.questions*examN())}
+function startExam(){
+  G={type:'exam',list:shuf(C.quiz).slice(0,examN()),i:0,score:0,err:[],t0:Date.now()};G.n=G.list.length;show('play');examQ();
+  const D=C.examen.minutes*60000*G.n/C.examen.questions;
+  G.tm=setInterval(()=>{const r=D-(Date.now()-G.t0);if($('chr'))$('chr').textContent=Math.max(0,Math.ceil(r/60000))+' min';if(r<=0){clearInterval(G.tm);examEnd(true)}},1000);
+}
+function examQ(){
+  const q=G.list[G.i];const order=shuf(q[2].map((t,i)=>({t,i})));
+  $('playBody').innerHTML=`<div class="top"><button class="back" onclick="if(confirm('Abandonner l\'examen ?'))tab('jeux')">✕</button><div class="prog"><i style="width:${G.i/G.n*100}%"></i></div><span class="pill">${G.i+1}/${G.n}</span><span class="pill" id="chr">⏱</span></div>
+   <div class="qcard">${q[1]}</div>
+   <div style="display:flex;flex-direction:column;gap:10px">${order.map(o=>`<button class="ans" data-i="${o.i}" onclick="examA(this)">${o.t}</button>`).join('')}</div>`;
+}
+function examA(b){
+  const q=G.list[G.i];if(+b.dataset.i===q[3])G.score++;else G.err.push(q);
+  G.i++;if(G.i>=G.n){clearInterval(G.tm);examEnd(false)}else examQ();
+}
+function examEnd(temps){
+  G.list.slice(G.i).forEach(q=>G.err.push(q));
+  const ok=G.score>=examSeuil();if(G.score>(P.best.exam||0))P.best.exam=G.score;P.xp+=G.score*2;P.parties++;save();
+  if(ok)confetti();
+  pubInterstitiel(()=>{show('play');
+  $('playBody').innerHTML=`<div class="big">${ok?'🎓':'📚'}</div>
+   <h1 style="text-align:center">${ok?'Admis !':'Pas encore…'}</h1>
+   <p class="mut" style="text-align:center;font-size:16px">${temps?'⏰ Temps écoulé. ':''}<b>${G.score} / ${G.n}</b> — il fallait ${examSeuil()} bonnes réponses</p>
+   ${G.err.length?`<h2>Tes erreurs</h2>`+G.err.map(q=>`<div class="sec"><p><b>${q[1]}</b></p><p style="color:var(--ok);margin-top:6px">✓ ${q[2][q[3]]}</p><p class="mut" style="margin-top:4px">${q[4]}</p></div>`).join(''):''}
+   <button class="btn" onclick="startExam()">Repasser l'examen</button><button class="btn ghost" onclick="tab('cours')">Revoir les cours</button>${pubBanniere()}`;
+  if(window.PUB&&window.PUB.banniere&&$('pubB'))window.PUB.banniere($('pubB'));});
+}
+
 /* ----- PUB -----
    Dans le navigateur on affiche un emplacement réservé.
    Dans l'appli Android (Capacitor + AdMob), définir window.PUB = {banniere(el), interstitiel(fin)}
@@ -430,6 +464,7 @@ function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.he
 /* démarrage */
 document.title=C.app;$('sousTitre').textContent=C.sousTitre||'';
 if(C.calcul)$('calcBtn').style.display='';
+if(C.examen){$('examBtn').style.display='';$('examBtn').textContent='📝 '+(C.examen.titre||'Examen blanc')+' ('+examN()+' questions)'}
 theme();load();renderHome();
 </script>
 </body>
