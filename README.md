@@ -9,6 +9,8 @@ Un seul **moteur** (cours en fiches, lexique, jeux, examen blanc, XP, niveaux, �
 | ❄️ Froid & Clim Pro | `contenus/froid-clim/` (appli complète : 3 niveaux, 20 modules, 13 dépannages, 3 câblages, 7 classements, 26 fiches, atelier de calcul ; réglementation F-Gas III vérifiée en octobre 2026, tables pression/température calculées avec CoolProp) | `dist/froid-clim.html` |
 | 💶 Paie Pro | `contenus/paie.js` (chiffres 2026, à mettre à jour chaque 1er janvier ; à faire relire) | `dist/paie.html` |
 | 📐 Maths 6e | `contenus/maths-6e/` (programme de la rentrée 2025 : 23 modules, 12 problèmes pas à pas, 7 classements, 18 figures, 16 exercices à l'infini, calcul mental ; pub désactivée, public mineur) | `dist/maths-6e.html` |
+| 🧭 Maths 5e | `contenus/maths-5e/` (nouveau programme de 5e, BO du 5 mars 2026, rentrée 2026 : 19 modules, 10 problèmes pas à pas, 17 figures, 7 classements, 18 exercices à l'infini, 17 fiches propriétés ; pub désactivée) | `dist/maths-5e.html` |
+| 🚀 Maths 4e | `contenus/maths-4e/` (nouveau programme de 4e, BO du 5 mars 2026, + partie « En plus en 2026-2027 » : Thalès, cosinus, notation scientifique, nombres premiers de l'ancien programme ; 21 modules, 10 problèmes, 15 figures, 7 classements, 21 exercices à l'infini, 16 fiches théorèmes ; pub désactivée) | `dist/maths-4e.html` |
 | 🎯 Maths 3e Brevet | `contenus/maths-3e/` (programme de 3e en vigueur jusqu'en 2028 + brevet 2026 : 20 modules, épreuve d'automatismes chronométrée sans calculatrice, 10 problèmes type brevet, 16 configurations, 6 classements, 16 exercices à l'infini, 16 fiches formules ; pub désactivée) | `dist/maths-3e.html` |
 
 Les fichiers de `dist/` s'ouvrent directement dans un navigateur, sur ordinateur ou téléphone.

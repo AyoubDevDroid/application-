@@ -7,6 +7,8 @@ const fs = require('fs'), path = require('path'), { execSync } = require('child_
 
 const APPS = {
   'maths-6e':    { id: 'com.sup762.maths6',       nom: 'Maths 6e' },
+  'maths-5e':    { id: 'com.sup762.maths5',       nom: 'Maths 5e' },
+  'maths-4e':    { id: 'com.sup762.maths4',       nom: 'Maths 4e' },
   'maths-3e':    { id: 'com.sup762.maths3brevet', nom: 'Maths 3e Brevet' },
   'electricien': { id: 'com.sup762.electricien',  nom: 'Électricien Pro' },
   'froid-clim':  { id: 'com.sup762.froidclim',    nom: 'Froid & Clim Pro' },
