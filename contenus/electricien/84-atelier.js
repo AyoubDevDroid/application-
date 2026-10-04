@@ -27,6 +27,6 @@ C.atelier=[
    return {q:`Tension limite <b>UL = ${ul} V</b> (local ${ul===50?'sec':'mouillé'}), différentiel de <b>${id[1]}</b>. Quelle résistance de terre maximale ?`,r,u:"Ω",ex:`R ≤ UL ÷ IΔn = ${ul} ÷ ${R.f(id[0],2)} = <b>${R.f(r,1)} Ω</b>`}}},
  {t:"Abonnement et intensité",ic:"🏠",d:"I = puissance ÷ 230",gen:R=>{const k=R.pick([3,6,9,12]),r=k*1000/230;
    return {q:`Un abonnement monophasé de <b>${k} kVA</b> correspond à quelle intensité en 230 V (au dixième près) ?`,r,u:"A",tol:0.3,ex:`I = ${k*1000} ÷ 230 = <b>${R.f(r,1)} A</b> ; le disjoncteur de branchement est réglé sur ${({3:15,6:30,9:45,12:60})[k]} A.`}}},
- {t:"Nombre de prises d'un séjour",ic:"🛋️",d:"1 prise par 4 m², minimum 5",gen:R=>{const s=R.r(14,48),r=Math.max(5,Math.ceil(s/4));
-   return {q:`Combien de prises au minimum dans un séjour de <b>${s} m²</b> ?`,r,u:"prises",tol:0.01,ex:`${s} ÷ 4 = ${R.f(s/4,2)} → arrondi au-dessus : ${Math.ceil(s/4)}${Math.ceil(s/4)<5?', mais le minimum est de 5':''} → <b>${r} prises</b>.`}}}
+ {t:"Nombre de prises d'un séjour",ic:"🛋️",d:"1 prise par 4 m², minimum 5 (7 au-delà de 28 m²)",gen:R=>{const s=R.r(14,48),r=s>28?7:Math.max(5,Math.ceil(s/4));
+   return {q:`Combien de prises au minimum dans un séjour de <b>${s} m²</b> ?`,r,u:"prises",tol:0.01,ex:s>28?`Plus de 28 m² : la norme demande <b>7 prises</b> minimum, réparties sur le pourtour.`:`${s} ÷ 4 = ${R.f(s/4,2)} → arrondi au-dessus : ${Math.ceil(s/4)}${Math.ceil(s/4)<5?', mais le minimum est de 5':''} → <b>${r} prises</b>.`}}}
 ];
