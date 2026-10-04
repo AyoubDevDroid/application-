@@ -9,7 +9,7 @@ Un seul **moteur** (cours en fiches, lexique, jeux, examen blanc, XP, niveaux, �
 | ❄️ Froid & Clim Pro | `contenus/froid-clim/` (appli complète : 3 niveaux, 20 modules, 13 dépannages, 3 câblages, 7 classements, 26 fiches, atelier de calcul ; réglementation F-Gas III vérifiée en octobre 2026, tables pression/température calculées avec CoolProp) | `dist/froid-clim.html` |
 | 💶 Paie Pro | `contenus/paie.js` (chiffres 2026, à mettre à jour chaque 1er janvier ; à faire relire) | `dist/paie.html` |
 | 📐 Maths 6e | `contenus/maths-6e/` (programme de la rentrée 2025 : 23 modules, 12 problèmes pas à pas, 7 classements, 18 figures, 16 exercices à l'infini, calcul mental ; pub désactivée, public mineur) | `dist/maths-6e.html` |
-| 🎯 Maths 3e Brevet | `contenus/maths-3e.js` (+ brevet blanc express) | `dist/maths-3e.html` |
+| 🎯 Maths 3e Brevet | `contenus/maths-3e/` (programme de 3e en vigueur jusqu'en 2028 + brevet 2026 : 20 modules, épreuve d'automatismes chronométrée sans calculatrice, 10 problèmes type brevet, 16 configurations, 6 classements, 16 exercices à l'infini, 16 fiches formules ; pub désactivée) | `dist/maths-3e.html` |
 
 Les fichiers de `dist/` s'ouvrent directement dans un navigateur, sur ordinateur ou téléphone.
 
