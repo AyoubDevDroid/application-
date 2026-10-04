@@ -549,7 +549,7 @@ function def(k){const w=C.lexique.find(x=>x[0]===k);$('modalIn').innerHTML=`<spa
 /* ----- WIKI : lexique, fiches appareils (C.appareils), symboles (C.symboles) ----- */
 let LX='mots';
 function renderLex(){
-  const segs=[['mots','📖 Mots']].concat(C.appareils?[['app','🧰 Appareils']]:[]).concat(C.symboles?[['sym','🔣 Symboles']]:[]);
+  const segs=[['mots','📖 Mots']].concat(C.appareils?[['app',C.appareilsNom||'🧰 Appareils']]:[]).concat(C.symboles?[['sym',(((C.jeux||{}).sym||{}).e||'🔣')+' '+(((C.jeux||{}).sym||{}).t||'Symboles')]]:[]);
   if(!segs.some(s=>s[0]===LX))LX='mots';
   $('lexSeg').style.display=segs.length>1?'':'none';
   $('lexSeg').innerHTML=segs.map(([k,t])=>`<button class="${LX===k?'on':''}" onclick="LX='${k}';renderLex()">${t}</button>`).join('');
@@ -568,22 +568,23 @@ function appFiche(i){const a=C.appareils[i],sy=a.sym&&(C.symboles||[]).find(s=>s
    <button class="btn ghost" onclick="$('modal').classList.remove('on')">Fermer</button>`;$('modal').classList.add('on');$('modalIn').scrollTop=0}
 
 /* ----- ÉCRAN JEUX ----- */
+/* C.jeux (facultatif) = {sym:{e,t,s}, diag:{…}} : renomme un jeu pour une appli (ex. maths) */
 const JEUX=[
- {e:'❓',t:'Quiz',s:'QCM + explications',c:'#ffc83d',go:'startQuiz()'},
- {e:'⏱️',t:'Vrai / Faux',s:'Contre la montre',c:'#3db5ff',go:'startVF()'},
- {e:'🔎',t:'Dépannage',s:'Enquêtes avec bon de travail',c:'#ff8a3d',go:'listDiag()',si:()=>C.diag&&C.diag.length},
- {e:'🔧',t:'Câblage',s:'Tire les fils toi-même',c:'#7be0d0',go:'listCab()',si:()=>C.cablage&&C.cablage.length},
- {e:'🔗',t:'Associer',s:'Mot ↔ définition',c:'#2ed47a',go:'startMatch()'},
- {e:'🪜',t:'Dans l\'ordre',s:'Les bonnes étapes',c:'#ff8fab',go:'pickOrdre()'},
- {e:'🗂️',t:'Classement',s:'Range au bon endroit',c:'#ffd6a5',go:'listTri()',si:()=>C.tri&&C.tri.length},
- {e:'🔣',t:'Symboles',s:'Lis les schémas',c:'#c3b1ff',go:'startSym()',si:()=>C.symboles&&C.symboles.length>=4},
- {e:'📐',t:'Atelier calcul',s:'Exercices à l\'infini',c:'#9be15d',go:'listAtelier()',si:()=>C.atelier&&C.atelier.length},
- {e:'🕵️',t:'Qui suis-je ?',s:'Devine l\'appareil',c:'#ffb3c7',go:'startQui()',si:()=>C.appareils&&C.appareils.length>=4},
- {e:'🧮',t:'Calcul mental',s:'Réponds vite',c:'#b18cff',go:'startCalc()',si:()=>C.calcul},
- {e:'⚡',t:'Chrono 60 s',s:'Un max de bonnes réponses',c:'#ff7b7b',go:'startChrono()'}
+ {k:'quiz',e:'❓',t:'Quiz',s:'QCM + explications',c:'#ffc83d',go:'startQuiz()'},
+ {k:'vf',e:'⏱️',t:'Vrai / Faux',s:'Contre la montre',c:'#3db5ff',go:'startVF()'},
+ {k:'diag',e:'🔎',t:'Dépannage',s:'Enquêtes avec bon de travail',c:'#ff8a3d',go:'listDiag()',si:()=>C.diag&&C.diag.length},
+ {k:'cab',e:'🔧',t:'Câblage',s:'Tire les fils toi-même',c:'#7be0d0',go:'listCab()',si:()=>C.cablage&&C.cablage.length},
+ {k:'match',e:'🔗',t:'Associer',s:'Mot ↔ définition',c:'#2ed47a',go:'startMatch()'},
+ {k:'ordre',e:'🪜',t:'Dans l\'ordre',s:'Les bonnes étapes',c:'#ff8fab',go:'pickOrdre()'},
+ {k:'tri',e:'🗂️',t:'Classement',s:'Range au bon endroit',c:'#ffd6a5',go:'listTri()',si:()=>C.tri&&C.tri.length},
+ {k:'sym',e:'🔣',t:'Symboles',s:'Lis les schémas',c:'#c3b1ff',go:'startSym()',si:()=>C.symboles&&C.symboles.length>=4},
+ {k:'atel',e:'📐',t:'Atelier calcul',s:'Exercices à l\'infini',c:'#9be15d',go:'listAtelier()',si:()=>C.atelier&&C.atelier.length},
+ {k:'qui',e:'🕵️',t:'Qui suis-je ?',s:'Devine l\'appareil',c:'#ffb3c7',go:'startQui()',si:()=>C.appareils&&C.appareils.length>=4},
+ {k:'calc',e:'🧮',t:'Calcul mental',s:'Réponds vite',c:'#b18cff',go:'startCalc()',si:()=>C.calcul},
+ {k:'chrono',e:'⚡',t:'Chrono 60 s',s:'Un max de bonnes réponses',c:'#ff7b7b',go:'startChrono()'}
 ];
 function renderJeux(){
-  $('jeuxGrid').innerHTML=JEUX.filter(j=>!j.si||j.si()).map(j=>`<button class="game" style="background:${j.c}" onclick="${j.go}"><span class="e">${j.e}</span>${j.t}<small>${j.s}</small></button>`).join('');
+  $('jeuxGrid').innerHTML=JEUX.filter(j=>!j.si||j.si()).map(j=>Object.assign({},j,(C.jeux||{})[j.k])).map(j=>`<button class="game" style="background:${j.c}" onclick="${j.go}"><span class="e">${j.e}</span>${j.t}<small>${j.s}</small></button>`).join('');
   const ne=errList().length;
   $('jeuxTop').innerHTML=(C.examen?`<button class="btn" onclick="startExam()">📝 ${C.examen.titre||'Examen blanc'} (${examN()} questions)</button>`:'')+
     (ne?`<button class="row" onclick="startErr()"><span class="ic">🧠</span><span class="tx"><b>Revoir mes erreurs</b><span>${ne} question${ne>1?'s':''} à retravailler</span></span><span class="mut">›</span></button>`:'');
@@ -693,13 +694,15 @@ function ordA(b){
    C.diag = [{id,t,ic,niv:1|2|3,bon:{lieu,qui,heure,prio:1|2|3,pb,contrainte},
              etapes:[{info?,fig?,q,o:[['choix',true|false,'résultat ou pourquoi c\'est faux'],…]}],fin:'rapport',retenir?}]
    Une seule bonne réponse par étape ; une mauvaise piste coûte des points mais on peut réessayer. */
-function listDiag(){liste('🔎 Dépannage','Tu reçois un bon de travail. Trouve la panne avec méthode : chaque fausse piste te coûte des étoiles.',C.diag.map((d,i)=>[d.ic||'🔎',d.t,(NIV[d.niv]||'')+' · '+d.bon.lieu,`startDiag(${i})`,P.diag[d.id]]))}
+/* C.diagTextes (facultatif) : adapte le jeu Dépannage à une autre matière (ex. « Problèmes pas à pas ») */
+function DT(){return Object.assign({titre:'🔎 Dépannage',sous:'Tu reçois un bon de travail. Trouve la panne avec méthode : chaque fausse piste te coûte des étoiles.',entete:'📋 Nouveau bon de travail',carte:'BON DE TRAVAIL N°',prio:true,champs:[['lieu','📍 Lieu'],['qui','👤 Demandeur'],['heure','🕐 Appel'],['pb','⚠️ Symptôme'],['contrainte','⛓️ Contrainte']],go:'🧰 Commencer l\'intervention',fin:'Terminer l\'intervention',parfait:'Panne trouvée sans fausse piste !',ok:'Panne réparée !',rapport:'📝 Rapport d\'intervention',autre:'Autre intervention',piste:'fausse piste'},C.diagTextes||{})}
+function listDiag(){liste(DT().titre,DT().sous,C.diag.map((d,i)=>[d.ic||'🔎',d.t,(NIV[d.niv]||'')+' · '+d.bon.lieu,`startDiag(${i})`,P.diag[d.id]]))}
 function startDiag(i){const d=C.diag[i],b=d.bon;G={type:'diag',d,k:i,i:0,err:0};show('play');
-  $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><b>📋 Nouveau bon de travail</b><span style="width:24px"></span></div>
-  <div class="bt"><div class="bth"><b>BON DE TRAVAIL N° ${2600+i*7}</b><span class="prio p${b.prio||2}">${['','🚨 Urgent','Normal','Planifié'][b.prio||2]}</span></div>
-   ${[['📍 Lieu',b.lieu],['👤 Demandeur',b.qui],['🕐 Appel',b.heure],['⚠️ Symptôme',b.pb],['⛓️ Contrainte',b.contrainte]].filter(x=>x[1]).map(x=>`<div class="btl"><span>${x[0]}</span><p>${x[1]}</p></div>`).join('')}</div>
+  $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><b>${DT().entete}</b><span style="width:24px"></span></div>
+  <div class="bt"><div class="bth"><b>${DT().carte} ${2600+i*7}</b>${DT().prio?`<span class="prio p${b.prio||2}">${['','🚨 Urgent','Normal','Planifié'][b.prio||2]}</span>`:''}</div>
+   ${DT().champs.map(([k,t])=>[t,b[k]]).filter(x=>x[1]).map(x=>`<div class="btl"><span>${x[0]}</span><p>${x[1]}</p></div>`).join('')}</div>
   <p class="mut" style="text-align:center">${d.etapes.length} étapes · ${NIV[d.niv]||''}</p>
-  <button class="btn" onclick="diagQ()">🧰 Commencer l'intervention</button>`}
+  <button class="btn" onclick="diagQ()">${DT().go}</button>`}
 function diagQ(){const d=G.d,e=d.etapes[G.i];
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><div class="prog"><i style="width:${G.i/d.etapes.length*100}%"></i></div><span class="pill">${G.i+1}/${d.etapes.length}</span></div>
    <div class="card mini"><span class="mut">📋 ${d.t}</span><span style="font-size:14px;line-height:1.4">${d.bon.pb}</span></div>
@@ -710,13 +713,13 @@ function diagQ(){const d=G.d,e=d.etapes[G.i];
   initFigs($('playBody'));$('playBody').querySelectorAll('.fig').forEach(playFig)}
 function diagA(b){const e=G.d.etapes[G.i],o=e.o[+b.dataset.i];if(b.disabled)return;
   if(o[1]){document.querySelectorAll('#playBody .ans').forEach(x=>x.disabled=true);b.classList.add('ok');gain(G.ko?5:15,b);G.ko=0;
-    $('ex').innerHTML='✅ '+o[2]+`<button class="btn" style="margin-top:12px" onclick="diagNext()">${G.i+1<G.d.etapes.length?'Étape suivante →':'Terminer l\'intervention'}</button>`;$('ex').classList.add('on');$('ex').scrollIntoView({behavior:'smooth',block:'nearest'})}
+    $('ex').innerHTML='✅ '+o[2]+`<button class="btn" style="margin-top:12px" onclick="diagNext()">${G.i+1<G.d.etapes.length?'Étape suivante →':DT().fin}</button>`;$('ex').classList.add('on');$('ex').scrollIntoView({behavior:'smooth',block:'nearest'})}
   else{G.err++;G.ko=1;b.disabled=true;b.classList.add('ko');shake('qc');$('ex').innerHTML='❌ '+o[2]+'<div class="mut" style="margin-top:6px">Essaie une autre piste.</div>';$('ex').classList.add('on')}}
 function diagNext(){G.i++;if(G.i<G.d.etapes.length)return diagQ();
   const d=G.d,st=G.err===0?3:G.err<=2?2:1;P.diag[d.id]=Math.max(P.diag[d.id]||0,st);P.parties++;save();badgeCheck();if(st>=2)confetti();
-  pubInterstitiel(()=>{show('play');$('playBody').innerHTML=`<div class="big">${st===3?'🏆':st===2?'🔧':'💪'}</div><h1 style="text-align:center">${st===3?'Panne trouvée sans fausse piste !':'Panne réparée !'}</h1><div class="stars">${stars(st)}</div><p class="mut" style="text-align:center">${G.err} fausse${G.err>1?'s':''} piste${G.err>1?'s':''}</p>
-   <div class="sec"><h3>📝 Rapport d'intervention</h3><p>${d.fin}</p></div>${d.retenir?`<div class="box ret"><b>📌 À retenir</b>${d.retenir}</div>`:''}
-   <button class="btn" onclick="listDiag()">Autre intervention</button><button class="btn ghost" onclick="tab('jeux')">Retour aux jeux</button>${pubBanniere()}`;pubB()})}
+  pubInterstitiel(()=>{show('play');$('playBody').innerHTML=`<div class="big">${st===3?'🏆':st===2?'🔧':'💪'}</div><h1 style="text-align:center">${st===3?DT().parfait:DT().ok}</h1><div class="stars">${stars(st)}</div><p class="mut" style="text-align:center">${G.err} ${DT().piste}${G.err>1?'s':''}</p>
+   <div class="sec"><h3>${DT().rapport}</h3><p>${d.fin}</p></div>${d.retenir?`<div class="box ret"><b>📌 À retenir</b>${d.retenir}</div>`:''}
+   <button class="btn" onclick="listDiag()">${DT().autre}</button><button class="btn ghost" onclick="tab('jeux')">Retour aux jeux</button>${pubBanniere()}`;pubB()})}
 
 /* ----- CÂBLAGE (si C.cablage est défini) -----
    C.cablage = [{id,t,ic,niv,d:'consigne',aide:'indice',fin:'explication',h:hauteur du plan (défaut 400),
@@ -841,12 +844,13 @@ function calcQ1(g){
 function startCalc(){G={type:'calc',list:Array.from({length:10},()=>calcQ1(C.calcul[rand(0,C.calcul.length-1)])),i:0,score:0};G.n=10;show('play');quizQ()}
 
 /* ----- EXAMEN BLANC (si C.examen est défini) -----
-   C.examen = {titre, questions:60, seuil:42, minutes:60}
+   C.examen = {titre, questions:60, seuil:42, minutes:60, modules?:['id',…]} (modules : ne tirer que ces modules)
    Questions tirées de tout le quiz, pas de correction pendant l'épreuve, verdict + corrections à la fin. */
-function examN(){return Math.min(C.examen.questions,C.quiz.length)}
+function examPool(){return C.quiz.filter(q=>!C.examen.modules||C.examen.modules.includes(q[0]))}
+function examN(){return Math.min(C.examen.questions,examPool().length)}
 function examSeuil(){return Math.ceil(C.examen.seuil/C.examen.questions*examN())}
 function startExam(){
-  G={type:'exam',list:shuf(C.quiz).slice(0,examN()),i:0,score:0,err:[],t0:Date.now()};G.n=G.list.length;show('play');examQ();
+  G={type:'exam',list:shuf(examPool()).slice(0,examN()),i:0,score:0,err:[],t0:Date.now()};G.n=G.list.length;show('play');examQ();
   const D=C.examen.minutes*60000*G.n/C.examen.questions;
   G.tm=setInterval(()=>{const r=D-(Date.now()-G.t0);if($('chr'))$('chr').textContent=Math.max(0,Math.ceil(r/60000))+' min';if(r<=0){clearInterval(G.tm);examEnd(true)}},1000);
 }
@@ -895,8 +899,8 @@ const BADGES=[
  ['🔥','Régulier','Apprendre 7 jours de suite',()=>P.serie>=7],
  ['⚡','Éclair','15 bonnes réponses au Chrono 60 s',()=>(P.best.chrono||0)>=15],
  ['🧠','J\'apprends de mes erreurs','Corriger 15 erreurs',()=>P.fix>=15],
- ['🔎','Détective','Réussir 5 dépannages',()=>Object.keys(P.diag).length>=5,()=>C.diag&&C.diag.length>=5],
- ['🕵️','Dépanneur expert','3 étoiles à tous les dépannages',()=>C.diag.every(d=>P.diag[d.id]===3),()=>C.diag],
+ ['🔎','Détective','Réussir 5 '+(((C.jeux||{}).diag||{}).t||'dépannages').toLowerCase(),()=>Object.keys(P.diag).length>=5,()=>C.diag&&C.diag.length>=5],
+ ['🕵️','Dépanneur expert','3 étoiles à tous les '+(((C.jeux||{}).diag||{}).t||'dépannages').toLowerCase(),()=>C.diag.every(d=>P.diag[d.id]===3),()=>C.diag],
  ['🔧','Mains d\'or','Réussir tous les câblages',()=>C.cablage.every(c=>P.cab[c.id]),()=>C.cablage],
  ['🗂️','Bien rangé','3 étoiles à tous les classements',()=>C.tri.every(t=>P.tri[t.t]===3),()=>C.tri],
  ['🔣','Lecteur de schémas','10/10 aux symboles',()=>(P.best.sym||0)>=10,()=>C.symboles],

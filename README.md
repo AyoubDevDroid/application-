@@ -8,7 +8,7 @@ Un seul **moteur** (cours en fiches, lexique, jeux, examen blanc, XP, niveaux, �
 | 🔥 Soudeur Pro | `contenus/soudeur.js` (petite appli : métier surtout pratique ; à faire relire) | `dist/soudeur.html` |
 | ❄️ Froid & Clim Pro | `contenus/froid-clim/` (appli complète : 3 niveaux, 20 modules, 13 dépannages, 3 câblages, 7 classements, 26 fiches, atelier de calcul ; réglementation F-Gas III vérifiée en octobre 2026, tables pression/température calculées avec CoolProp) | `dist/froid-clim.html` |
 | 💶 Paie Pro | `contenus/paie.js` (chiffres 2026, à mettre à jour chaque 1er janvier ; à faire relire) | `dist/paie.html` |
-| 📐 Maths 6e | `contenus/maths-6e.js` | `dist/maths-6e.html` |
+| 📐 Maths 6e | `contenus/maths-6e/` (programme de la rentrée 2025 : 23 modules, 12 problèmes pas à pas, 7 classements, 18 figures, 16 exercices à l'infini, calcul mental ; pub désactivée, public mineur) | `dist/maths-6e.html` |
 | 🎯 Maths 3e Brevet | `contenus/maths-3e.js` (+ brevet blanc express) | `dist/maths-3e.html` |
 
 Les fichiers de `dist/` s'ouvrent directement dans un navigateur, sur ordinateur ou téléphone.
@@ -44,6 +44,7 @@ docs/                  étude des métiers, planning, règles pub
    - `niveaux` + `n` sur chaque module *(facultatif)* — cours regroupés par niveau ; `grades` — noms des niveaux d'XP
    - Jeux facultatifs (chacun apparaît seulement s'il est rempli ; le format est décrit en commentaire dans `moteur/template.html`) :
      `diag` (dépannages avec bon de travail) · `cablage` (tirer les fils, vérification des courts-circuits et des couleurs) · `tri` (classement) · `symboles` · `atelier` (calculs générés à l'infini) · `appareils` (fiches appareils + jeu « Qui suis-je ? »)
+   - `jeux` *(facultatif)* renomme un jeu (ex. `{diag:{t:'Problèmes'},sym:{t:'Figures'}}`), `diagTextes` adapte les textes du jeu dépannage, `appareilsNom` l'onglet du wiki, `examen.modules` limite l'examen à certains modules
    - Toujours présents : quiz, vrai/faux, chrono 60 s, associer, dans l'ordre, révision des erreurs, badges
 3. Fabriquer : `node build.js plaquiste` (ou `node build.js` pour toutes)
 

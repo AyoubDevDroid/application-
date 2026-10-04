@@ -275,119 +275,905 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
 /* =====================================================================
    CONTENU — c'est la seule partie à changer pour un autre métier
    ===================================================================== */
-/* Maths 6e — contenu (programme de mathématiques du cycle 3, classe de 6e)
-   Le moteur est le même que pour les métiers ; C.calcul ajoute le jeu « Calcul mental ». */
+/* ---- 00-app.js ---- */
+/* Maths 6e — contenu conforme au programme de mathématiques de 6e entré en vigueur à la rentrée 2025
+   (BO du 17 avril 2025, cycle 3). Vérifié en octobre 2026.
+   Nouveautés du programme prises en compte : grands nombres jusqu'au milliard, fraction = quotient, fractions sur une
+   demi-droite graduée, pensée algébrique (schémas en barres, balances), somme des angles du triangle, symétrie axiale,
+   volumes en cm³, durées, probabilités écrites en fraction, proportionnalité sans produit en croix, pensée informatique. */
 const C={
- id:'maths6',app:'Maths 6e',icon:'📐',
- sousTitre:'Le programme de 6e, chapitre par chapitre, en fiches courtes.',
- theme:{pri:'#5ad1ff',pri2:'#1a8fc4',acc:'#ffc83d'},
+ id:"maths6",app:"Maths 6e",icon:"📐",
+ sousTitre:"Tout le programme de 6e (rentrée 2025) : cours illustrés, jeux, problèmes pas à pas et exercices à l'infini.",
+ theme:{pri:"#5ad1ff",pri2:"#1a8fc4",acc:"#ffc83d"},
  pub:{actif:false,toutesLes:3},   // public mineur : voir docs/PUBLICITE.md avant d'activer
- calcul:[
-  {op:'+',a:[12,99],b:[11,99]},
-  {op:'−',a:[30,150],b:[11,60]},
-  {op:'×',a:[2,10],b:[2,10]},
-  {op:'×',a:[11,25],b:[2,5]},
-  {op:'÷',a:[2,10],b:[2,10]}
+ examen:{titre:"Évaluation de fin de 6e",questions:30,seuil:18,minutes:30},
+ calcul:[{op:"+",a:[12,99],b:[11,99]},{op:"−",a:[30,150],b:[11,60]},{op:"×",a:[2,10],b:[2,10]},{op:"×",a:[11,25],b:[2,5]},{op:"÷",a:[2,10],b:[2,10]}],
+ niveaux:[
+  {ic:"🔢",t:"Partie 1 — Nombres et calcul",d:"Entiers, décimaux, opérations, fractions, calcul mental."},
+  {ic:"📏",t:"Partie 2 — Géométrie et mesures",d:"Droites, angles, triangles, symétrie, périmètres, aires, volumes, durées."},
+  {ic:"🧠",t:"Partie 3 — Raisonner",d:"Proportionnalité, algèbre, données, probabilités, programmation, problèmes."}
  ],
- modules:[
-  {id:'decimaux',i:'🔢',t:'Les nombres décimaux',d:'Écrire, comparer, ranger',
-   s:[{h:'Partie entière et partie décimale',l:['Dans <b>12,35</b> : la partie entière est <b>12</b>, la partie décimale est <b>35</b> (centièmes).','Rang après la virgule : <b>dixièmes</b>, <b>centièmes</b>, <b>millièmes</b>.','12,35 = 12 + 3/10 + 5/100.']},
-      {h:'Comparer deux décimaux',l:['On compare d\'abord les <b>parties entières</b>.','Si elles sont égales, on compare chiffre par chiffre après la virgule.','Astuce : on ajoute des zéros. 2,5 et 2,45 → <b>2,50 > 2,45</b>.']},
-      {h:'Ranger',l:['<b>Ordre croissant</b> : du plus petit au plus grand.','<b>Ordre décroissant</b> : du plus grand au plus petit.']}],
-   k:['Nombre décimal','Dixième','Centième','Ordre croissant']},
-  {id:'operations',i:'➕',t:'Les quatre opérations',d:'Somme, différence, produit, quotient',
-   s:[{h:'Le vocabulaire',l:['Le résultat d\'une addition est une <b>somme</b>.','Le résultat d\'une soustraction est une <b>différence</b>.','Le résultat d\'une multiplication est un <b>produit</b>.','Le résultat d\'une division est un <b>quotient</b>.']},
-      {h:'Multiplier par 10, 100, 1 000',l:['× 10 : chaque chiffre prend une valeur <b>10 fois plus grande</b>.','3,7 × 10 = <b>37</b> ; 3,7 × 100 = <b>370</b>.','÷ 10 : 45 ÷ 10 = <b>4,5</b>.']},
-      {h:'Multiples et diviseurs',l:['15 est un <b>multiple</b> de 3 car 15 = 3 × 5.','3 est un <b>diviseur</b> de 15.','Un nombre est divisible par 2 s\'il est pair, par 5 s\'il finit par 0 ou 5.']}],
-   k:['Somme','Différence','Produit','Quotient','Multiple','Diviseur']},
-  {id:'fractions',i:'🍕',t:'Les fractions',d:'Partager, lire, placer',
-   s:[{h:'Lire une fraction',l:['Dans <b>3/4</b> : 3 est le <b>numérateur</b>, 4 est le <b>dénominateur</b>.','On partage l\'unité en 4 parts égales et on en prend 3.','3/4 se lit « trois quarts ».']},
-      {h:'Fraction et quotient',l:['<b>a/b</b> est le nombre qui multiplié par b donne a.','3/4 = 3 ÷ 4 = <b>0,75</b>.','1/2 = 0,5 ; 1/4 = 0,25 ; 1/10 = 0,1.']},
-      {h:'Prendre une fraction d\'une quantité',l:['3/4 de 20 = 20 ÷ 4 × 3 = <b>15</b>.']}],
-   k:['Fraction','Numérateur','Dénominateur']},
-  {id:'geometrie',i:'📏',t:'Droites, angles, cercles',d:'Parallèles, perpendiculaires, angles',
-   s:[{h:'Les droites',l:['Deux droites <b>perpendiculaires</b> se coupent en formant un angle droit.','Deux droites <b>parallèles</b> ne se coupent jamais.','La <b>médiatrice</b> d\'un segment est perpendiculaire à ce segment en son milieu.']},
-      {h:'Les angles',l:['<b>Angle aigu</b> : moins de 90°.','<b>Angle droit</b> : exactement 90°.','<b>Angle obtus</b> : entre 90° et 180°.','<b>Angle plat</b> : 180°. On mesure avec un <b>rapporteur</b>.']},
-      {h:'Le cercle',l:['Le <b>rayon</b> relie le centre à un point du cercle.','Le <b>diamètre</b> = 2 × rayon.']}],
-   k:['Perpendiculaires','Parallèles','Médiatrice','Angle droit','Angle aigu','Angle obtus','Rayon','Diamètre']},
-  {id:'mesures',i:'📦',t:'Périmètres & aires',d:'Mesurer le tour et la surface',
-   s:[{h:'Le périmètre',l:['Le <b>périmètre</b> est la longueur du tour d\'une figure.','Carré de côté c : <b>P = 4 × c</b>.','Rectangle : <b>P = 2 × (L + l)</b>.','Cercle : <b>P = 2 × π × r</b> (π ≈ 3,14).']},
-      {h:'L\'aire',l:['L\'<b>aire</b> est la mesure de la surface, en cm², m²…','Carré : <b>A = c × c</b>.','Rectangle : <b>A = L × l</b>.','Triangle rectangle : <b>A = (base × hauteur) ÷ 2</b>.']},
-      {h:'Proportionnalité',l:['Deux grandeurs sont <b>proportionnelles</b> si on passe de l\'une à l\'autre en multipliant toujours par le même nombre.','3 stylos coûtent 6 € → 6 stylos coûtent <b>12 €</b>.']}],
-   k:['Périmètre','Aire','Proportionnalité']}
- ],
- lexique:[
-  ['Nombre décimal','Nombre qui peut s\'écrire avec une virgule et un nombre fini de chiffres après : 3,25.'],
-  ['Dixième','Une unité partagée en 10 parts égales : 1/10 = 0,1.'],
-  ['Centième','Une unité partagée en 100 parts égales : 1/100 = 0,01.'],
-  ['Ordre croissant','Du plus petit au plus grand.'],
-  ['Somme','Résultat d\'une addition. La somme de 4 et 5 est 9.'],
-  ['Différence','Résultat d\'une soustraction. La différence de 9 et 4 est 5.'],
-  ['Produit','Résultat d\'une multiplication. Le produit de 4 par 5 est 20.'],
-  ['Quotient','Résultat d\'une division. Le quotient de 20 par 4 est 5.'],
-  ['Multiple','24 est un multiple de 6 car 24 = 6 × 4.'],
-  ['Diviseur','6 est un diviseur de 24 car 24 ÷ 6 tombe juste.'],
-  ['Fraction','Nombre écrit a/b : on partage en b parts égales et on en prend a.'],
-  ['Numérateur','Nombre du haut d\'une fraction : le nombre de parts prises.'],
-  ['Dénominateur','Nombre du bas d\'une fraction : en combien de parts on partage.'],
-  ['Perpendiculaires','Deux droites qui se coupent en formant un angle droit.'],
-  ['Parallèles','Deux droites qui ne se coupent jamais.'],
-  ['Médiatrice','Droite perpendiculaire à un segment en son milieu.'],
-  ['Angle droit','Angle de 90°, comme le coin d\'une feuille.'],
-  ['Angle aigu','Angle plus petit qu\'un angle droit (moins de 90°).'],
-  ['Angle obtus','Angle plus grand qu\'un angle droit et plus petit qu\'un angle plat.'],
-  ['Rayon','Distance entre le centre du cercle et un point du cercle.'],
-  ['Diamètre','Segment qui traverse le cercle en passant par le centre. Il vaut 2 rayons.'],
-  ['Périmètre','Longueur du tour d\'une figure.'],
-  ['Aire','Mesure de la surface d\'une figure, en unités d\'aire (cm², m²…).'],
-  ['Proportionnalité','Deux grandeurs liées par un même coefficient multiplicateur.']
- ],
- quiz:[
-  ['decimaux','Dans 45,78, le chiffre des dixièmes est…',['7','8','5','4'],0,'Le premier chiffre après la virgule est celui des dixièmes.'],
-  ['decimaux','Quel nombre est le plus grand ?',['2,5','2,45','2,099','2,4'],0,'2,50 > 2,45 > 2,40 > 2,099.'],
-  ['decimaux','3 + 7/100 s\'écrit…',['3,07','3,7','3,007','37'],0,'7 centièmes : deuxième chiffre après la virgule.'],
-  ['decimaux','Entre 4,1 et 4,2, on peut placer…',['4,15','4,25','4,05','4,3'],0,'4,10 < 4,15 < 4,20.'],
-  ['operations','Le résultat d\'une multiplication s\'appelle…',['Un produit','Une somme','Un quotient','Une différence'],0,'Multiplication → produit.'],
-  ['operations','3,7 × 100 = ?',['370','37','3 700','0,037'],0,'Chaque chiffre prend une valeur 100 fois plus grande.'],
-  ['operations','45 ÷ 10 = ?',['4,5','450','0,45','45,10'],0,'Diviser par 10 rend chaque chiffre 10 fois plus petit.'],
-  ['operations','Lequel est un multiple de 7 ?',['42','27','45','71'],0,'42 = 7 × 6.'],
-  ['operations','Un nombre divisible par 5 se termine par…',['0 ou 5','2 ou 4','5 uniquement','un chiffre pair'],0,'Critère de divisibilité par 5.'],
-  ['fractions','Dans 3/8, le dénominateur est…',['8','3','11','5'],0,'Le dénominateur est en bas.'],
-  ['fractions','1/4 = ?',['0,25','0,4','0,14','4'],0,'1 ÷ 4 = 0,25.'],
-  ['fractions','3/4 de 20 = ?',['15','12','5','60'],0,'20 ÷ 4 = 5, puis 5 × 3 = 15.'],
-  ['fractions','Quelle fraction vaut 0,5 ?',['1/2','1/5','5/1','2/5'],0,'1 ÷ 2 = 0,5.'],
-  ['geometrie','Un angle de 120° est…',['Obtus','Aigu','Droit','Plat'],0,'Entre 90° et 180° : obtus.'],
-  ['geometrie','Deux droites qui ne se coupent jamais sont…',['Parallèles','Perpendiculaires','Sécantes','Médiatrices'],0,'Parallèles.'],
-  ['geometrie','Le rayon d\'un cercle de diamètre 10 cm est…',['5 cm','20 cm','10 cm','3,14 cm'],0,'Rayon = diamètre ÷ 2.'],
-  ['geometrie','Pour mesurer un angle, on utilise…',['Un rapporteur','Un compas','Une règle seule','Une équerre'],0,'Le rapporteur mesure en degrés.'],
-  ['mesures','Périmètre d\'un carré de côté 6 cm ?',['24 cm','36 cm','12 cm','36 cm²'],0,'P = 4 × 6 = 24 cm.'],
-  ['mesures','Aire d\'un rectangle de 5 cm sur 3 cm ?',['15 cm²','16 cm','8 cm²','15 cm'],0,'A = 5 × 3 = 15 cm².'],
-  ['mesures','Aire d\'un triangle rectangle de côtés 4 cm et 6 cm (angle droit entre eux) ?',['12 cm²','24 cm²','10 cm²','20 cm²'],0,'(4 × 6) ÷ 2 = 12 cm².'],
-  ['mesures','2 kg de pommes coûtent 5 €. 6 kg coûtent…',['15 €','11 €','30 €','12 €'],0,'3 fois plus de pommes → 3 fois plus cher.'],
-  ['mesures','L\'aire se mesure en…',['cm²','cm','degrés','litres'],0,'Une surface se mesure en unités carrées.']
- ],
- vf:[
-  ['2,5 est plus grand que 2,45.',true,'2,50 > 2,45.'],
-  ['Le produit de 6 et 4 est 10.',false,'Le produit est 24. 10 est leur somme.'],
-  ['1/2 = 0,5.',true,'1 ÷ 2 = 0,5.'],
-  ['Un angle droit mesure 100°.',false,'Il mesure 90°.'],
-  ['Le diamètre est le double du rayon.',true,'D = 2 × r.'],
-  ['Le périmètre se mesure en cm².',false,'En cm. L\'aire se mesure en cm².'],
-  ['36 est un multiple de 9.',true,'36 = 9 × 4.'],
-  ['0,7 = 7/100.',false,'0,7 = 7/10.'],
-  ['Deux droites perpendiculaires forment un angle droit.',true,'C\'est leur définition.'],
-  ['5,2 × 10 = 5,20.',false,'5,2 × 10 = 52.'],
-  ['Dans 7/9, 7 est le numérateur.',true,'Le numérateur est en haut.'],
-  ['Un angle de 45° est aigu.',true,'Moins de 90°.'],
-  ['Le quotient de 30 par 5 est 6.',true,'30 ÷ 5 = 6.'],
-  ['L\'aire d\'un carré de côté 3 cm est 12 cm².',false,'3 × 3 = 9 cm². 12 cm est son périmètre.']
- ],
- ordre:[
-  {t:'Range dans l\'ordre croissant',s:['0,09','0,5','0,55','1,05','1,5','10,1']},
-  {t:'Construire la médiatrice d\'un segment [AB] au compas',s:['Tracer le segment [AB]','Ouvrir le compas plus que la moitié de AB','Tracer un arc de centre A','Tracer un arc de centre B avec le même écartement','Relier les 2 points d\'intersection des arcs']},
-  {t:'Calculer l\'aire d\'un rectangle',s:['Mesurer la longueur','Mesurer la largeur','Vérifier qu\'elles sont dans la même unité','Multiplier longueur × largeur','Écrire le résultat en unité d\'aire (cm²)']}
- ]
+ grades:["Débutant","Curieux","Explorateur","Explorateur","Calculateur","Calculateur","Géomètre","Géomètre","As des maths","As des maths","Champion","Champion","Expert","Expert","Génie des maths","Génie des maths"],
+ jeux:{diag:{e:"🧩",t:"Problèmes",s:"Résous pas à pas"},sym:{e:"🔷",t:"Figures",s:"Reconnais les figures"},qui:{s:"Devine l'instrument"},atel:{t:"Exercices",s:"À l'infini, avec correction"}},
+ diagTextes:{titre:"🧩 Problèmes pas à pas",sous:"Lis bien l'énoncé, puis avance étape par étape. Une erreur te coûte une étoile, mais tu peux réessayer.",entete:"🧩 Nouveau problème",carte:"PROBLÈME N°",prio:false,champs:[["lieu","📍 La situation"],["pb","❓ La question"],["qui","💡 Les données"]],go:"✏️ Je commence",fin:"Terminer",parfait:"Résolu sans erreur !",ok:"Problème résolu !",rapport:"📝 La solution complète",autre:"Autre problème",piste:"erreur"},
+ appareilsNom:"📏 Instruments",
+ modules:[],lexique:[],quiz:[],vf:[],ordre:[]
 };
+C.fiches={};
+
+/* ---- 10-nombres.js ---- */
+/* PARTIE 1 — Nombres et calcul */
+
+/* ---------- Les nombres entiers ---------- */
+C.modules.push({id:"entiers",n:1,i:"🔢",t:"Les grands nombres entiers",d:"Lire, écrire, décomposer jusqu'au milliard",
+ s:[{h:"La valeur d'un chiffre",l:["Dans un nombre, la valeur d'un chiffre dépend de sa <b>position</b>.","Dans <b>5 382</b>, le 3 vaut 3 <b>centaines</b>, soit 300.","10 unités = 1 dizaine ; 10 dizaines = 1 centaine ; 10 centaines = 1 millier."]},
+    {h:"Les grandes classes",l:["On regroupe les chiffres par <b>trois</b> : unités, milliers, millions, milliards.","<b>1 million</b> = 1 000 000 ; <b>1 milliard</b> = 1 000 000 000.","On écrit avec un espace entre les classes : 4 250 000."]},
+    {h:"Comparer et ranger",l:["Le nombre qui a le plus de chiffres est le plus grand.","Sinon, on compare chiffre par chiffre en partant de la gauche.","Symboles : <b>&lt;</b> (plus petit que), <b>&gt;</b> (plus grand que)."]}],
+ k:["Chiffre","Nombre","Milliard","Décomposition"]});
+C.fiches.entiers={
+ intro:"Avec seulement dix chiffres (0, 1, 2… 9), on peut écrire tous les nombres, même les plus grands. Le secret : la place de chaque chiffre. Une fois que tu as compris ça, lire « 7 054 300 000 » devient facile.",
+ s:[
+  {p:"Un <b>chiffre</b> est un symbole (0 à 9) ; un <b>nombre</b> est une quantité, écrite avec des chiffres. Dans un nombre, chaque position vaut <b>10 fois</b> plus que celle de droite. C'est pour ça que dans 5 382, le 5 vaut 5 000 et le 3 vaut 300.",
+   fig:{type:"flux",legende:"Décomposer 5 382",etapes:[["5 milliers","5 000"],["3 centaines","300"],["8 dizaines","80"],["2 unités","2"],["Total","5 382"]]},
+   q:["Dans 47 615, quelle est la valeur du chiffre 6 ?",["600","6","60","6 000"],0,"Le 6 est au rang des centaines : il vaut 600."]},
+  {p:"Pour lire un grand nombre, on le coupe en <b>classes de trois chiffres</b> en partant de la droite : unités, milliers, millions, milliards. On lit chaque classe puis son nom. 2 045 300 000 se lit « deux milliards quarante-cinq millions trois cent mille ».",
+   fig:{type:"chiffres",items:[[1000,"","mille"],[1000000,"","un million"],[1000000000,"","un milliard"]]},
+   info:"Il y a environ 8 milliards d'humains sur Terre. Si tu comptais un nombre par seconde sans t'arrêter, il te faudrait plus de 30 ans pour arriver à un milliard !",
+   q:["Combien de millions dans un milliard ?",["1 000","100","10","1 000 000"],0,"1 milliard = 1 000 millions."]},
+  {p:"Pour comparer deux entiers, on regarde d'abord le <b>nombre de chiffres</b> : le plus long est le plus grand. S'ils ont autant de chiffres, on compare de gauche à droite jusqu'au premier chiffre différent.",
+   ex:"45 302 et 45 230 : mêmes chiffres jusqu'aux centaines… 3 &gt; 2, donc 45 302 &gt; 45 230.",
+   q:["Quel est le plus grand ?",["120 001","99 999","100 999","119 999"],0,"120 001 a autant de chiffres que deux autres, mais 12 > 11 et 12 > 10."]}
+ ],
+ retenir:["La valeur d'un chiffre dépend de sa place.","Classes : unités, milliers, millions, milliards.","1 milliard = 1 000 millions = 1 000 000 000."]
+};
+
+/* ---------- Les nombres décimaux ---------- */
+C.modules.push({id:"decimaux",n:1,i:"🔟",t:"Les nombres décimaux",d:"Dixièmes, centièmes, comparer, demi-droite graduée",
+ s:[{h:"Partie entière et partie décimale",l:["Dans <b>12,35</b> : partie entière 12, partie décimale 35 centièmes.","Après la virgule : <b>dixièmes</b>, <b>centièmes</b>, <b>millièmes</b>.","12,35 = 12 + 3/10 + 5/100."]},
+    {h:"Plusieurs écritures",l:["0,5 = 5/10 = 1/2 = 50 %.","0,25 = 25/100 = 1/4 = 25 %.","Un même nombre peut s'écrire de plusieurs façons."]},
+    {h:"Comparer et placer",l:["On compare d'abord les parties entières, puis chiffre par chiffre après la virgule.","Astuce : ajouter des zéros. 2,5 = 2,50 &gt; 2,45.","Sur une demi-droite graduée, plus on va à droite, plus le nombre est grand."]}],
+ k:["Nombre décimal","Dixième","Centième","Demi-droite graduée","Pourcentage"]});
+C.fiches.decimaux={
+ intro:"Les nombres décimaux servent tous les jours : les prix (3,49 €), les tailles (1,52 m), les notes (14,5). Ils permettent d'être plus précis qu'avec les entiers, grâce aux dixièmes, centièmes et millièmes.",
+ s:[
+  {p:"Un dixième, c'est l'unité partagée en 10 ; un centième, l'unité partagée en 100. Dans 12,35, le 3 est le chiffre des dixièmes (il vaut 3/10) et le 5 celui des centièmes (5/100).",
+   fig:{type:"flux",legende:"Décomposer 12,35",etapes:[["Partie entière","12"],["3 dixièmes","0,3"],["5 centièmes","0,05"],["Total","12,35"]]},
+   q:["Dans 8,147, quel est le chiffre des centièmes ?",["4","1","7","8"],0,"8 unités, 1 dixième, 4 centièmes, 7 millièmes."]},
+  {p:"Un décimal peut s'écrire avec une virgule, avec une fraction décimale ou avec un pourcentage. <b>50 %</b> veut dire 50 sur 100, soit 0,5, soit la moitié.",
+   fig:{type:"barres",legende:"Le même nombre, trois écritures",items:[["1/4 = 0,25",25,"%","#3db5ff"],["1/2 = 0,5",50,"%","#2ed47a"],["3/4 = 0,75",75,"%","#ffc83d"]]},
+   q:["0,75 s'écrit aussi…",["75/100","7/5","75/10","0,75/100"],0,"75 centièmes = 75/100 = 3/4 = 75 %."]},
+  {p:"Pour comparer, on compare les parties entières, puis les dixièmes, puis les centièmes. Attention au piège : 2,5 n'est pas plus petit que 2,45 parce que « 5 &lt; 45 » ! On écrit 2,50 et 2,45 : 50 centièmes &gt; 45 centièmes.",
+   fig:{type:"svg",legende:"Demi-droite graduée de 0 à 1 (pas de 0,1)",svg:"<svg viewBox='0 0 300 70'><path d='M10 40H290' stroke='#fff' stroke-width='2'/>"+[...Array(11)].map((_,i)=>"<path d='M"+(15+i*27)+" 33V47' stroke='#fff' stroke-width='2'/>").join("")+"<text x='15' y='62' fill='#fff' font-size='11' text-anchor='middle'>0</text><text x='285' y='62' fill='#fff' font-size='11' text-anchor='middle'>1</text><circle cx='"+(15+7*27)+"' cy='40' r='6' fill='var(--pri)' class='pop'/><text x='"+(15+7*27)+"' y='24' fill='var(--pri)' font-size='12' font-weight='900' text-anchor='middle'>0,7</text></svg>"},
+   att:"Le nombre de chiffres après la virgule ne dit pas qui est le plus grand : 0,8 &gt; 0,75.",
+   q:["Quel est le plus grand ?",["3,4","3,39","3,099","3,385"],0,"3,40 > 3,39 > 3,385 > 3,099."]}
+ ],
+ retenir:["Dixièmes, centièmes, millièmes après la virgule.","0,5 = 1/2 = 50 % ; 0,25 = 1/4 = 25 %.","Comparer : parties entières, puis chiffre par chiffre (ajouter des zéros)."]
+};
+
+/* ---------- Les opérations ---------- */
+C.modules.push({id:"operations",n:1,i:"➕",t:"Additionner, soustraire, multiplier",d:"Vocabulaire, ×10 ×100, multiplier des décimaux",
+ s:[{h:"Le vocabulaire",l:["Addition → <b>somme</b> ; soustraction → <b>différence</b>.","Multiplication → <b>produit</b> ; division → <b>quotient</b>."]},
+    {h:"Multiplier et diviser par 10, 100, 1 000",l:["× 10 : chaque chiffre prend une valeur <b>10 fois plus grande</b> : 3,7 × 10 = 37.","÷ 10 : chaque chiffre prend une valeur 10 fois plus petite : 45 ÷ 10 = 4,5.","× 0,1 revient à ÷ 10."]},
+    {h:"Multiplier deux décimaux",l:["On multiplie sans les virgules, puis on place la virgule.","Le résultat a autant de chiffres après la virgule que les deux nombres réunis.","2,4 × 1,3 : 24 × 13 = 312 → <b>3,12</b>."]}],
+ k:["Somme","Différence","Produit","Quotient"]});
+C.fiches.operations={
+ intro:"Les quatre opérations sont les outils de base des maths. Connaître leur vocabulaire, poser les calculs sans erreur et vérifier avec un ordre de grandeur : c'est ce qui rend sûr de soi en calcul.",
+ s:[
+  {p:"Chaque opération a son mot pour le résultat. « La <b>somme</b> de 12 et 8 », c'est 20 ; « la <b>différence</b> entre 12 et 8 », c'est 4 ; « le <b>produit</b> de 12 par 8 », c'est 96 ; « le <b>quotient</b> de 12 par 8 », c'est 1,5.",
+   fig:{type:"cycle",centre:"12 et 8",etapes:[["Somme<br>12 + 8 = 20","#2ed47a"],["Différence<br>12 − 8 = 4","#3db5ff"],["Produit<br>12 × 8 = 96","#ffc83d"],["Quotient<br>12 ÷ 8 = 1,5","#ff8a3d"]]},
+   q:["Le produit de 7 par 6 est…",["42","13","1","76"],0,"Produit = résultat d'une multiplication."]},
+  {p:"Multiplier par 10, c'est donner à chaque chiffre une valeur 10 fois plus grande : les chiffres « glissent » d'un rang vers la gauche (et on ajoute un zéro si besoin). Diviser par 10, c'est l'inverse. On ne dit pas « on déplace la virgule » mais c'est ce qu'on voit.",
+   fig:{type:"flux",legende:"3,7 multiplié par 10 puis par 100",etapes:[["3,7",""],["× 10","37"],["× 10 encore (donc × 100)","370"]]},
+   q:["4,56 × 100 = ?",["456","45,6","4 560","0,0456"],0,"Chaque chiffre prend une valeur 100 fois plus grande."]},
+  {p:"Pour multiplier deux décimaux, on calcule le produit sans virgules, puis on met dans le résultat autant de chiffres après la virgule qu'il y en avait dans les deux nombres ensemble. On vérifie avec un <b>ordre de grandeur</b> : 2,4 × 1,3, c'est environ 2 × 1 = 2 ou 2,5 × 1 = 2,5 ; 3,12 est cohérent.",
+   att:"Multiplier par un nombre plus petit que 1 donne un résultat plus petit : 8 × 0,5 = 4.",
+   q:["1,5 × 0,2 = ?",["0,3","3","0,03","30"],0,"15 × 2 = 30, deux chiffres après la virgule : 0,30."]}
+ ],
+ retenir:["Somme, différence, produit, quotient.","× 10 : valeur 10 fois plus grande ; ÷ 10 : 10 fois plus petite.","Décimaux : on multiplie sans virgule, puis on compte les chiffres après la virgule.","Toujours vérifier avec un ordre de grandeur."]
+};
+
+/* ---------- Division et diviseurs ---------- */
+C.modules.push({id:"division",n:1,i:"➗",t:"Division, multiples et diviseurs",d:"Division euclidienne, critères de divisibilité",
+ s:[{h:"La division euclidienne",l:["a = b × q + r, avec le reste <b>r plus petit que b</b>.","47 ÷ 5 : 47 = 5 × 9 + 2 → quotient 9, reste 2."]},
+    {h:"Multiples et diviseurs",l:["15 est un <b>multiple</b> de 3 car 15 = 3 × 5.","3 est un <b>diviseur</b> de 15 : la division tombe juste (reste 0)."]},
+    {h:"Critères de divisibilité",l:["Par <b>2</b> : chiffre des unités pair.","Par <b>5</b> : finit par 0 ou 5. Par <b>10</b> : finit par 0.","Par <b>3</b> : somme des chiffres divisible par 3. Par <b>9</b> : somme des chiffres divisible par 9."]}],
+ k:["Quotient","Reste","Multiple","Diviseur"]});
+C.fiches.division={
+ intro:"Partager 47 bonbons entre 5 enfants : chacun en a 9 et il en reste 2. C'est la division euclidienne. Elle permet aussi de savoir si un nombre est un multiple d'un autre, ce qui servira pour les fractions.",
+ s:[
+  {p:"Dans la division euclidienne de a par b, on cherche combien de fois b « rentre » dans a (le <b>quotient</b> q) et ce qui reste (le <b>reste</b> r). On a toujours <b>a = b × q + r</b> et le reste est plus petit que le diviseur.",
+   fig:{type:"flux",legende:"47 bonbons pour 5 enfants",etapes:[["47 ÷ 5","?"],["5 × 9 = 45","9 bonbons chacun"],["47 − 45","reste 2"],["Vérification","5 × 9 + 2 = 47 ✔"]]},
+   q:["Dans la division euclidienne de 38 par 7, le reste est…",["3","5","4","0"],0,"38 = 7 × 5 + 3."]},
+  {p:"Si le reste est 0, la division « tombe juste » : b est un <b>diviseur</b> de a, et a est un <b>multiple</b> de b. Les multiples de 4 sont 0, 4, 8, 12, 16… ; les diviseurs de 12 sont 1, 2, 3, 4, 6 et 12.",
+   q:["Lequel est un diviseur de 24 ?",["6","5","7","9"],0,"24 = 6 × 4."]},
+  {p:"Les <b>critères de divisibilité</b> évitent de poser la division. Par 2 : unités paires. Par 5 : 0 ou 5 à la fin. Par 10 : 0 à la fin. Par 3 et par 9 : on additionne les chiffres.",
+   ex:"1 254 : 1 + 2 + 5 + 4 = 12, divisible par 3 mais pas par 9. Donc 1 254 est divisible par 3 (et par 2, car il finit par 4).",
+   q:["Quel nombre est divisible par 9 ?",["729","728","1 000","455"],0,"7 + 2 + 9 = 18, divisible par 9."]}
+ ],
+ retenir:["a = b × q + r, avec r < b.","Reste 0 : b divise a, a est multiple de b.","Critères : 2, 5, 10 (dernier chiffre) ; 3, 9 (somme des chiffres)."]
+};
+
+/* ---------- Les fractions ---------- */
+C.modules.push({id:"fractions",n:1,i:"🍕",t:"Les fractions",d:"Partager, quotient, demi-droite graduée",
+ s:[{h:"Lire une fraction",l:["Dans <b>3/4</b> : 3 est le <b>numérateur</b>, 4 le <b>dénominateur</b>.","On partage l'unité en 4 parts égales et on en prend 3.","3/4 se lit « trois quarts »."]},
+    {h:"La fraction est un quotient",l:["<b>a/b</b> est le nombre qui, multiplié par b, donne a.","3/4 = 3 ÷ 4 = <b>0,75</b>.","1/2 = 0,5 ; 1/4 = 0,25 ; 1/10 = 0,1."]},
+    {h:"Placer et comparer",l:["Sur une demi-droite graduée, on partage l'unité en autant de parts que le dénominateur.","Une fraction est plus grande que 1 quand son numérateur est plus grand que son dénominateur."]}],
+ k:["Fraction","Numérateur","Dénominateur"]});
+C.fiches.fractions={
+ intro:"Une fraction, c'est d'abord un partage : 3/4 d'une pizza. Mais c'est aussi un nombre, qu'on peut placer sur une droite graduée et écrire avec une virgule. Le programme de 6e insiste sur ces trois façons de voir une fraction.",
+ s:[
+  {p:"Le <b>dénominateur</b> (en bas) dit en combien de parts égales on partage l'unité ; le <b>numérateur</b> (en haut) dit combien de parts on prend. 3/4 : quatre parts, on en prend trois.",
+   fig:{type:"svg",legende:"3/4 d'un disque",svg:"<svg viewBox='0 0 200 110'><circle cx='100' cy='55' r='45' fill='var(--card)' stroke='#fff' stroke-width='2'/><path d='M100 55V10A45 45 0 1 1 55 55Z' fill='var(--pri)' class='pop'/><path d='M100 10V100M55 55H145' stroke='#fff' stroke-width='2'/></svg>"},
+   q:["Dans 5/8, le dénominateur est…",["8","5","13","40"],0,"Le dénominateur est en bas : on partage en 8."]},
+  {p:"La fraction a/b est aussi le <b>quotient</b> de a par b : c'est le nombre qui, multiplié par b, donne a. Donc 3/4 = 3 ÷ 4 = 0,75. C'est pour ça qu'on peut partager 3 pizzas entre 4 personnes : chacune a 3/4 de pizza.",
+   fig:{type:"flux",legende:"De la fraction au décimal",etapes:[["3/4","3 ÷ 4"],["Division","0,75"],["Vérification","0,75 × 4 = 3 ✔"]]},
+   q:["7/10 = ?",["0,7","7,10","0,07","1,7"],0,"7 dixièmes = 0,7."]},
+  {p:"Pour placer 5/3 sur une demi-droite graduée, on partage chaque unité en 3 et on compte 5 parts depuis 0 : on dépasse 1. Une fraction est plus grande que 1 quand le numérateur est plus grand que le dénominateur.",
+   fig:{type:"svg",legende:"5/3 sur une demi-droite (unité partagée en 3)",svg:"<svg viewBox='0 0 300 70'><path d='M10 40H290' stroke='#fff' stroke-width='2'/>"+[...Array(7)].map((_,i)=>"<path d='M"+(20+i*42)+" "+(i%3===0?30:34)+"V"+(i%3===0?50:46)+"' stroke='#fff' stroke-width='2'/>").join("")+"<text x='20' y='64' fill='#fff' font-size='11' text-anchor='middle'>0</text><text x='146' y='64' fill='#fff' font-size='11' text-anchor='middle'>1</text><text x='272' y='64' fill='#fff' font-size='11' text-anchor='middle'>2</text><circle cx='230' cy='40' r='6' fill='var(--pri)' class='pop'/><text x='230' y='24' fill='var(--pri)' font-size='12' font-weight='900' text-anchor='middle'>5/3</text></svg>"},
+   q:["Laquelle de ces fractions est plus grande que 1 ?",["7/5","5/7","1/2","3/4"],0,"7 > 5 : on prend plus de parts qu'il n'y en a dans l'unité."]}
+ ],
+ retenir:["Numérateur en haut, dénominateur en bas.","a/b = a ÷ b : 3/4 = 0,75.","Fraction > 1 quand numérateur > dénominateur."]
+};
+
+/* ---------- Calculer avec les fractions ---------- */
+C.modules.push({id:"fractionscalc",n:1,i:"🧮",t:"Calculer avec des fractions",d:"Ajouter, multiplier par un entier, fraction d'un nombre",
+ s:[{h:"Ajouter et soustraire",l:["Avec le <b>même dénominateur</b>, on ajoute les numérateurs : 2/7 + 3/7 = 5/7.","On garde le dénominateur."]},
+    {h:"Fractions égales",l:["On peut multiplier (ou diviser) le haut et le bas par le même nombre : 1/2 = 2/4 = 5/10.","Cela sert à mettre deux fractions au même dénominateur."]},
+    {h:"Multiplier et prendre une fraction",l:["3 × 2/5 = 6/5.","3/4 de 20 = (20 ÷ 4) × 3 = <b>15</b>."]}],
+ k:["Fraction","Fractions égales"]});
+C.fiches.fractionscalc={
+ intro:"Une fois qu'on a compris ce qu'est une fraction, on peut calculer avec : ajouter des parts de même taille, trouver une fraction égale, ou prendre « les trois quarts » d'une quantité. Ces calculs servent tous les jours (recettes, soldes, partages).",
+ s:[
+  {p:"On ne peut ajouter des fractions que si elles parlent de parts de <b>même taille</b>, donc avec le même dénominateur. 2/7 + 3/7 : 2 septièmes plus 3 septièmes = 5 septièmes.",
+   att:"On n'ajoute jamais les dénominateurs : 1/2 + 1/2 = 2/2 = 1, et non 2/4 !",
+   q:["4/9 + 2/9 = ?",["6/9","6/18","8/9","2/9"],0,"Même dénominateur : on ajoute les numérateurs."]},
+  {p:"Deux fractions sont <b>égales</b> si on passe de l'une à l'autre en multipliant (ou en divisant) le numérateur et le dénominateur par le même nombre. 1/2 = 2/4 = 3/6 = 50/100.",
+   fig:{type:"flux",legende:"Mettre 1/2 et 3/8 au même dénominateur",etapes:[["1/2","× 4 en haut et en bas"],["4/8","même dénominateur que 3/8"],["4/8 + 3/8","7/8"]]},
+   q:["Quelle fraction est égale à 3/5 ?",["6/10","3/10","5/3","6/5"],0,"On multiplie haut et bas par 2."]},
+  {p:"Prendre une fraction d'une quantité : 3/4 de 20, c'est partager 20 en 4 (on obtient 5) puis prendre 3 parts (15). Multiplier une fraction par un entier : 3 × 2/5, c'est 3 fois deux cinquièmes, donc 6/5.",
+   fig:{type:"flux",legende:"Les 3/4 de 20 €",etapes:[["20 € partagés en 4","5 € par part"],["On prend 3 parts","3 × 5 €"],["Résultat","15 €"]]},
+   q:["2/3 de 30 = ?",["20","10","15","60"],0,"30 ÷ 3 = 10, puis × 2 = 20."]}
+ ],
+ retenir:["Même dénominateur : on ajoute les numérateurs.","Fractions égales : × ou ÷ haut et bas par le même nombre.","a/b de N = (N ÷ b) × a."]
+};
+
+/* ---------- Calcul mental et ordre de grandeur ---------- */
+C.modules.push({id:"mental",n:1,i:"⚡",t:"Calcul mental et ordre de grandeur",d:"Astuces, arrondis, estimer un résultat",
+ s:[{h:"Les astuces",l:["× 5 : × 10 puis ÷ 2. × 9 : × 10 puis − une fois le nombre.","× 11 : × 10 + une fois le nombre.","Ajouter 99 : ajouter 100 puis enlever 1."]},
+    {h:"Arrondir",l:["Arrondir à l'unité : on regarde le chiffre des dixièmes.","5 ou plus : on arrondit au-dessus ; moins de 5 : en dessous.","12,6 ≈ 13 ; 12,4 ≈ 12."]},
+    {h:"L'ordre de grandeur",l:["On remplace les nombres par des valeurs proches et simples.","198 × 5 ≈ 200 × 5 = 1 000.","Il sert à vérifier un résultat de calculatrice."]}],
+ k:["Ordre de grandeur","Arrondi"]});
+C.fiches.mental={
+ intro:"Le calcul mental, c'est gagner du temps et éviter les erreurs. Quelques astuces suffisent, et l'ordre de grandeur permet de repérer tout de suite un résultat absurde.",
+ s:[
+  {p:"Les astuces reposent sur des calculs faciles : multiplier par 10, diviser par 2, ajouter 100. Exemple : 46 × 5 = 460 ÷ 2 = 230 ; 23 × 9 = 230 − 23 = 207 ; 34 × 11 = 340 + 34 = 374.",
+   fig:{type:"flux",legende:"27 × 11 de tête",etapes:[["27 × 10","270"],["+ 27","297"]]},
+   q:["48 × 5 = ?",["240","200","480","2 400"],0,"48 × 10 = 480, puis ÷ 2 = 240."]},
+  {p:"Pour <b>arrondir</b> un nombre à l'unité, on regarde le chiffre juste après : s'il vaut 5 ou plus, on arrondit au-dessus, sinon en dessous. Arrondi au dixième de 3,147 : on regarde les centièmes (4) → 3,1.",
+   q:["L'arrondi à l'unité de 18,5 est…",["19","18","18,5","20"],0,"Le chiffre des dixièmes est 5 : on arrondit au-dessus."]},
+  {p:"Un <b>ordre de grandeur</b> est un résultat approché obtenu avec des nombres simples. La calculatrice affiche 98,7 × 3,1 = 3 059,7 ? 100 × 3 = 300 : il y a une erreur (le bon résultat est 305,97).",
+   att:"L'ordre de grandeur ne remplace pas le calcul exact : il sert à vérifier.",
+   q:["Un ordre de grandeur de 412 × 19 est…",["8 000","800","80 000","400"],0,"400 × 20 = 8 000."]}
+ ],
+ retenir:["× 5 = × 10 ÷ 2 ; × 9 = × 10 − 1 fois ; × 11 = × 10 + 1 fois.","Arrondir : 5 ou plus → au-dessus.","Ordre de grandeur pour vérifier."]
+};
+
+C.lexique.push(
+ ["Chiffre","Symbole utilisé pour écrire les nombres : 0, 1, 2, 3, 4, 5, 6, 7, 8, 9."],
+ ["Nombre","Quantité écrite avec des chiffres. 47 est un nombre de deux chiffres."],
+ ["Milliard","Mille millions : 1 000 000 000."],
+ ["Décomposition","Écriture d'un nombre comme somme de la valeur de ses chiffres : 352 = 300 + 50 + 2."],
+ ["Nombre décimal","Nombre qui peut s'écrire avec une virgule et un nombre fini de chiffres après : 3,25."],
+ ["Dixième","L'unité partagée en 10 parts égales : 1/10 = 0,1."],
+ ["Centième","L'unité partagée en 100 parts égales : 1/100 = 0,01."],
+ ["Demi-droite graduée","Droite partant de 0, avec des graduations régulières, sur laquelle on place les nombres."],
+ ["Pourcentage","Nombre de parts sur 100 : 30 % = 30/100 = 0,3."],
+ ["Somme","Résultat d'une addition."],
+ ["Différence","Résultat d'une soustraction."],
+ ["Produit","Résultat d'une multiplication."],
+ ["Quotient","Résultat d'une division."],
+ ["Reste","Dans une division euclidienne, ce qui reste après le partage. Il est plus petit que le diviseur."],
+ ["Multiple","15 est un multiple de 3 car 15 = 3 × 5."],
+ ["Diviseur","3 est un diviseur de 15 : 15 ÷ 3 tombe juste."],
+ ["Fraction","Écriture a/b : l'unité partagée en b parts égales dont on prend a. C'est aussi le quotient a ÷ b."],
+ ["Numérateur","Nombre du haut d'une fraction : le nombre de parts prises."],
+ ["Dénominateur","Nombre du bas d'une fraction : le nombre de parts égales de l'unité."],
+ ["Fractions égales","Fractions qui représentent le même nombre : 1/2 = 2/4 = 50/100."],
+ ["Ordre de grandeur","Valeur approchée d'un résultat, obtenue avec des nombres simples, pour vérifier un calcul."],
+ ["Arrondi","Valeur approchée la plus proche à une précision donnée : 12,6 arrondi à l'unité donne 13."]
+);
+
+C.quiz.push(
+ ["entiers","Comment s'écrit « trois millions deux cent mille » ?",["3 200 000","3 000 200","3 200 000 000","320 000"],0,"3 millions et 200 milliers."],
+ ["entiers","Dans 9 405 271, quel est le chiffre des centaines de mille ?",["4","9","0","5"],0,"9 millions, 4 centaines de mille, 0 dizaine de mille, 5 milliers…"],
+ ["entiers","Combien y a-t-il de zéros dans un milliard ?",["9","6","12","3"],0,"1 000 000 000."],
+ ["entiers","Rangés dans l'ordre croissant :",["8 999 < 9 089 < 9 098","9 098 < 9 089 < 8 999","9 089 < 8 999 < 9 098","8 999 < 9 098 < 9 089"],0,"Croissant = du plus petit au plus grand."],
+ ["decimaux","Dans 6,384, le chiffre des dixièmes est…",["3","6","8","4"],0,"Juste après la virgule : les dixièmes."],
+ ["decimaux","Quel nombre est égal à 25 % ?",["0,25","2,5","0,025","25"],0,"25 % = 25/100 = 0,25."],
+ ["decimaux","Quel nombre est entre 4,5 et 4,6 ?",["4,53","4,7","4,05","4,61"],0,"4,50 < 4,53 < 4,60."],
+ ["decimaux","1/2 en pourcentage, c'est…",["50 %","12 %","2 %","20 %"],0,"La moitié = 50 sur 100."],
+ ["operations","0,7 × 1 000 = ?",["700","7 000","70","0,007"],0,"Chaque chiffre prend une valeur 1 000 fois plus grande."],
+ ["operations","3,2 × 0,5 = ?",["1,6","16","0,16","6,4"],0,"32 × 5 = 160 → 1,60."],
+ ["operations","Le résultat d'une soustraction s'appelle…",["Une différence","Un produit","Un quotient","Une somme"],0,"Différence."],
+ ["operations","56,3 ÷ 10 = ?",["5,63","563","0,563","56,03"],0,"Chaque chiffre prend une valeur 10 fois plus petite."],
+ ["division","Dans 53 = 6 × 8 + 5, le quotient est…",["8","5","6","53"],0,"Division de 53 par 6 : quotient 8, reste 5."],
+ ["division","Quel nombre est divisible par 3 ?",["471","472","475","1 000"],0,"4 + 7 + 1 = 12, divisible par 3."],
+ ["division","Les diviseurs de 10 sont…",["1, 2, 5, 10","1, 2, 5","2, 5, 10, 20","1 et 10"],0,"10 = 1 × 10 = 2 × 5."],
+ ["division","Un nombre qui se termine par 5 est divisible par…",["5","2","10","9"],0,"Il finit par 0 ou 5."],
+ ["fractions","Que représente 2/5 d'une tablette coupée en 5 morceaux égaux ?",["2 morceaux","5 morceaux","2,5 morceaux","3 morceaux"],0,"On prend 2 parts sur 5."],
+ ["fractions","9 ÷ 4 s'écrit aussi…",["9/4","4/9","94","4,9"],0,"Une fraction est un quotient."],
+ ["fractions","1/4 = ?",["0,25","0,4","1,4","4"],0,"1 ÷ 4 = 0,25."],
+ ["fractions","Sur une demi-droite graduée en quarts, 3/4 se trouve…",["Entre 0 et 1","Après 1","Avant 0","Sur 3"],0,"3 parts sur 4 : moins d'une unité."],
+ ["fractionscalc","3/8 + 4/8 = ?",["7/8","7/16","12/8","1/8"],0,"Même dénominateur."],
+ ["fractionscalc","3/4 de 40 = ?",["30","10","120","34"],0,"40 ÷ 4 = 10 ; 10 × 3 = 30."],
+ ["fractionscalc","5 × 2/7 = ?",["10/7","10/35","7/7","2/35"],0,"On multiplie le numérateur."],
+ ["fractionscalc","2/3 = ?",["8/12","2/6","4/3","3/2"],0,"× 4 en haut et en bas."],
+ ["mental","25 × 4 = ?",["100","29","80","125"],0,"Un grand classique."],
+ ["mental","37 + 99 = ?",["136","137","126","146"],0,"37 + 100 − 1."],
+ ["mental","L'arrondi au dixième de 7,46 est…",["7,5","7,4","7","8"],0,"Le chiffre des centièmes est 6 : on arrondit au-dessus."],
+ ["mental","Un ordre de grandeur de 51 × 39 est…",["2 000","200","20 000","90"],0,"50 × 40 = 2 000."]
+);
+
+C.vf.push(
+ ["Un milliard, c'est mille millions.",true,"1 000 × 1 000 000."],
+ ["2,5 est plus petit que 2,45 car 5 < 45.",false,"2,50 > 2,45."],
+ ["3/4 = 0,75.",true,"3 ÷ 4 = 0,75."],
+ ["1/2 + 1/2 = 2/4.",false,"1/2 + 1/2 = 2/2 = 1."],
+ ["Multiplier par 0,5 revient à diviser par 2.",true,"0,5 = la moitié."],
+ ["Dans une division euclidienne, le reste peut être plus grand que le diviseur.",false,"Le reste est toujours plus petit que le diviseur."],
+ ["Un nombre pair est divisible par 2.",true,"C'est la définition d'un nombre pair."],
+ ["7/5 est plus petit que 1.",false,"7 > 5 : la fraction dépasse 1."],
+ ["50 % c'est la moitié.",true,"50/100 = 1/2."],
+ ["Le produit de 4 par 3 est 7.",false,"Le produit est 12 ; 7 est la somme."]
+);
+
+C.ordre.push(
+ {t:"Poser une division euclidienne : 157 ÷ 6",ic:"➗",s:["Combien de fois 6 dans 15 ? 2 fois","2 × 6 = 12 ; 15 − 12 = 3","On abaisse le 7 : 37","Combien de fois 6 dans 37 ? 6 fois","6 × 6 = 36 ; 37 − 36 = 1","Quotient 26, reste 1 : 157 = 6 × 26 + 1"]}
+);
+
+/* ---- 20-geometrie.js ---- */
+/* PARTIE 2 — Géométrie et mesures */
+const ANG=(deg)=>{const r=deg*Math.PI/180,x=60+100*Math.cos(r),y=110-100*Math.sin(r);return "<path d='M60 110H170M60 110L"+x.toFixed(1)+" "+y.toFixed(1)+"' stroke='#fff' stroke-width='3' fill='none'/>"+(deg===90?"<path d='M60 92H78V110' stroke='var(--pri)' stroke-width='2' fill='none'/>":"<path d='M88 110A28 28 0 0 0 "+(60+28*Math.cos(r)).toFixed(1)+" "+(110-28*Math.sin(r)).toFixed(1)+"' stroke='var(--pri)' stroke-width='3' fill='none'/>")};
+
+/* ---------- Points, droites, cercles ---------- */
+C.modules.push({id:"geometrie",n:2,i:"📍",t:"Points, droites, segments et cercles",d:"Vocabulaire et notations, distance, cercle et disque",
+ s:[{h:"Les notations",l:["<b>(AB)</b> : la droite qui passe par A et B, illimitée.","<b>[AB]</b> : le segment, limité par A et B. <b>AB</b> : sa longueur.","<b>[AB)</b> : la demi-droite d'origine A passant par B."]},
+    {h:"Distance et milieu",l:["La <b>distance</b> entre deux points est la longueur du segment qui les relie.","Le <b>milieu</b> de [AB] est sur [AB], à égale distance de A et de B."]},
+    {h:"Cercle et disque",l:["Le <b>cercle</b> de centre O et de rayon r : tous les points à la distance r de O.","Le <b>disque</b> : le cercle et tout l'intérieur.","<b>Diamètre</b> = 2 × rayon."]}],
+ k:["Droite","Segment","Milieu","Cercle","Rayon","Diamètre"]});
+C.fiches.geometrie={
+ intro:"La géométrie a son propre langage : crochets, parenthèses, mots précis. Bien écrire et bien lire ces notations, c'est la moitié du travail pour réussir un exercice de construction.",
+ s:[
+  {p:"Une <b>droite</b> est illimitée dans les deux sens : on la note (AB). Un <b>segment</b> s'arrête à ses deux extrémités : [AB]. Une <b>demi-droite</b> a une origine et part à l'infini d'un seul côté : [AB). Sans crochets ni parenthèses, AB désigne une <b>longueur</b>.",
+   fig:{type:"svg",legende:"Droite (AB), segment [AB], demi-droite [AB)",svg:"<svg viewBox='0 0 300 120'><g stroke='#fff' stroke-width='2'><path d='M10 20H290' stroke-dasharray='0'/><path d='M80 60H220'/><path d='M80 100H290'/></g><g fill='var(--pri)'><circle cx='80' cy='20' r='4'/><circle cx='220' cy='20' r='4'/><circle cx='80' cy='60' r='4'/><circle cx='220' cy='60' r='4'/><circle cx='80' cy='100' r='4'/><circle cx='220' cy='100' r='4'/></g><g fill='var(--mut)' font-size='11' font-weight='700'><text x='10' y='14'>(AB)</text><text x='10' y='64'>[AB]</text><text x='10' y='104'>[AB)</text></g></svg>"},
+   q:["Comment note-t-on le segment d'extrémités E et F ?",["[EF]","(EF)","EF","[EF)"],0,"Crochets des deux côtés : il s'arrête en E et en F."]},
+  {p:"La <b>distance</b> entre deux points est la longueur du segment qui les relie : c'est le plus court chemin. Le <b>milieu</b> d'un segment est le point du segment situé à la même distance des deux extrémités.",
+   q:["M est le milieu de [AB] et AB = 10 cm. Combien mesure AM ?",["5 cm","10 cm","20 cm","2,5 cm"],0,"Le milieu partage le segment en deux longueurs égales."]},
+  {p:"Le <b>cercle</b> de centre O et de rayon 3 cm est l'ensemble des points situés à exactement 3 cm de O. Le <b>disque</b> contient le cercle et tout l'intérieur. Un <b>rayon</b> relie le centre à un point du cercle ; un <b>diamètre</b> traverse le cercle en passant par le centre : il mesure deux rayons.",
+   fig:{type:"svg",legende:"Centre, rayon, diamètre",svg:"<svg viewBox='0 0 200 130'><circle cx='100' cy='65' r='55' fill='none' stroke='#fff' stroke-width='2' class='draw'/><path d='M45 65H155' stroke='var(--pri)' stroke-width='3'/><path d='M100 65L139 26' stroke='#3db5ff' stroke-width='3'/><circle cx='100' cy='65' r='4' fill='#fff'/><text x='92' y='84' fill='var(--pri)' font-size='11' font-weight='800'>diamètre</text><text x='122' y='40' fill='#3db5ff' font-size='11' font-weight='800'>rayon</text></svg>"},
+   q:["Un cercle a un diamètre de 12 cm. Son rayon mesure…",["6 cm","24 cm","12 cm","3 cm"],0,"Rayon = diamètre ÷ 2."]}
+ ],
+ retenir:["(AB) droite, [AB] segment, [AB) demi-droite, AB longueur.","Milieu : sur le segment, à égale distance des extrémités.","Cercle = points à la distance r du centre ; diamètre = 2 × rayon."]
+};
+
+/* ---------- Droites parallèles, perpendiculaires, médiatrice ---------- */
+C.modules.push({id:"droites",n:2,i:"📐",t:"Parallèles, perpendiculaires, médiatrice",d:"Tracer et reconnaître",
+ s:[{h:"Perpendiculaires et parallèles",l:["Deux droites <b>perpendiculaires</b> se coupent en formant un angle droit. Notation : (d) ⊥ (d').","Deux droites <b>parallèles</b> ne se coupent jamais. Notation : (d) // (d').","On trace avec la règle et l'équerre."]},
+    {h:"La médiatrice d'un segment",l:["C'est la droite <b>perpendiculaire</b> au segment qui passe par son <b>milieu</b>.","Tout point de la médiatrice est à <b>égale distance</b> des extrémités du segment.","On la construit au compas."]}],
+ k:["Perpendiculaires","Parallèles","Médiatrice","Équerre"]});
+C.fiches.droites={
+ intro:"Les murs d'une pièce, les lignes d'un cahier, les rues d'un quartier : les droites parallèles et perpendiculaires sont partout. La médiatrice, elle, est un outil puissant pour trouver des points « à égale distance ».",
+ s:[
+  {p:"Deux droites <b>perpendiculaires</b> forment un angle droit, codé par un petit carré. Deux droites <b>parallèles</b> gardent toujours le même écartement et ne se coupent jamais. Une propriété utile : si deux droites sont perpendiculaires à une même troisième, elles sont parallèles entre elles.",
+   fig:{type:"svg",legende:"Perpendiculaires (angle droit codé) et parallèles",svg:"<svg viewBox='0 0 300 120'><path d='M20 90H130M70 20V110' stroke='#fff' stroke-width='2'/><path d='M70 78H82V90' stroke='var(--pri)' stroke-width='2' fill='none'/><path d='M170 40L290 20M170 100L290 80' stroke='#3db5ff' stroke-width='3'/><text x='60' y='15' fill='var(--mut)' font-size='11' font-weight='700'>⊥</text><text x='215' y='70' fill='var(--mut)' font-size='11' font-weight='700'>//</text></svg>"},
+   q:["(d) ⊥ (e) et (f) ⊥ (e). Que peut-on dire de (d) et (f) ?",["Elles sont parallèles","Elles sont perpendiculaires","Elles se coupent","On ne peut rien dire"],0,"Deux droites perpendiculaires à une même droite sont parallèles."]},
+  {p:"La <b>médiatrice</b> d'un segment [AB] est la droite perpendiculaire à [AB] passant par son milieu. Sa propriété : tout point de la médiatrice est à la même distance de A et de B, et tout point à égale distance de A et de B est sur la médiatrice.",
+   fig:{type:"etapes",vues:[
+     {svg:"<svg viewBox='0 0 240 140'><path d='M60 70H180' stroke='#fff' stroke-width='3'/><circle cx='60' cy='70' r='4' fill='#fff'/><circle cx='180' cy='70' r='4' fill='#fff'/><text x='50' y='92' fill='#fff' font-size='12'>A</text><text x='176' y='92' fill='#fff' font-size='12'>B</text></svg>",t:"On part du segment [AB]."},
+     {svg:"<svg viewBox='0 0 240 140'><path d='M60 70H180' stroke='#fff' stroke-width='3'/><path d='M120 17.1A80 80 0 0 1 120 122.9' stroke='var(--pri)' stroke-width='2' fill='none' class='draw'/><path d='M120 17.1A80 80 0 0 0 120 122.9' stroke='#3db5ff' stroke-width='2' fill='none' class='draw'/><circle cx='120' cy='17.1' r='3' fill='#fff'/><circle cx='120' cy='122.9' r='3' fill='#fff'/><circle cx='60' cy='70' r='4' fill='#fff'/><circle cx='180' cy='70' r='4' fill='#fff'/></svg>",t:"Pointe du compas en A puis en B, même écartement (plus de la moitié de AB) : on trace deux arcs de chaque côté."},
+     {svg:"<svg viewBox='0 0 240 140'><path d='M60 70H180' stroke='#fff' stroke-width='3'/><path d='M120 5V135' stroke='var(--pri)' stroke-width='3' class='draw'/><path d='M120 58H132V70' stroke='var(--pri)' stroke-width='2' fill='none'/><circle cx='60' cy='70' r='4' fill='#fff'/><circle cx='180' cy='70' r='4' fill='#fff'/></svg>",t:"On relie les deux points d'intersection des arcs : c'est la médiatrice, perpendiculaire à [AB] en son milieu."}]},
+   q:["Un point M est sur la médiatrice de [AB] et MA = 7 cm. Combien mesure MB ?",["7 cm","14 cm","3,5 cm","On ne peut pas savoir"],0,"Tout point de la médiatrice est à égale distance de A et de B."]}
+ ],
+ retenir:["⊥ : angle droit ; // : jamais de point commun.","Deux perpendiculaires à une même droite sont parallèles.","Médiatrice : perpendiculaire au segment en son milieu ; ses points sont à égale distance des extrémités."]
+};
+
+/* ---------- Les angles ---------- */
+C.modules.push({id:"angles",n:2,i:"📐",t:"Les angles",d:"Nommer, mesurer, construire, bissectrice",
+ s:[{h:"Nommer un angle",l:["L'angle xOy a pour <b>sommet</b> O et pour <b>côtés</b> les demi-droites [Ox) et [Oy).","On le note avec un chapeau : ABC, le sommet est la lettre du milieu."]},
+    {h:"Les sortes d'angles",l:["<b>Aigu</b> : moins de 90°. <b>Droit</b> : 90°.","<b>Obtus</b> : entre 90° et 180°. <b>Plat</b> : 180°."]},
+    {h:"Mesurer et tracer",l:["On mesure avec un <b>rapporteur</b> : centre sur le sommet, zéro sur un côté.","La <b>bissectrice</b> partage un angle en deux angles égaux."]}],
+ k:["Angle","Sommet","Rapporteur","Angle aigu","Angle obtus","Bissectrice"]});
+C.fiches.angles={
+ intro:"Un angle mesure une « ouverture » entre deux demi-droites, en degrés. On le retrouve dans les aiguilles d'une horloge, les pentes, les virages. Manipule l'angle ci-dessous pour voir ses différentes sortes.",
+ s:[
+  {p:"Un angle est formé par deux demi-droites de même origine : cette origine est le <b>sommet</b>. Dans l'angle ABC, le sommet est <b>B</b> (la lettre du milieu). Sa mesure ne dépend pas de la longueur des côtés dessinés.",
+   q:["Quel est le sommet de l'angle RST ?",["S","R","T","Il n'en a pas"],0,"Le sommet est la lettre du milieu."]},
+  {p:"On classe les angles selon leur mesure. Touche le bouton pour changer l'angle :",
+   fig:{type:"inter",legende:"Aigu, droit, obtus, plat",inters:[["a","🔁 Changer l'angle",4]],
+    svg:"<svg viewBox='0 0 230 130'><g data-v='a:0'>"+ANG(45)+"</g><g data-v='a:1'>"+ANG(90)+"</g><g data-v='a:2'>"+ANG(135)+"</g><g data-v='a:3'><path d='M10 110H170' stroke='#fff' stroke-width='3'/><path d='M88 110A28 28 0 0 0 32 110' stroke='var(--pri)' stroke-width='3' fill='none'/></g><circle cx='60' cy='110' r='4' fill='var(--pri)'/></svg>",
+    f:s=>[],msg:s=>["Angle <b>aigu</b> : 45°, moins de 90°.","Angle <b>droit</b> : exactement 90° (codé par un petit carré).","Angle <b>obtus</b> : 135°, entre 90° et 180°.","Angle <b>plat</b> : 180°, les deux côtés sont alignés."][s.a]},
+   q:["Un angle de 120° est…",["Obtus","Aigu","Droit","Plat"],0,"Entre 90° et 180°."]},
+  {p:"Pour mesurer, on place le <b>centre du rapporteur</b> sur le sommet et le <b>zéro</b> d'une graduation sur un côté, puis on lit sur la même graduation où passe l'autre côté. La <b>bissectrice</b> d'un angle est la demi-droite qui le partage en deux angles de même mesure.",
+   att:"Le rapporteur a deux graduations (0 à 180 dans les deux sens) : on lit toujours celle qui part de 0 sur le premier côté. Un angle visiblement aigu ne peut pas mesurer 140° !",
+   q:["La bissectrice d'un angle de 70° forme deux angles de…",["35°","70°","140°","20°"],0,"Elle partage l'angle en deux moitiés."]}
+ ],
+ retenir:["Sommet = lettre du milieu.","Aigu < 90° ; droit = 90° ; obtus entre 90° et 180° ; plat = 180°.","Rapporteur : centre sur le sommet, zéro sur un côté.","Bissectrice : partage l'angle en deux angles égaux."]
+};
+
+/* ---------- Les triangles ---------- */
+C.modules.push({id:"triangles",n:2,i:"🔺",t:"Les triangles",d:"Triangles particuliers, somme des angles, construction",
+ s:[{h:"Les triangles particuliers",l:["<b>Isocèle</b> : deux côtés de même longueur.","<b>Équilatéral</b> : trois côtés de même longueur.","<b>Rectangle</b> : un angle droit."]},
+    {h:"La somme des angles",l:["Dans tout triangle, la somme des trois angles vaut <b>180°</b>.","Dans un triangle équilatéral, chaque angle mesure 60°."]},
+    {h:"Construire un triangle",l:["Avec trois longueurs : règle et compas.","Il n'est possible que si la plus grande longueur est inférieure à la somme des deux autres."]}],
+ k:["Triangle isocèle","Triangle équilatéral","Triangle rectangle","Somme des angles"]});
+C.fiches.triangles={
+ intro:"Le triangle est la figure la plus solide qui existe : c'est pour ça qu'on en voit dans les charpentes, les ponts et les grues. Le programme de 6e ajoute une propriété très puissante : la somme de ses angles vaut toujours 180°.",
+ s:[
+  {p:"Un triangle <b>isocèle</b> a deux côtés égaux (et deux angles égaux, à la base). Un triangle <b>équilatéral</b> a trois côtés égaux (et trois angles de 60°). Un triangle <b>rectangle</b> a un angle droit ; le côté opposé à l'angle droit est le plus long, on l'appelle l'<b>hypoténuse</b>.",
+   fig:{type:"svg",legende:"Isocèle, équilatéral, rectangle (codages)",svg:"<svg viewBox='0 0 300 110'><path d='M50 15L15 95H85Z' fill='none' stroke='#fff' stroke-width='2'/><path d='M28 52l6 3M66 52l-6 3' stroke='var(--pri)' stroke-width='2'/><path d='M150 18L110 95H190Z' fill='none' stroke='#fff' stroke-width='2'/><path d='M125 56l6 3M175 56l-6 3M150 91v8' stroke='var(--pri)' stroke-width='2'/><path d='M220 20V95H290Z' fill='none' stroke='#fff' stroke-width='2'/><path d='M220 83H232V95' stroke='var(--pri)' stroke-width='2' fill='none'/></svg>"},
+   q:["Un triangle a deux côtés de 5 cm et un de 7 cm. Il est…",["Isocèle","Équilatéral","Rectangle forcément","Quelconque"],0,"Deux côtés égaux : isocèle."]},
+  {p:"Dans <b>tout</b> triangle, la somme des trois angles est égale à <b>180°</b>. Si on connaît deux angles, on trouve le troisième par soustraction. On peut le vérifier en découpant les trois coins d'un triangle en papier : ils forment un angle plat.",
+   fig:{type:"flux",legende:"Trouver le 3e angle",etapes:[["Angle A","50°"],["Angle B","70°"],["Angle C = 180 − 50 − 70","60°"]]},
+   q:["Un triangle a deux angles de 40° et 100°. Le troisième mesure…",["40°","60°","140°","80°"],0,"180 − 40 − 100 = 40."]},
+  {p:"Pour construire un triangle dont on connaît les trois longueurs, on trace le plus grand côté à la règle, puis deux arcs au compas depuis ses extrémités. Ce n'est possible que si le plus grand côté est plus petit que la somme des deux autres (<b>inégalité triangulaire</b>) : avec 3 cm, 4 cm et 10 cm, les arcs ne se rencontrent pas.",
+   q:["Peut-on construire un triangle de côtés 2 cm, 3 cm et 8 cm ?",["Non, 8 > 2 + 3","Oui","Oui, il est rectangle","Oui, il est isocèle"],0,"Le plus grand côté doit être plus petit que la somme des deux autres."]}
+ ],
+ retenir:["Isocèle : 2 côtés égaux ; équilatéral : 3 côtés égaux ; rectangle : un angle droit.","Somme des angles d'un triangle = 180°.","Construction possible si le plus grand côté < somme des deux autres."]
+};
+
+/* ---------- Les quadrilatères ---------- */
+C.modules.push({id:"quadrilateres",n:2,i:"🟦",t:"Les quadrilatères",d:"Rectangle, losange, carré : propriétés",
+ s:[{h:"Les quadrilatères particuliers",l:["<b>Rectangle</b> : quatre angles droits.","<b>Losange</b> : quatre côtés de même longueur.","<b>Carré</b> : quatre angles droits et quatre côtés égaux (rectangle et losange à la fois)."]},
+    {h:"Leurs propriétés",l:["Côtés opposés parallèles et de même longueur (rectangle, losange, carré).","Diagonales du rectangle : même longueur, même milieu.","Diagonales du losange : perpendiculaires, même milieu."]}],
+ k:["Rectangle","Losange","Carré","Diagonale"]});
+C.fiches.quadrilateres={
+ intro:"Un quadrilatère a quatre côtés. Certains sont « spéciaux » parce qu'ils ont des angles droits ou des côtés égaux. Le carré est le champion : il a toutes les propriétés du rectangle et du losange.",
+ s:[
+  {p:"Le <b>rectangle</b> a quatre angles droits. Le <b>losange</b> a quatre côtés égaux. Le <b>carré</b> a les deux : quatre angles droits et quatre côtés égaux. Un carré est donc à la fois un rectangle particulier et un losange particulier.",
+   fig:{type:"svg",legende:"Rectangle, losange, carré",svg:"<svg viewBox='0 0 300 100'><rect x='10' y='25' width='90' height='55' fill='none' stroke='#fff' stroke-width='2'/><path d='M10 37H22V25' stroke='var(--pri)' stroke-width='2' fill='none'/><path d='M150 10L185 50L150 90L115 50Z' fill='none' stroke='#fff' stroke-width='2'/><path d='M165 27l6-4M165 73l6 4M133 27l-6-4M133 73l-6 4' stroke='var(--pri)' stroke-width='2'/><rect x='215' y='15' width='70' height='70' fill='none' stroke='#fff' stroke-width='2'/><path d='M215 27H227V15' stroke='var(--pri)' stroke-width='2' fill='none'/></svg>"},
+   q:["Un quadrilatère a quatre côtés égaux et un angle droit. C'est…",["Un carré","Un losange quelconque","Un rectangle quelconque","Un triangle"],0,"Losange avec un angle droit = carré."]},
+  {p:"Les <b>diagonales</b> relient deux sommets opposés. Celles du rectangle ont la même longueur et se coupent en leur milieu. Celles du losange sont perpendiculaires et se coupent en leur milieu. Celles du carré ont toutes ces propriétés.",
+   q:["Les diagonales d'un losange sont…",["Perpendiculaires","Toujours de même longueur","Parallèles","Égales à un côté"],0,"Elles se coupent à angle droit, en leur milieu."]}
+ ],
+ retenir:["Rectangle : 4 angles droits ; losange : 4 côtés égaux ; carré : les deux.","Diagonales : même milieu ; égales (rectangle) ; perpendiculaires (losange)."]
+};
+
+/* ---------- La symétrie axiale ---------- */
+C.modules.push({id:"symetrie",n:2,i:"🦋",t:"La symétrie axiale",d:"Figure symétrique, axe de symétrie, propriétés",
+ s:[{h:"Le principe",l:["Deux figures sont symétriques par rapport à une droite si elles se <b>superposent par pliage</b> le long de cette droite.","Cette droite est l'<b>axe de symétrie</b>."]},
+    {h:"Le symétrique d'un point",l:["A' est le symétrique de A si l'axe est la <b>médiatrice</b> de [AA'].","Donc (AA') est perpendiculaire à l'axe et A et A' sont à la même distance de l'axe."]},
+    {h:"Ce que la symétrie conserve",l:["Les longueurs, les angles, les aires, l'alignement.","Une figure peut avoir un ou plusieurs axes de symétrie (le carré en a 4)."]}],
+ k:["Symétrie axiale","Axe de symétrie"]});
+C.fiches.symetrie={
+ intro:"Un papillon, un visage, de nombreux logos : la symétrie est partout dans la nature et dans les objets. En géométrie, la symétrie axiale fonctionne comme un miroir ou un pliage.",
+ s:[
+  {p:"Deux figures sont <b>symétriques par rapport à une droite</b> si, en pliant la feuille le long de cette droite, elles se superposent exactement. Cette droite est l'<b>axe de symétrie</b>.",
+   fig:{type:"svg",legende:"Un triangle et son symétrique par rapport à l'axe",svg:"<svg viewBox='0 0 260 130'><path d='M130 5V125' stroke='var(--pri)' stroke-width='2' stroke-dasharray='6 5'/><path d='M40 30L100 50L60 110Z' fill='rgba(61,181,255,.3)' stroke='#3db5ff' stroke-width='2'/><path d='M220 30L160 50L200 110Z' fill='rgba(255,200,61,.25)' stroke='var(--pri)' stroke-width='2' class='appear'/></svg>"},
+   q:["Pour vérifier que deux figures sont symétriques, on peut…",["Plier le long de l'axe","Les mesurer au rapporteur","Les colorier","Les découper en morceaux"],0,"Elles doivent se superposer par pliage."]},
+  {p:"Le symétrique A' d'un point A est tel que l'axe est la <b>médiatrice</b> de [AA'] : on trace la perpendiculaire à l'axe passant par A, et on reporte la même distance de l'autre côté. Un point situé sur l'axe est son propre symétrique.",
+   q:["Un point est à 3 cm de l'axe. Son symétrique est à…",["3 cm de l'axe, de l'autre côté","6 cm de l'axe","3 cm du point","Sur l'axe"],0,"L'axe est la médiatrice du segment qui les relie."]},
+  {p:"La symétrie <b>conserve</b> tout : longueurs, mesures d'angles, aires, alignement. Le symétrique d'un segment est un segment de même longueur. Certaines figures sont leur propre symétrique : elles ont des <b>axes de symétrie</b>. Un rectangle en a 2, un losange 2, un carré 4, un cercle une infinité.",
+   fig:{type:"barres",legende:"Nombre d'axes de symétrie",items:[["Triangle isocèle",1,""],["Rectangle",2,""],["Losange",2,""],["Triangle équilatéral",3,""],["Carré",4,""]]},
+   q:["Combien d'axes de symétrie a un carré ?",["4","2","1","0"],0,"2 médianes et 2 diagonales."]}
+ ],
+ retenir:["Symétriques = superposables par pliage le long de l'axe.","L'axe est la médiatrice de [AA'].","La symétrie conserve longueurs, angles, aires, alignement.","Axes : rectangle 2, losange 2, carré 4, cercle une infinité."]
+};
+
+/* ---------- Longueurs et périmètres ---------- */
+C.modules.push({id:"longueurs",n:2,i:"📏",t:"Longueurs et périmètres",d:"Conversions, périmètre des polygones et du cercle",
+ s:[{h:"Les unités de longueur",l:["km, hm, dam, <b>m</b>, dm, cm, mm : chaque unité vaut <b>10 fois</b> la suivante.","1 km = 1 000 m ; 1 m = 100 cm ; 1 cm = 10 mm."]},
+    {h:"Le périmètre d'un polygone",l:["Le <b>périmètre</b> est la longueur du contour : on additionne les côtés.","Carré : 4 × côté. Rectangle : 2 × (longueur + largeur)."]},
+    {h:"Le périmètre du cercle",l:["Périmètre = <b>π × diamètre</b> = 2 × π × rayon.","π ≈ 3,14 (un peu plus de 3)."]}],
+ k:["Périmètre","π"]});
+C.fiches.longueurs={
+ intro:"Clôturer un jardin, poser une frise autour d'une chambre, faire le tour d'un stade : on calcule un périmètre. Le cercle a sa formule spéciale, avec un nombre célèbre : π.",
+ s:[
+  {p:"Les unités de longueur vont de 10 en 10 : km, hm, dam, m, dm, cm, mm. Pour convertir, on peut utiliser un tableau de conversion ou multiplier/diviser par 10, 100, 1 000.",
+   fig:{type:"flux",legende:"Convertir 3,5 km en mètres",etapes:[["3,5 km","× 1 000"],["3 500 m",""]]},
+   q:["2,4 m = ?",["240 cm","24 cm","2 400 cm","0,24 cm"],0,"1 m = 100 cm."]},
+  {p:"Le <b>périmètre</b> d'une figure est la longueur de son contour. Pour un polygone, on additionne les longueurs des côtés. Formules utiles : carré = 4 × côté ; rectangle = 2 × (longueur + largeur).",
+   q:["Périmètre d'un rectangle de 8 m sur 5 m ?",["26 m","40 m","13 m","21 m"],0,"2 × (8 + 5) = 26."]},
+  {p:"Le périmètre d'un cercle est toujours un peu plus de 3 fois son diamètre : ce nombre s'appelle <b>π</b> (pi) et vaut environ 3,14. Périmètre = π × diamètre = 2 × π × rayon.",
+   fig:{type:"flux",legende:"Tour d'une roue de 60 cm de diamètre",etapes:[["π × diamètre","3,14 × 60"],["Périmètre","≈ 188,4 cm"]]},
+   info:"π a une infinité de chiffres après la virgule et ils ne se répètent jamais : 3,14159265… On en connaît des milliers de milliards grâce aux ordinateurs.",
+   q:["Un cercle a un rayon de 10 cm. Son périmètre vaut environ…",["62,8 cm","31,4 cm","100 cm","20 cm"],0,"2 × 3,14 × 10 = 62,8."]}
+ ],
+ retenir:["Unités de 10 en 10 : 1 m = 100 cm = 1 000 mm.","Périmètre = longueur du contour. Rectangle : 2 × (L + l).","Cercle : π × diamètre (π ≈ 3,14)."]
+};
+
+/* ---------- Les aires ---------- */
+C.modules.push({id:"aires",n:2,i:"🟩",t:"Les aires",d:"Unités, conversions, carré et rectangle",
+ s:[{h:"Aire et périmètre, c'est différent",l:["L'<b>aire</b> mesure la surface (l'intérieur), le <b>périmètre</b> le contour.","Deux figures peuvent avoir la même aire et des périmètres différents."]},
+    {h:"Les unités d'aire",l:["1 cm² : l'aire d'un carré de 1 cm de côté.","Entre deux unités voisines, on multiplie par <b>100</b> : 1 m² = 100 dm² = 10 000 cm²."]},
+    {h:"Les formules",l:["Rectangle : <b>longueur × largeur</b>.","Carré : <b>côté × côté</b>.","Figure complexe : on la découpe en rectangles."]}],
+ k:["Aire","Centimètre carré"]});
+C.fiches.aires={
+ intro:"Combien de carrelage pour la salle de bain ? Combien de peinture pour un mur ? On a besoin de l'aire, c'est-à-dire de la surface. Attention : les unités d'aire ne se convertissent pas comme les longueurs.",
+ s:[
+  {p:"L'<b>aire</b> d'une figure mesure la place qu'elle occupe à l'intérieur ; le <b>périmètre</b> mesure son tour. Un rectangle de 6 cm × 1 cm et un carré de 3 cm × 3 cm n'ont pas la même aire (6 cm² et 9 cm²), ni le même périmètre (14 cm et 12 cm).",
+   q:["Pour savoir combien de gazon semer, on calcule…",["L'aire","Le périmètre","Le diamètre","Le volume"],0,"Le gazon couvre la surface."]},
+  {p:"1 cm² est l'aire d'un carré de 1 cm de côté. Un carré de 1 m de côté contient 100 × 100 = 10 000 petits carrés de 1 cm : donc <b>1 m² = 10 000 cm²</b>. Entre deux unités d'aire voisines, on multiplie par 100 (et non par 10).",
+   fig:{type:"flux",legende:"Convertir 3 m² en cm²",etapes:[["3 m²","× 100"],["300 dm²","× 100"],["30 000 cm²",""]]},
+   att:"Erreur fréquente : 1 m² = 100 cm². Faux ! 1 m² = 10 000 cm².",
+   q:["1 dm² = ?",["100 cm²","10 cm²","1 000 cm²","10 000 cm²"],0,"Un carré de 10 cm × 10 cm."]},
+  {p:"Aire d'un <b>rectangle</b> = longueur × largeur ; aire d'un <b>carré</b> = côté × côté. Les deux longueurs doivent être dans la même unité. Pour une figure en L, on la découpe en rectangles et on additionne leurs aires.",
+   fig:{type:"svg",legende:"Une figure en L découpée en deux rectangles",svg:"<svg viewBox='0 0 240 130'><path d='M20 20H100V70H200V110H20Z' fill='rgba(61,181,255,.25)' stroke='#fff' stroke-width='2'/><path d='M100 70V110' stroke='var(--pri)' stroke-width='2' stroke-dasharray='5 4'/><text x='60' y='70' fill='#fff' font-size='12' text-anchor='middle'>8 × 9</text><text x='150' y='95' fill='#fff' font-size='12' text-anchor='middle'>10 × 4</text></svg>"},
+   q:["Aire d'un rectangle de 7 cm sur 4 cm ?",["28 cm²","22 cm²","11 cm²","28 cm"],0,"7 × 4 = 28, en cm²."]}
+ ],
+ retenir:["Aire = surface ; périmètre = contour.","1 m² = 100 dm² = 10 000 cm² (×100 entre unités voisines).","Rectangle : L × l ; carré : c × c ; découper les figures complexes."]
+};
+
+/* ---------- Volumes et espace ---------- */
+C.modules.push({id:"volumes",n:2,i:"🧊",t:"Volumes et solides",d:"Cubes, centimètre cube, vision dans l'espace",
+ s:[{h:"Les solides",l:["<b>Cube</b> : 6 faces carrées. <b>Pavé droit</b> : 6 faces rectangulaires.","Un pavé a 6 faces, 12 arêtes et 8 sommets."]},
+    {h:"Le volume",l:["Le <b>volume</b> mesure la place occupée dans l'espace.","1 cm³ : le volume d'un cube de 1 cm d'arête.","On compte les cubes : cubes par couche × nombre de couches."]},
+    {h:"Voir dans l'espace",l:["Un assemblage de cubes se voit de face, de côté, de dessus.","Des cubes peuvent être cachés derrière d'autres."]}],
+ k:["Volume","Centimètre cube","Pavé droit"]});
+C.fiches.volumes={
+ intro:"Une boîte, un aquarium, une pièce : ils ont un volume, la place qu'ils occupent en longueur, largeur et hauteur. En 6e, on mesure les volumes en comptant des petits cubes.",
+ s:[
+  {p:"Le <b>cube</b> a 6 faces carrées identiques. Le <b>pavé droit</b> (comme une boîte à chaussures) a 6 faces rectangulaires. Tous les deux ont 12 <b>arêtes</b> et 8 <b>sommets</b>.",
+   fig:{type:"chiffres",items:[[6,"","faces"],[12,"","arêtes"],[8,"","sommets"]]},
+   q:["Combien d'arêtes a un cube ?",["12","6","8","4"],0,"4 en haut, 4 en bas, 4 verticales."]},
+  {p:"L'unité de volume la plus utilisée en 6e est le <b>centimètre cube</b> (cm³) : le volume d'un cube de 1 cm d'arête. Pour trouver le volume d'un pavé rempli de petits cubes, on compte les cubes d'une couche, puis on multiplie par le nombre de couches.",
+   fig:{type:"flux",legende:"Un pavé de 4 cubes de long, 3 de large, 2 couches",etapes:[["Une couche","4 × 3 = 12 cubes"],["2 couches","12 × 2"],["Volume","24 cm³"]]},
+   q:["Une boîte contient 5 couches de 6 cubes de 1 cm³. Son volume est…",["30 cm³","11 cm³","56 cm³","30 cm²"],0,"6 × 5 = 30 cubes."]},
+  {p:"Un assemblage de cubes ne se voit pas en entier : selon la vue (de face, de dessus, de côté), certains cubes sont cachés. Pour compter, on raisonne couche par couche ou colonne par colonne.",
+   q:["Une tour de 3 cubes posée sur un carré de 2 × 2 cubes compte combien de cubes ?",["7","5","12","6"],0,"4 cubes en bas + 3 au-dessus = 7."]}
+ ],
+ retenir:["Cube et pavé : 6 faces, 12 arêtes, 8 sommets.","1 cm³ = volume d'un cube de 1 cm d'arête.","Volume = cubes par couche × nombre de couches."]
+};
+
+/* ---------- Durées ---------- */
+C.modules.push({id:"durees",n:2,i:"⏰",t:"Heures et durées",d:"Convertir, calculer une durée, heure de fin",
+ s:[{h:"Les conversions",l:["1 h = <b>60</b> min ; 1 min = 60 s ; 1 jour = 24 h.","Attention : les durées ne comptent pas de 10 en 10, mais de 60 en 60."]},
+    {h:"Heures et nombres décimaux",l:["1,5 h = 1 h <b>30</b> min (et non 1 h 50 !).","0,25 h = 15 min ; 0,75 h = 45 min."]},
+    {h:"Calculer une durée",l:["Durée = heure de fin − heure de début.","On peut compter par étapes : jusqu'à l'heure ronde, puis le reste."]}],
+ k:["Durée","Minute"]});
+C.fiches.durees={
+ intro:"Un film commence à 20 h 45 et dure 1 h 50 : à quelle heure finit-il ? Les durées sont pièges, parce qu'elles comptent en soixantaines et pas en dizaines.",
+ s:[
+  {p:"Une heure compte <b>60 minutes</b>, une minute 60 secondes, un jour 24 heures. On ne peut donc pas calculer avec les durées comme avec des décimaux ordinaires : 1 h 50 + 20 min = 2 h 10.",
+   fig:{type:"chiffres",items:[[60,"min","dans 1 heure"],[60,"s","dans 1 minute"],[24,"h","dans 1 jour"]]},
+   q:["2 h 15 min = ?",["135 min","215 min","120 min","2,15 min"],0,"2 × 60 + 15 = 135."]},
+  {p:"Une durée écrite avec une virgule est en <b>heures décimales</b> : 1,5 h, c'est une heure et demie, donc 1 h 30 min. 0,1 h = 6 min ; 0,25 h = 15 min ; 0,75 h = 45 min.",
+   att:"1,5 h ≠ 1 h 50 min. 0,5 h est la moitié d'une heure : 30 minutes.",
+   q:["0,75 h = ?",["45 min","75 min","7 min 5 s","30 min"],0,"3/4 de 60 min = 45 min."]},
+  {p:"Pour calculer une heure de fin ou une durée, on avance par étapes jusqu'aux heures rondes. Le film de 20 h 45 qui dure 1 h 50 : 20 h 45 + 15 min = 21 h ; il reste 1 h 35 ; fin à 22 h 35.",
+   fig:{type:"flux",legende:"Durée entre 8 h 40 et 11 h 15",etapes:[["8 h 40 → 9 h","20 min"],["9 h → 11 h","2 h"],["11 h → 11 h 15","15 min"],["Total","2 h 35 min"]]},
+   q:["Un trajet part à 14 h 50 et arrive à 16 h 20. Durée ?",["1 h 30 min","1 h 70 min","2 h 30 min","1 h 20 min"],0,"14 h 50 → 15 h : 10 min ; 15 h → 16 h 20 : 1 h 20 ; total 1 h 30."]}
+ ],
+ retenir:["1 h = 60 min ; 1 min = 60 s ; 1 jour = 24 h.","1,5 h = 1 h 30 min ; 0,25 h = 15 min.","Calculer par étapes jusqu'aux heures rondes."]
+};
+
+C.lexique.push(
+ ["Droite","Ligne droite illimitée des deux côtés, notée (AB)."],
+ ["Segment","Portion de droite limitée par deux points, notée [AB]."],
+ ["Milieu","Point d'un segment situé à égale distance de ses extrémités."],
+ ["Cercle","Ensemble des points situés à une même distance (le rayon) d'un point (le centre)."],
+ ["Rayon","Segment (ou longueur) reliant le centre d'un cercle à un point du cercle."],
+ ["Diamètre","Segment passant par le centre et reliant deux points du cercle. Il mesure deux rayons."],
+ ["Perpendiculaires","Droites qui se coupent en formant un angle droit. Notation ⊥."],
+ ["Parallèles","Droites qui ne se coupent jamais. Notation //."],
+ ["Médiatrice","Droite perpendiculaire à un segment en son milieu ; ses points sont à égale distance des extrémités."],
+ ["Équerre","Instrument pour tracer et vérifier les angles droits."],
+ ["Angle","Figure formée par deux demi-droites de même origine (le sommet). Se mesure en degrés."],
+ ["Sommet","Point commun aux deux côtés d'un angle, ou coin d'un polygone."],
+ ["Rapporteur","Instrument gradué en degrés pour mesurer et tracer les angles."],
+ ["Angle aigu","Angle de moins de 90°."],
+ ["Angle obtus","Angle compris entre 90° et 180°."],
+ ["Bissectrice","Demi-droite qui partage un angle en deux angles de même mesure."],
+ ["Triangle isocèle","Triangle qui a deux côtés de même longueur."],
+ ["Triangle équilatéral","Triangle qui a trois côtés de même longueur (et trois angles de 60°)."],
+ ["Triangle rectangle","Triangle qui a un angle droit."],
+ ["Somme des angles","Dans tout triangle, les trois angles additionnés font 180°."],
+ ["Rectangle","Quadrilatère qui a quatre angles droits."],
+ ["Losange","Quadrilatère qui a quatre côtés de même longueur."],
+ ["Carré","Quadrilatère qui a quatre angles droits et quatre côtés égaux."],
+ ["Diagonale","Segment qui relie deux sommets opposés d'un polygone."],
+ ["Symétrie axiale","Transformation qui fait correspondre deux figures superposables par pliage le long d'une droite (l'axe)."],
+ ["Axe de symétrie","Droite de pliage qui partage une figure en deux parties superposables."],
+ ["Périmètre","Longueur du contour d'une figure."],
+ ["π","Nombre qui vaut environ 3,14 : le périmètre d'un cercle divisé par son diamètre."],
+ ["Aire","Mesure de la surface d'une figure, en cm², m²…"],
+ ["Centimètre carré","Aire d'un carré de 1 cm de côté (cm²)."],
+ ["Volume","Mesure de la place occupée par un solide, en cm³, m³…"],
+ ["Centimètre cube","Volume d'un cube de 1 cm d'arête (cm³)."],
+ ["Pavé droit","Solide à 6 faces rectangulaires, comme une boîte."],
+ ["Durée","Temps écoulé entre deux instants."],
+ ["Minute","Unité de durée : 1 min = 60 s ; 60 min = 1 h."]
+);
+
+C.quiz.push(
+ ["geometrie","(AB) désigne…",["Une droite","Un segment","Une longueur","Une demi-droite"],0,"Les parenthèses : la droite, illimitée."],
+ ["geometrie","Un cercle de rayon 4 cm a un diamètre de…",["8 cm","2 cm","4 cm","16 cm"],0,"Diamètre = 2 × rayon."],
+ ["geometrie","Tous les points d'un cercle sont…",["À la même distance du centre","Alignés","Sur le diamètre","À 1 cm du centre"],0,"C'est la définition du cercle."],
+ ["droites","Deux droites qui se coupent à angle droit sont…",["Perpendiculaires","Parallèles","Confondues","Sécantes obliques"],0,"Notation ⊥."],
+ ["droites","La médiatrice d'un segment passe par…",["Son milieu","Une de ses extrémités","Son milieu seulement s'il est horizontal","Aucun point du segment"],0,"Elle est perpendiculaire au segment en son milieu."],
+ ["droites","Quel instrument pour tracer un angle droit ?",["L'équerre","Le compas","Le rapporteur seulement","La calculatrice"],0,"L'équerre (le rapporteur peut aussi, mais l'équerre est faite pour ça)."],
+ ["angles","Un angle de 90° est…",["Droit","Aigu","Obtus","Plat"],0,"90° exactement."],
+ ["angles","Un angle de 30° est…",["Aigu","Obtus","Plat","Droit"],0,"Moins de 90°."],
+ ["angles","Un angle plat mesure…",["180°","90°","360°","100°"],0,"Les deux côtés sont alignés."],
+ ["angles","Dans l'angle MNP, le sommet est…",["N","M","P","MNP"],0,"La lettre du milieu."],
+ ["triangles","La somme des angles d'un triangle vaut…",["180°","90°","360°","100°"],0,"Toujours 180°."],
+ ["triangles","Un triangle a deux angles de 60°. Le troisième mesure…",["60°","120°","90°","30°"],0,"180 − 120 = 60 : il est équilatéral."],
+ ["triangles","Un triangle rectangle a un angle de 35°. Le troisième angle mesure…",["55°","35°","145°","65°"],0,"180 − 90 − 35 = 55."],
+ ["triangles","Un triangle équilatéral a…",["Trois côtés égaux","Un angle droit","Deux côtés égaux seulement","Aucun côté égal"],0,"Et trois angles de 60°."],
+ ["quadrilateres","Un rectangle a…",["Quatre angles droits","Quatre côtés égaux","Des diagonales perpendiculaires toujours","Trois côtés"],0,"C'est sa définition."],
+ ["quadrilateres","Un losange a…",["Quatre côtés égaux","Quatre angles droits","Deux côtés seulement","Des côtés tous différents"],0,"C'est sa définition."],
+ ["symetrie","La symétrie axiale conserve…",["Les longueurs et les angles","Seulement les angles","Seulement la position","Rien"],0,"Elle conserve aussi aires et alignement."],
+ ["symetrie","Combien d'axes de symétrie a un rectangle (non carré) ?",["2","4","1","0"],0,"Les deux médianes, pas les diagonales."],
+ ["symetrie","Un point sur l'axe de symétrie a pour symétrique…",["Lui-même","Un point à 1 cm","Le centre","Aucun point"],0,"Il est sur la droite de pliage."],
+ ["longueurs","5 km = ?",["5 000 m","500 m","50 000 m","50 m"],0,"1 km = 1 000 m."],
+ ["longueurs","Périmètre d'un carré de 6 cm de côté ?",["24 cm","36 cm","12 cm","36 cm²"],0,"4 × 6 = 24."],
+ ["longueurs","Le périmètre d'un cercle de diamètre 10 cm vaut environ…",["31,4 cm","62,8 cm","100 cm","10 cm"],0,"π × 10 ≈ 31,4."],
+ ["aires","1 m² = ?",["10 000 cm²","100 cm²","1 000 cm²","10 cm²"],0,"100 × 100 = 10 000."],
+ ["aires","Aire d'un carré de 5 cm de côté ?",["25 cm²","20 cm²","10 cm²","25 cm"],0,"5 × 5 = 25, en cm²."],
+ ["aires","Pour peindre un mur, on a besoin de connaître…",["Son aire","Son périmètre","Son volume","Son angle"],0,"La peinture couvre la surface."],
+ ["volumes","Un cube de 1 cm d'arête a un volume de…",["1 cm³","1 cm²","6 cm³","12 cm³"],0,"C'est la définition du cm³."],
+ ["volumes","Combien de faces a un pavé droit ?",["6","4","8","12"],0,"6 faces rectangulaires."],
+ ["volumes","3 couches de 8 cubes de 1 cm³, c'est un volume de…",["24 cm³","11 cm³","38 cm³","24 cm²"],0,"8 × 3 = 24."],
+ ["durees","1,5 h = ?",["1 h 30 min","1 h 50 min","1 h 05 min","150 min"],0,"0,5 h = la moitié d'une heure."],
+ ["durees","Combien de minutes dans 3 h ?",["180","300","30","360"],0,"3 × 60."],
+ ["durees","Un film commence à 20 h 45 et dure 1 h 50. Il finit à…",["22 h 35","21 h 95","22 h 95","21 h 35"],0,"20 h 45 + 15 min = 21 h ; + 1 h 35 = 22 h 35."]
+);
+
+C.vf.push(
+ ["[AB] désigne un segment.",true,"Les crochets limitent aux deux extrémités."],
+ ["Un angle de 100° est aigu.",false,"Il est obtus (entre 90° et 180°)."],
+ ["La somme des angles d'un triangle vaut 180°.",true,"Dans tout triangle."],
+ ["Un carré est un losange particulier.",true,"Il a quatre côtés égaux."],
+ ["1 m² = 100 cm².",false,"1 m² = 10 000 cm²."],
+ ["1,5 h = 1 h 50 min.",false,"1,5 h = 1 h 30 min."],
+ ["Le diamètre d'un cercle mesure deux rayons.",true,"Il passe par le centre."],
+ ["La symétrie axiale change les longueurs.",false,"Elle les conserve."],
+ ["Un cube a 8 sommets.",true,"4 en haut et 4 en bas."],
+ ["Deux droites parallèles se coupent en un point.",false,"Elles ne se coupent jamais."]
+);
+
+C.ordre.push(
+ {t:"Construire la médiatrice d'un segment [AB]",ic:"📐",s:["Ouvrir le compas de plus de la moitié de AB","Pointe en A : tracer un arc de chaque côté de [AB]","Pointe en B, même écartement : tracer deux arcs qui coupent les premiers","Relier les deux points d'intersection"]},
+ {t:"Mesurer un angle au rapporteur",ic:"📐",s:["Placer le centre du rapporteur sur le sommet","Aligner le zéro d'une graduation sur un côté","Suivre cette graduation jusqu'à l'autre côté","Lire la mesure et vérifier (aigu ou obtus ?)"]},
+ {t:"Tracer le symétrique d'un point A par rapport à une droite",ic:"🦋",s:["Tracer la perpendiculaire à l'axe passant par A","Repérer le point où elle coupe l'axe","Mesurer la distance de A à l'axe","Reporter la même distance de l'autre côté : c'est A'"]}
+);
+
+/* ---- 30-raisonner.js ---- */
+/* PARTIE 3 — Raisonner : proportionnalité, algèbre, données, probabilités, pensée informatique */
+
+/* ---------- Proportionnalité ---------- */
+C.modules.push({id:"proportionnalite",n:3,i:"⚖️",t:"La proportionnalité",d:"Reconnaître, calculer, pourcentages, échelles",
+ s:[{h:"Reconnaître",l:["Deux grandeurs sont <b>proportionnelles</b> si on passe de l'une à l'autre en multipliant toujours par le <b>même nombre</b>.","Prix et quantité de pommes : oui. Âge et taille : non."]},
+    {h:"Calculer",l:["<b>Linéarité</b> : si 2 kg coûtent 6 €, 4 kg coûtent 12 € et 6 kg coûtent 18 €.","<b>Retour à l'unité</b> : 1 kg coûte 3 €, donc 5 kg coûtent 15 €.","<b>Coefficient</b> : on multiplie toujours par 3."]},
+    {h:"Pourcentages et échelles",l:["Prendre 10 % : diviser par 10. 25 % : diviser par 4. 50 % : diviser par 2.","Échelle 1/100 : 1 cm sur le plan = 100 cm en vrai."]}],
+ k:["Proportionnalité","Retour à l'unité","Échelle","Pourcentage"]});
+C.fiches.proportionnalite={
+ intro:"Recettes, prix au kilo, cartes routières, soldes : la proportionnalité est partout. Le programme 2025 demande de savoir la reconnaître et de raisonner avec des méthodes simples (linéarité, retour à l'unité) plutôt qu'avec une formule apprise par cœur.",
+ s:[
+  {p:"Deux grandeurs sont <b>proportionnelles</b> quand on passe de l'une à l'autre en multipliant toujours par le même nombre (le <b>coefficient de proportionnalité</b>). Le prix des pommes est proportionnel à leur masse. Mais la taille n'est pas proportionnelle à l'âge : à 20 ans, on ne mesure pas deux fois sa taille de 10 ans !",
+   fig:{type:"barres",legende:"Prix des pommes à 3 € le kilo",items:[["1 kg",3,"€"],["2 kg",6,"€"],["3 kg",9,"€"],["5 kg",15,"€"]]},
+   q:["Lequel est une situation de proportionnalité ?",["Le prix de l'essence et le nombre de litres","La taille et l'âge","La note et le temps passé","La pointure et l'âge"],0,"Le prix au litre est toujours le même."]},
+  {p:"Trois méthodes pour calculer. La <b>linéarité</b> : si on double la quantité, on double le prix ; si on additionne deux quantités, on additionne les prix. Le <b>retour à l'unité</b> : on cherche le prix d'un seul, puis on multiplie. Le <b>coefficient</b> : on repère le nombre par lequel on multiplie à chaque fois.",
+   fig:{type:"flux",legende:"Une recette pour 4 personnes demande 200 g de farine. Pour 6 ?",etapes:[["4 personnes","200 g"],["1 personne (retour à l'unité)","200 ÷ 4 = 50 g"],["6 personnes","6 × 50 = 300 g"]]},
+   q:["3 cahiers coûtent 4,50 €. Combien coûtent 6 cahiers ?",["9 €","7,50 €","13,50 €","6 €"],0,"Deux fois plus de cahiers : deux fois plus cher."]},
+  {p:"Un <b>pourcentage</b> est une proportion sur 100. Prendre 10 % d'un prix, c'est le diviser par 10 ; 50 %, c'est la moitié ; 25 %, le quart. Une <b>échelle</b> relie les distances sur un plan et dans la réalité : à l'échelle 1/1 000, 1 cm sur le plan représente 1 000 cm, soit 10 m.",
+   fig:{type:"flux",legende:"Un pull à 40 € soldé à −25 %",etapes:[["25 % de 40 €","40 ÷ 4 = 10 €"],["Nouveau prix","40 − 10 = 30 €"]]},
+   q:["Sur un plan à l'échelle 1/100, un mur mesure 5 cm. En vrai, il mesure…",["5 m","50 cm","500 m","5 cm"],0,"5 × 100 = 500 cm = 5 m."]}
+ ],
+ retenir:["Proportionnalité = multiplier toujours par le même nombre.","Méthodes : linéarité, retour à l'unité, coefficient.","10 % = ÷ 10 ; 25 % = ÷ 4 ; 50 % = ÷ 2.","Échelle 1/n : 1 cm sur le plan = n cm en vrai."]
+};
+
+/* ---------- Pensée algébrique ---------- */
+C.modules.push({id:"algebre",n:3,i:"🧱",t:"Trouver un nombre inconnu",d:"Schémas en barres, balances, suites de motifs",
+ s:[{h:"Le schéma en barres",l:["On dessine les quantités comme des barres pour voir le problème.","Le nombre inconnu est une barre avec un « ? »."]},
+    {h:"La balance",l:["Une égalité est comme une balance en équilibre.","On peut enlever la même chose des deux côtés : elle reste en équilibre."]},
+    {h:"Les motifs qui grandissent",l:["Une suite de figures qui grandit selon une règle.","On cherche la règle pour prévoir l'étape 10 ou 100."]}],
+ k:["Nombre inconnu","Égalité"]});
+C.fiches.algebre={
+ intro:"Trouver un nombre caché, c'est le début de l'algèbre. Le programme 2025 propose des outils visuels (barres, balances) qui rendent ces problèmes faciles à voir, avant les équations du collège.",
+ s:[
+  {p:"Le <b>schéma en barres</b> représente les quantités par des rectangles de longueurs proportionnelles. « Léa a 3 fois plus de billes que Tom ; ensemble ils en ont 48. » On dessine 1 barre pour Tom, 3 barres pour Léa : 4 barres = 48, donc 1 barre = 12. Tom a 12 billes, Léa 36.",
+   fig:{type:"svg",legende:"4 barres égales font 48",svg:"<svg viewBox='0 0 300 110'><text x='10' y='32' fill='#fff' font-size='12' font-weight='700'>Tom</text><rect x='60' y='15' width='50' height='26' fill='#3db5ff' class='pop'/><text x='10' y='78' fill='#fff' font-size='12' font-weight='700'>Léa</text><rect x='60' y='60' width='50' height='26' fill='var(--pri)' class='pop'/><rect x='110' y='60' width='50' height='26' fill='var(--pri)' class='pop' style='animation-delay:.2s'/><rect x='160' y='60' width='50' height='26' fill='var(--pri)' class='pop' style='animation-delay:.4s'/><path d='M220 15V86' stroke='#fff' stroke-width='2'/><text x='250' y='56' fill='#fff' font-size='13' font-weight='900'>48</text><text x='85' y='33' fill='#10142a' font-size='12' font-weight='900' text-anchor='middle'>?</text></svg>"},
+   q:["Un livre et un stylo coûtent 13 €. Le livre coûte 10 € de plus que le stylo. Le stylo coûte…",["1,50 €","3 €","2 €","10 €"],0,"13 − 10 = 3 ; ces 3 € sont partagés en 2 barres égales : 1,50 €."]},
+  {p:"Une égalité ressemble à une <b>balance en équilibre</b>. Si on enlève (ou ajoute) la même chose des deux côtés, elle reste équilibrée. « Un nombre + 7 = 19 » : on enlève 7 des deux côtés, le nombre vaut 12.",
+   fig:{type:"flux",legende:"? + 7 = 19",etapes:[["? + 7","19"],["On enlève 7 des deux côtés","? = 19 − 7"],["Le nombre caché","12"]]},
+   q:["3 × ? = 27. Le nombre caché vaut…",["9","24","30","81"],0,"27 ÷ 3 = 9."]},
+  {p:"Une suite de <b>motifs</b> grandit selon une règle : 4 allumettes pour un carré, 7 pour deux carrés collés, 10 pour trois… À chaque étape, on ajoute 3 allumettes. La règle permet de prévoir n'importe quelle étape sans tout dessiner.",
+   fig:{type:"barres",legende:"Allumettes pour 1, 2, 3, 4 carrés en ligne",items:[["1 carré",4,""],["2 carrés",7,""],["3 carrés",10,""],["4 carrés",13,""]]},
+   q:["Avec la même règle (4, 7, 10, 13…), combien d'allumettes pour 5 carrés ?",["16","15","17","20"],0,"On ajoute 3 à chaque étape."]}
+ ],
+ retenir:["Schéma en barres : dessiner pour voir le nombre inconnu.","Balance : on fait la même chose des deux côtés.","Motifs : trouver ce qu'on ajoute à chaque étape."]
+};
+
+/* ---------- Données ---------- */
+C.modules.push({id:"donnees",n:3,i:"📊",t:"Organiser des données",d:"Tableaux, diagrammes, lire et trier",
+ s:[{h:"Recueillir et ranger",l:["Une <b>enquête</b> se prépare : quelle question, à qui ?","On range les réponses dans un <b>tableau</b> (effectifs)."]},
+    {h:"Les graphiques",l:["<b>Diagramme en barres</b> : comparer des quantités.","<b>Diagramme circulaire</b> : voir des parts d'un tout.","<b>Graphique</b> en courbe : voir une évolution dans le temps."]},
+    {h:"Lire et filtrer",l:["Lire le titre, les axes, les unités.","Filtrer : ne garder que les données qui respectent un critère."]}],
+ k:["Effectif","Diagramme"]});
+C.fiches.donnees={
+ intro:"Les données sont partout : sondages, résultats sportifs, météo. Savoir les ranger dans un tableau et les lire sur un graphique, c'est ne pas se faire piéger par un chiffre mal présenté.",
+ s:[
+  {p:"Pour une enquête (« quel est ton sport préféré ? »), on note chaque réponse, puis on compte : le nombre de fois qu'une réponse apparaît est son <b>effectif</b>. Un tableau d'effectifs résume tout.",
+   fig:{type:"barres",legende:"Sport préféré dans une classe de 25 élèves",items:[["Football",9,"élèves","#2ed47a"],["Danse",6,"élèves","#ff8fab"],["Basket",5,"élèves","#ff8a3d"],["Natation",3,"élèves","#3db5ff"],["Autre",2,"élèves","#a9b0d6"]]},
+   q:["Dans ce diagramme, quel est l'effectif de la danse ?",["6","9","25","5"],0,"6 élèves ont choisi la danse."]},
+  {p:"Chaque graphique a son usage : le <b>diagramme en barres</b> compare des quantités, le <b>diagramme circulaire</b> montre comment un tout est partagé, le <b>graphique en courbe</b> montre une évolution (température au fil des heures). On lit toujours le titre, les axes et les unités avant de conclure.",
+   att:"Un axe qui ne commence pas à 0 peut exagérer les différences. Vérifie toujours la graduation.",
+   q:["Pour montrer l'évolution de la température dans la journée, on choisit…",["Un graphique en courbe","Un diagramme circulaire","Un tableau à une case","Un dessin"],0,"La courbe montre une évolution dans le temps."]},
+  {p:"<b>Filtrer</b> des données, c'est ne garder que celles qui vérifient un critère : « les élèves qui viennent à vélo », « les jours où il a plu plus de 5 mm ». Un tableur le fait automatiquement, mais il faut savoir quoi demander.",
+   q:["Dans une liste de 30 jours, on garde ceux où il fait plus de 25 °C. C'est…",["Filtrer les données","Calculer une aire","Faire une symétrie","Tracer une médiatrice"],0,"On garde seulement les données qui vérifient le critère."]}
+ ],
+ retenir:["Effectif = nombre de fois qu'une réponse apparaît.","Barres : comparer ; circulaire : parts d'un tout ; courbe : évolution.","Lire titre, axes, unités ; filtrer selon un critère."]
+};
+
+/* ---------- Probabilités ---------- */
+C.modules.push({id:"probabilites",n:3,i:"🎲",t:"Les probabilités",d:"Hasard, chances, probabilité en fraction",
+ s:[{h:"Le vocabulaire du hasard",l:["Une expérience est <b>aléatoire</b> si on ne peut pas prévoir son résultat.","Événement <b>impossible</b> (probabilité 0) ou <b>certain</b> (probabilité 1)."]},
+    {h:"Calculer une probabilité",l:["Quand tous les résultats ont la même chance : <b>probabilité = cas favorables ÷ cas possibles</b>.","Dé à 6 faces : probabilité d'obtenir 3 = <b>1/6</b>.","On peut l'écrire en fraction, en décimal ou en pourcentage."]},
+    {h:"Répéter l'expérience",l:["En répétant beaucoup de fois, la <b>fréquence</b> observée se rapproche de la probabilité."]}],
+ k:["Probabilité","Aléatoire","Événement","Fréquence"]});
+C.fiches.probabilites={
+ intro:"Pile ou face, dé, loterie : peut-on mesurer le hasard ? Oui ! La probabilité est un nombre entre 0 (impossible) et 1 (certain). Le programme 2025 l'introduit dès la 6e, écrite sous forme de fraction.",
+ s:[
+  {p:"Une expérience est <b>aléatoire</b> quand on connaît les résultats possibles mais qu'on ne peut pas prévoir celui qu'on obtiendra. Un événement <b>impossible</b> a une probabilité de 0 (obtenir 7 avec un dé à 6 faces) ; un événement <b>certain</b> a une probabilité de 1 (obtenir un nombre entre 1 et 6).",
+   fig:{type:"barres",legende:"Échelle des probabilités",items:[["Impossible",0,""],["Peu probable",0.2,""],["Une chance sur deux",0.5,""],["Très probable",0.9,""],["Certain",1,""]]},
+   q:["Obtenir 7 en lançant un dé à 6 faces est un événement…",["Impossible","Certain","Probable","Équiprobable"],0,"Sa probabilité est 0."]},
+  {p:"Quand tous les résultats ont la même chance d'arriver (on dit qu'ils sont <b>équiprobables</b>), la probabilité d'un événement est le nombre de cas favorables divisé par le nombre de cas possibles. Avec un dé : probabilité d'obtenir un nombre pair = 3/6 = 1/2 = 0,5 = 50 %.",
+   fig:{type:"flux",legende:"Un sac contient 3 billes rouges et 5 bleues. On en tire une au hasard.",etapes:[["Cas possibles","8 billes"],["Cas favorables (rouge)","3 billes"],["Probabilité de tirer une rouge","3/8"]]},
+   q:["Probabilité d'obtenir « pile » en lançant une pièce équilibrée ?",["1/2","1/4","1","2"],0,"1 cas favorable sur 2 possibles."]},
+  {p:"Si on lance une pièce 10 fois, on n'obtient pas forcément 5 piles. Mais si on la lance 1 000 fois, la <b>fréquence</b> de pile (nombre de piles ÷ nombre de lancers) sera très proche de 1/2. C'est l'approche « fréquentiste » : plus on répète, plus la fréquence s'approche de la probabilité.",
+   q:["On lance un dé 600 fois. On obtient le 6 environ…",["100 fois","600 fois","6 fois","300 fois"],0,"1/6 de 600 = 100."]}
+ ],
+ retenir:["Probabilité entre 0 (impossible) et 1 (certain).","Équiprobabilité : cas favorables ÷ cas possibles.","Beaucoup de répétitions : la fréquence se rapproche de la probabilité."]
+};
+
+/* ---------- Pensée informatique ---------- */
+C.modules.push({id:"programmation",n:3,i:"🤖",t:"Programmer",d:"Instructions, séquences, boucles, tableur",
+ s:[{h:"Instructions et séquences",l:["Un <b>programme</b> est une suite d'<b>instructions</b> exécutées dans l'ordre.","Avancer de 50, tourner à droite de 90°, avancer de 50…"]},
+    {h:"La boucle « répéter »",l:["Pour un carré : <b>répéter 4 fois</b> (avancer de 50, tourner de 90°).","Une boucle évite de réécrire les mêmes instructions."]},
+    {h:"Le tableur",l:["Une cellule peut calculer à partir d'une autre : =A1+3.","On recopie la formule vers le bas pour créer une suite."]}],
+ k:["Programme","Boucle","Tableur"]});
+C.fiches.programmation={
+ intro:"Un ordinateur ne devine rien : il exécute exactement ce qu'on lui dit, dans l'ordre. Programmer, c'est découper une tâche en petites instructions précises. Le programme de 6e en fait un domaine à part entière.",
+ s:[
+  {p:"Un <b>programme</b> est une suite d'<b>instructions</b> exécutées l'une après l'autre. Pour faire tracer un chemin à un lutin, on lui donne des déplacements (« avancer de 50 pas ») et des rotations (« tourner à droite de 90° »). L'ordre compte : inverser deux instructions change le dessin.",
+   fig:{type:"flux",legende:"Tracer un « L »",etapes:["Stylo en position d'écriture","Avancer de 100","Tourner à droite de 90°","Avancer de 50"]},
+   q:["Dans un programme, les instructions sont exécutées…",["Dans l'ordre où elles sont écrites","Au hasard","Toutes en même temps","De la dernière à la première"],0,"L'ordre est essentiel."]},
+  {p:"Quand une même suite d'instructions se répète, on utilise une <b>boucle</b> : « répéter 4 fois : avancer de 50, tourner de 90° » trace un carré. Pour un triangle équilatéral : répéter 3 fois, avancer, tourner de 120°.",
+   fig:{type:"flux",legende:"Tracer un carré avec une boucle",etapes:["Répéter 4 fois :",["→ avancer de 50",""],["→ tourner à droite de 90°",""],"Fin de la boucle : le carré est tracé"]},
+   q:["Pour tracer un carré, on répète « avancer, tourner de 90° » combien de fois ?",["4","3","2","90"],0,"Un carré a 4 côtés."]},
+  {p:"Dans un <b>tableur</b>, chaque case (cellule) a un nom : A1, B3… Une cellule peut contenir une formule qui calcule à partir d'autres cellules. Si A1 contient 5 et A2 contient =A1+3, A2 affiche 8 ; en recopiant la formule vers le bas, on obtient la suite 5, 8, 11, 14…",
+   q:["A1 contient 2 et A2 contient =A1×2. Qu'affiche A2 ?",["4","2","22","A1×2"],0,"Le tableur calcule : 2 × 2 = 4."]}
+ ],
+ retenir:["Programme = instructions dans l'ordre.","Boucle « répéter n fois » pour ne pas tout réécrire.","Tableur : formules qui utilisent d'autres cellules, recopiées vers le bas."]
+};
+
+/* ---------- Résoudre un problème ---------- */
+C.modules.push({id:"problemes",n:3,i:"🧩",t:"Résoudre un problème",d:"Méthode, étapes, vérification, rédaction",
+ s:[{h:"La méthode",l:["<b>Lire</b> l'énoncé deux fois et repérer la question.","<b>Trier</b> les données utiles.","<b>Chercher</b> : schéma, étapes intermédiaires.","<b>Calculer</b>, puis <b>vérifier</b> que la réponse est cohérente.","<b>Rédiger</b> une phrase réponse avec l'unité."]},
+    {h:"Les pièges",l:["Des données inutiles glissées dans l'énoncé.","Des unités différentes à convertir.","Une réponse absurde non vérifiée (un élève de 3 m de haut…)."]}],
+ k:["Énoncé","Donnée"]});
+C.fiches.problemes={
+ intro:"Résoudre un problème, ce n'est pas trouver « l'opération magique » : c'est une démarche. Avec une méthode toujours la même, les problèmes compliqués deviennent une suite de petites questions faciles. Entraîne-toi avec le jeu « Problèmes ».",
+ s:[
+  {p:"Première étape : lire l'énoncé en entier, deux fois, et repérer la <b>question</b>. Deuxième : trier les <b>données</b> (lesquelles sont utiles ?). Troisième : chercher, en faisant un schéma ou en découpant en questions intermédiaires. Puis calculer, vérifier, et répondre par une phrase.",
+   fig:{type:"cycle",centre:"Méthode",etapes:[["Lire, repérer la question","#3db5ff"],["Trier les données","#7be0d0"],["Chercher (schéma, étapes)","#ffc83d"],["Calculer","#ff8a3d"],["Vérifier, rédiger","#2ed47a"]]},
+   q:["Quelle est la première chose à faire face à un problème ?",["Lire l'énoncé et repérer la question","Calculer avec tous les nombres","Écrire la réponse","Faire une addition"],0,"Sans comprendre la question, on calcule au hasard."]},
+  {p:"Les énoncés contiennent parfois des <b>données inutiles</b>, des <b>unités différentes</b> (des cm et des m, des min et des h) et des étapes cachées. Toujours se demander à la fin : « ma réponse est-elle réaliste ? ». Un trajet à pied de 300 km en une heure, c'est impossible : il y a une erreur.",
+   att:"La réponse doit être une phrase avec l'unité : « Le trajet dure 1 h 30 min. »",
+   q:["Un élève trouve qu'une salle de classe mesure 800 m de long. Que doit-il faire ?",["Vérifier son calcul et ses unités","Écrire la réponse","Arrondir à 1 000 m","Rien"],0,"800 m est absurde pour une salle : erreur d'unité ou de calcul."]}
+ ],
+ retenir:["Lire, trier, chercher, calculer, vérifier, rédiger.","Attention aux données inutiles et aux unités.","Toujours se demander si le résultat est réaliste."]
+};
+
+C.lexique.push(
+ ["Proportionnalité","Deux grandeurs sont proportionnelles si on passe de l'une à l'autre en multipliant toujours par le même nombre."],
+ ["Retour à l'unité","Méthode qui calcule d'abord la valeur pour 1, puis pour la quantité voulue."],
+ ["Échelle","Rapport entre une distance sur un plan et la distance réelle : 1/100 = 1 cm pour 100 cm."],
+ ["Nombre inconnu","Nombre qu'on cherche dans un problème, représenté par un « ? » ou une barre."],
+ ["Égalité","Écriture avec le signe = : les deux côtés ont la même valeur, comme une balance en équilibre."],
+ ["Effectif","Nombre de fois qu'une valeur apparaît dans une série de données."],
+ ["Diagramme","Graphique qui représente des données (barres, circulaire…)."],
+ ["Probabilité","Nombre entre 0 et 1 qui mesure la chance qu'un événement se produise."],
+ ["Aléatoire","Se dit d'une expérience dont on ne peut pas prévoir le résultat."],
+ ["Événement","Résultat ou ensemble de résultats d'une expérience aléatoire (« obtenir un nombre pair »)."],
+ ["Fréquence","Nombre de fois qu'un résultat apparaît divisé par le nombre total d'essais."],
+ ["Programme","Suite d'instructions exécutées dans l'ordre par une machine."],
+ ["Boucle","Instruction qui répète plusieurs fois une suite d'instructions."],
+ ["Tableur","Logiciel de calcul organisé en cellules (A1, B2…) qui peuvent contenir des formules."],
+ ["Énoncé","Texte d'un problème : la situation, les données et la question."],
+ ["Donnée","Information de l'énoncé (nombre, mesure) utile ou non pour répondre."]
+);
+
+C.quiz.push(
+ ["proportionnalite","5 stylos coûtent 4 €. Combien coûtent 10 stylos ?",["8 €","9 €","20 €","40 €"],0,"Deux fois plus de stylos, deux fois plus cher."],
+ ["proportionnalite","10 % de 70 €, c'est…",["7 €","10 €","0,7 €","63 €"],0,"70 ÷ 10 = 7."],
+ ["proportionnalite","Un gâteau pour 6 personnes demande 3 œufs. Pour 2 personnes ?",["1 œuf","2 œufs","3 œufs","6 œufs"],0,"3 fois moins de personnes : 3 ÷ 3 = 1."],
+ ["proportionnalite","Échelle 1/1 000 : 3 cm sur le plan représentent…",["30 m","3 m","300 m","3 km"],0,"3 × 1 000 = 3 000 cm = 30 m."],
+ ["proportionnalite","Lequel N'est PAS proportionnel ?",["L'âge et la pointure","Le prix et la masse de fromage","Le nombre de tickets et leur prix","La distance et le temps à vitesse constante"],0,"La pointure ne double pas quand l'âge double."],
+ ["algebre","? + 15 = 40. Le nombre caché est…",["25","55","15","35"],0,"40 − 15 = 25."],
+ ["algebre","4 × ? = 32. Le nombre caché est…",["8","28","36","128"],0,"32 ÷ 4 = 8."],
+ ["algebre","Suite : 3, 7, 11, 15… Le terme suivant est…",["19","18","20","22"],0,"On ajoute 4 à chaque fois."],
+ ["algebre","Deux nombres font 20 en tout ; l'un est le triple de l'autre. Le plus petit est…",["5","15","10","4"],0,"4 barres égales = 20, une barre = 5."],
+ ["donnees","Le nombre de fois qu'une réponse apparaît s'appelle…",["L'effectif","La moyenne","Le diamètre","La fréquence en %"],0,"Effectif."],
+ ["donnees","Pour montrer comment se partage un budget, on choisit souvent…",["Un diagramme circulaire","Un graphique en courbe","Une demi-droite graduée","Un rapporteur"],0,"Il montre des parts d'un tout."],
+ ["probabilites","Probabilité d'obtenir 5 avec un dé équilibré à 6 faces ?",["1/6","5/6","1/5","5"],0,"1 cas favorable sur 6."],
+ ["probabilites","Un sac contient 4 billes vertes et 6 jaunes. Probabilité de tirer une verte ?",["4/10","4/6","6/10","1/4"],0,"4 favorables sur 10 possibles."],
+ ["probabilites","Une probabilité est toujours…",["Entre 0 et 1","Plus grande que 1","Négative","Égale à 0,5"],0,"0 = impossible, 1 = certain."],
+ ["probabilites","Probabilité d'obtenir un nombre plus petit que 7 avec un dé à 6 faces ?",["1","0","1/6","6/7"],0,"C'est un événement certain."],
+ ["programmation","Pour tracer un triangle équilatéral, on répète 3 fois « avancer, tourner de… »",["120°","60°","90°","180°"],0,"Le lutin tourne de 120° à chaque coin (l'angle extérieur)."],
+ ["programmation","Une boucle sert à…",["Répéter des instructions","Effacer le programme","Changer de couleur","Arrêter l'ordinateur"],0,"Elle évite de réécrire."],
+ ["programmation","A1 contient 10 ; A2 contient =A1−4. A2 affiche…",["6","14","A1−4","4"],0,"10 − 4 = 6."],
+ ["problemes","À la fin d'un problème, on écrit…",["Une phrase réponse avec l'unité","Seulement le nombre","L'énoncé","Rien"],0,"La réponse doit répondre à la question posée."],
+ ["problemes","Un énoncé donne l'âge du capitaine et demande la vitesse du bateau. L'âge est…",["Une donnée inutile","Indispensable","La réponse","Une unité"],0,"Il faut trier les données."]
+);
+
+C.vf.push(
+ ["Le prix est proportionnel à la quantité quand le prix unitaire ne change pas.",true,"On multiplie toujours par le prix unitaire."],
+ ["25 % c'est le quart.",true,"25/100 = 1/4."],
+ ["Une probabilité peut valoir 2.",false,"Elle est toujours entre 0 et 1."],
+ ["Avec une pièce équilibrée, on obtient forcément 5 piles en 10 lancers.",false,"Le hasard n'est pas régulier sur peu de lancers."],
+ ["Dans un programme, l'ordre des instructions n'a aucune importance.",false,"Inverser deux instructions change le résultat."],
+ ["Si ? + 8 = 20, alors ? = 12.",true,"20 − 8 = 12."],
+ ["Un diagramme circulaire montre bien une évolution dans le temps.",false,"Pour une évolution, on utilise une courbe."]
+);
+
+C.ordre.push(
+ {t:"Résoudre un problème",ic:"🧩",s:["Lire l'énoncé et repérer la question","Trier les données utiles","Faire un schéma ou découper en étapes","Calculer","Vérifier que le résultat est réaliste","Rédiger une phrase réponse avec l'unité"]},
+ {t:"Calculer une probabilité",ic:"🎲",s:["Vérifier que les résultats ont la même chance","Compter tous les cas possibles","Compter les cas favorables","Diviser favorables par possibles","Simplifier ou écrire en décimal si besoin"]}
+);
+
+/* ---- 80-jeux.js ---- */
+/* JEUX — Maths 6e */
+
+/* ---------- Problèmes pas à pas (jeu « dépannage » renommé) ---------- */
+C.diag=[
+ {id:"sortie",t:"La sortie scolaire",ic:"🚌",niv:1,bon:{lieu:"Trois classes de 6e partent au musée : 27 élèves par classe, plus 8 adultes.",pb:"Combien de cars de 52 places faut-il réserver ?",qui:"Classes de 27 élèves · 3 classes · 8 adultes · cars de 52 places"},
+  etapes:[
+   {q:"Combien d'élèves partent ?",o:[["81",true,"3 × 27 = 81 élèves."],["30",false,"27 + 3 ? Non : il y a 3 classes de 27 élèves, on multiplie."],["35",false,"On n'additionne pas 27 et 8 ici : on compte d'abord les élèves des 3 classes."]]},
+   {q:"Combien de personnes en tout ?",o:[["89",true,"81 élèves + 8 adultes = 89 personnes."],["81",false,"N'oublie pas les 8 adultes !"],["648",false,"On ajoute les adultes, on ne multiplie pas."]]},
+   {q:"89 ÷ 52 ≈ 1,7. Combien de cars faut-il ?",o:[["2 cars",true,"1 car ne suffit pas (52 places) : il en faut 2. Dans ce genre de problème, on arrondit au-dessus."],["1 car",false,"Dans 1 car, il n'y a que 52 places : 37 personnes resteraient sur le trottoir !"],["1,7 car",false,"On ne peut pas réserver 1,7 car : il faut un nombre entier."]]}],
+  fin:"3 × 27 = 81 élèves ; 81 + 8 = 89 personnes ; 89 ÷ 52 ≈ 1,7. Il faut réserver 2 cars.",retenir:"Quand on compte des objets entiers (cars, boîtes…), on arrondit souvent au nombre entier supérieur."},
+
+ {id:"crepes",t:"Les crêpes pour 12",ic:"🥞",niv:1,bon:{lieu:"Une recette de crêpes pour 4 personnes : 250 g de farine, 3 œufs, 0,5 L de lait.",pb:"Quelles quantités pour 12 personnes ?",qui:"4 personnes · 250 g · 3 œufs · 0,5 L"},
+  etapes:[
+   {q:"Par combien multiplie-t-on le nombre de personnes ?",o:[["Par 3",true,"4 × 3 = 12 : il y a 3 fois plus de personnes."],["Par 8",false,"4 + 8 = 12, mais en proportionnalité on cherche par combien on multiplie."],["Par 12",false,"4 × 12 = 48 : beaucoup trop !"]]},
+   {q:"Quelle quantité de farine ?",o:[["750 g",true,"250 × 3 = 750 g."],["258 g",false,"On ne rajoute pas 8 : on multiplie par 3."],["3 000 g",false,"On multiplie par 3, pas par 12."]]},
+   {q:"Et le lait ?",o:[["1,5 L",true,"0,5 × 3 = 1,5 L."],["0,15 L",false,"0,5 × 3 = 1,5, pas 0,15."],["3,5 L",false,"On ne fait pas 0,5 + 3 : on multiplie."]]}],
+  fin:"Il y a 3 fois plus de personnes, donc 3 fois plus de chaque ingrédient : 750 g de farine, 9 œufs, 1,5 L de lait.",retenir:"Dans une recette, les quantités sont proportionnelles au nombre de personnes."},
+
+ {id:"cloture",t:"Clôturer le jardin",ic:"🌳",niv:2,bon:{lieu:"Un jardin rectangulaire mesure 12 m sur 8 m. On laisse un portail de 3 m sans grillage.",pb:"Le grillage se vend en rouleaux de 10 m. Combien de rouleaux acheter ?",qui:"12 m × 8 m · portail 3 m · rouleaux de 10 m"},
+  etapes:[
+   {q:"Quel est le périmètre du jardin ?",o:[["40 m",true,"2 × (12 + 8) = 40 m."],["96 m",false,"12 × 8 = 96 m² est l'aire, pas le périmètre."],["20 m",false,"12 + 8 = 20 : c'est la moitié du tour."]]},
+   {q:"Quelle longueur de grillage faut-il ?",o:[["37 m",true,"40 − 3 = 37 m (pas de grillage devant le portail)."],["43 m",false,"On enlève le portail, on ne l'ajoute pas."],["40 m",false,"Le portail n'a pas besoin de grillage."]]},
+   {q:"Combien de rouleaux de 10 m ?",o:[["4 rouleaux",true,"3 rouleaux = 30 m, pas assez. 4 rouleaux = 40 m : il restera 3 m."],["3 rouleaux",false,"3 × 10 = 30 m < 37 m : il manquerait 7 m."],["3,7 rouleaux",false,"Les rouleaux se vendent entiers."]]}],
+  fin:"Périmètre : 2 × (12 + 8) = 40 m. Sans le portail : 37 m. 4 rouleaux de 10 m sont nécessaires.",retenir:"Clôture = périmètre ; ne pas confondre avec l'aire."},
+
+ {id:"mur",t:"Peindre le mur",ic:"🎨",niv:2,bon:{lieu:"Un mur de 5 m de long et 2,5 m de haut a une fenêtre de 1,2 m sur 1 m. Un pot de peinture couvre 10 m².",pb:"Combien de pots faut-il pour une couche ?",qui:"Mur 5 m × 2,5 m · fenêtre 1,2 m × 1 m · 1 pot = 10 m²"},
+  etapes:[
+   {q:"Quelle est l'aire du mur entier ?",o:[["12,5 m²",true,"5 × 2,5 = 12,5 m²."],["15 m²",false,"2 × (5 + 2,5) = 15 m est le périmètre."],["7,5 m²",false,"5 + 2,5 n'est pas une aire : on multiplie."]]},
+   {q:"Quelle surface faut-il peindre ?",o:[["11,3 m²",true,"Fenêtre : 1,2 × 1 = 1,2 m². 12,5 − 1,2 = 11,3 m²."],["13,7 m²",false,"On ne peint pas la fenêtre : on enlève son aire."],["12,5 m²",false,"La fenêtre ne se peint pas."]]},
+   {q:"Combien de pots ?",o:[["2 pots",true,"1 pot couvre 10 m² : pas assez pour 11,3 m². Il en faut 2."],["1 pot",false,"Il manquerait 1,3 m²."],["11 pots",false,"Un pot couvre 10 m², pas 1 m²."]]}],
+  fin:"Mur : 12,5 m². Fenêtre : 1,2 m². À peindre : 11,3 m². Il faut 2 pots.",retenir:"Aire d'un rectangle = longueur × largeur ; on enlève les parties qu'on ne peint pas."},
+
+ {id:"train",t:"L'horaire du train",ic:"🚆",niv:2,bon:{lieu:"Un train part de Lyon à 9 h 47 et le trajet dure 2 h 35.",pb:"À quelle heure arrive-t-il ? Peut-on prendre une correspondance à 12 h 30 ?",qui:"Départ 9 h 47 · durée 2 h 35 · correspondance 12 h 30"},
+  etapes:[
+   {q:"Première étape : de 9 h 47 à 10 h, combien de minutes ?",o:[["13 min",true,"60 − 47 = 13."],["53 min",false,"De 47 à 60, il y a 13 minutes."],["3 min",false,"On va jusqu'à 60 minutes, pas jusqu'à 50."]]},
+   {q:"Il reste 2 h 35 − 13 min = 2 h 22. Heure d'arrivée ?",o:[["12 h 22",true,"10 h + 2 h 22 = 12 h 22."],["12 h 82",false,"Une heure n'a que 60 minutes."],["11 h 22",false,"10 h + 2 h = 12 h."]]},
+   {q:"La correspondance part à 12 h 30. Est-ce possible ?",o:[["Oui, il reste 8 minutes",true,"12 h 30 − 12 h 22 = 8 minutes (c'est juste !)."],["Non, le train arrive après",false,"12 h 22 est avant 12 h 30."],["Oui, il reste 1 h 08",false,"Entre 12 h 22 et 12 h 30, il y a 8 minutes."]]}],
+  fin:"9 h 47 + 13 min = 10 h ; 10 h + 2 h 22 = 12 h 22. La correspondance de 12 h 30 laisse 8 minutes.",retenir:"Pour les durées, on passe par les heures rondes."},
+
+ {id:"soldes",t:"Les soldes",ic:"🛍️",niv:2,bon:{lieu:"Un jean coûte 60 €, il est soldé à −30 %. Sarah achète aussi un t-shirt à 15 €.",pb:"Combien Sarah paie-t-elle en tout ?",qui:"Jean 60 € · −30 % · t-shirt 15 €"},
+  etapes:[
+   {q:"Combien vaut 10 % de 60 € ?",o:[["6 €",true,"60 ÷ 10 = 6 €."],["10 €",false,"10 % = on divise par 10."],["0,6 €",false,"60 ÷ 10 = 6, pas 0,6."]]},
+   {q:"Et 30 % de 60 € ?",o:[["18 €",true,"30 % = 3 × 10 % = 3 × 6 = 18 €."],["30 €",false,"30 % de 60 n'est pas 30."],["2 €",false,"On multiplie les 10 % par 3."]]},
+   {q:"Combien paie Sarah en tout ?",o:[["57 €",true,"Jean : 60 − 18 = 42 € ; total : 42 + 15 = 57 €."],["75 €",false,"Le jean est soldé : il ne coûte plus 60 €."],["42 €",false,"N'oublie pas le t-shirt."]]}],
+  fin:"30 % de 60 € = 18 € ; jean soldé : 42 € ; avec le t-shirt : 57 €.",retenir:"Pour un pourcentage, on peut passer par 10 % puis multiplier."},
+
+ {id:"velo",t:"Économiser pour un vélo",ic:"🚲",niv:2,bon:{lieu:"Lina a déjà 30 €. Elle économise 7,50 € par semaine. Le vélo coûte 120 €.",pb:"Combien de semaines doit-elle attendre ?",qui:"Déjà 30 € · 7,50 € par semaine · vélo 120 €"},
+  etapes:[
+   {q:"Combien lui manque-t-il ?",o:[["90 €",true,"120 − 30 = 90 €."],["150 €",false,"On enlève ce qu'elle a déjà."],["120 €",false,"Elle a déjà 30 €."]]},
+   {q:"Combien de semaines pour économiser 90 € ?",o:[["12 semaines",true,"90 ÷ 7,5 = 12 (vérification : 12 × 7,50 = 90)."],["16 semaines",false,"120 ÷ 7,5 = 16, mais elle a déjà 30 €."],["83 semaines",false,"On divise, on ne soustrait pas."]]}],
+  fin:"Il manque 120 − 30 = 90 €. 90 ÷ 7,50 = 12 semaines.",retenir:"Découper le problème : d'abord ce qui manque, puis le nombre de semaines."},
+
+ {id:"billes",t:"Les billes de Tom et Léa",ic:"🔵",niv:2,bon:{lieu:"Tom et Léa ont ensemble 45 billes. Léa en a 2 fois plus que Tom.",pb:"Combien de billes a chacun ?",qui:"Total 45 · Léa = 2 × Tom"},
+  etapes:[
+   {q:"Avec un schéma en barres : Tom = 1 barre, Léa = 2 barres. Combien de barres en tout ?",o:[["3 barres",true,"1 + 2 = 3 barres égales."],["2 barres",false,"N'oublie pas la barre de Tom."],["45 barres",false,"45 est le nombre de billes."]]},
+   {q:"Combien vaut une barre ?",o:[["15 billes",true,"45 ÷ 3 = 15."],["22,5 billes",false,"45 ÷ 2 ? Il y a 3 barres, pas 2."],["9 billes",false,"45 ÷ 5 ? Il y a 3 barres."]]},
+   {q:"Combien Léa a-t-elle de billes ?",o:[["30",true,"2 barres = 30 billes. Vérification : 15 + 30 = 45 ✔."],["15",false,"15 billes, c'est Tom."],["45",false,"C'est le total."]]}],
+  fin:"3 barres = 45 billes, une barre = 15. Tom a 15 billes, Léa 30 (et 15 + 30 = 45).",retenir:"Le schéma en barres transforme « 2 fois plus » en barres égales qu'on peut compter."},
+
+ {id:"sac",t:"Le sac de billes",ic:"🎲",niv:3,bon:{lieu:"Un sac contient 5 billes rouges, 3 bleues et 2 vertes, indiscernables au toucher. On tire une bille au hasard.",pb:"Quelle est la probabilité de tirer une bille bleue ? De ne pas tirer une rouge ?",qui:"5 rouges · 3 bleues · 2 vertes"},
+  etapes:[
+   {q:"Combien de billes en tout ?",o:[["10",true,"5 + 3 + 2 = 10."],["3",false,"3, c'est le nombre de couleurs."],["30",false,"On additionne, on ne multiplie pas."]]},
+   {q:"Probabilité de tirer une bleue ?",o:[["3/10",true,"3 billes bleues sur 10."],["1/3",false,"Il y a 3 couleurs, mais pas le même nombre de billes de chaque couleur."],["3/7",false,"On divise par le nombre total de billes : 10."]]},
+   {q:"Probabilité de NE PAS tirer une rouge ?",o:[["5/10 = 1/2",true,"Pas rouge = bleue ou verte : 3 + 2 = 5 billes sur 10."],["5/10 parce qu'il y a 5 rouges, donc 1/5",false,"Les « pas rouges » sont 5 sur 10, soit 1/2."],["0",false,"Il y a des billes qui ne sont pas rouges."]]}],
+  fin:"10 billes. P(bleue) = 3/10. P(pas rouge) = 5/10 = 1/2.",retenir:"Probabilité = cas favorables ÷ cas possibles, si tout a la même chance."},
+
+ {id:"aquarium",t:"Remplir l'aquarium",ic:"🐠",niv:3,bon:{lieu:"Un aquarium a la forme d'un pavé droit : 30 cm de long, 20 cm de large, 25 cm de haut.",pb:"Combien de cubes de 1 cm³ faudrait-il pour le remplir ? Combien de litres d'eau peut-il contenir (1 L = 1 000 cm³) ?",qui:"30 cm × 20 cm × 25 cm · 1 L = 1 000 cm³"},
+  etapes:[
+   {q:"Combien de cubes de 1 cm³ dans une couche du fond ?",o:[["600",true,"30 × 20 = 600 cubes."],["50",false,"On multiplie longueur et largeur."],["75",false,"30 + 20 + 25 n'est pas un volume."]]},
+   {q:"Combien de couches ?",o:[["25",true,"Une couche par centimètre de hauteur : 25 couches."],["20",false,"20 cm est la largeur ; la hauteur est 25 cm."],["600",false,"600 est le nombre de cubes par couche."]]},
+   {q:"Volume et contenance ?",o:[["15 000 cm³, soit 15 L",true,"600 × 25 = 15 000 cm³ ; 15 000 ÷ 1 000 = 15 L."],["1 500 cm³, soit 1,5 L",false,"600 × 25 = 15 000, pas 1 500."],["625 cm³",false,"On multiplie 600 par 25."]]}],
+  fin:"Une couche : 30 × 20 = 600 cm³. 25 couches : 15 000 cm³. L'aquarium contient 15 L.",retenir:"Volume = cubes par couche × nombre de couches."},
+
+ {id:"angles-triangle",t:"Le toit de la cabane",ic:"🏠",niv:3,bon:{lieu:"Le toit d'une cabane forme un triangle isocèle. L'angle du sommet mesure 110°.",pb:"Combien mesurent les deux angles à la base ?",qui:"Triangle isocèle · angle au sommet 110°"},
+  etapes:[
+   {q:"Que vaut la somme des angles d'un triangle ?",o:[["180°",true,"C'est vrai pour tout triangle."],["360°",false,"360°, c'est pour un quadrilatère."],["90°",false,"90° est un angle droit."]]},
+   {q:"Que reste-t-il pour les deux angles de la base ?",o:[["70°",true,"180 − 110 = 70°."],["290°",false,"On soustrait, on n'additionne pas."],["110°",false,"On enlève l'angle du sommet."]]},
+   {q:"Dans un triangle isocèle, les angles à la base sont égaux. Chacun mesure…",o:[["35°",true,"70 ÷ 2 = 35°. Vérification : 110 + 35 + 35 = 180 ✔."],["70°",false,"Les 70° sont partagés entre deux angles."],["55°",false,"70 ÷ 2 = 35."]]}],
+  fin:"180 − 110 = 70° pour les deux angles de la base, qui sont égaux : 35° chacun.",retenir:"Somme des angles = 180° ; dans un triangle isocèle, les deux angles à la base sont égaux."},
+
+ {id:"lutin",t:"Le lutin dessinateur",ic:"🤖",niv:3,bon:{lieu:"Un lutin de programmation part en regardant vers la droite. On veut lui faire tracer un carré de 80 pas de côté.",pb:"Quel programme faut-il écrire ?",qui:"Carré · côté 80 pas"},
+  etapes:[
+   {q:"Pour un côté, quelle instruction ?",o:[["Avancer de 80",true,"Le côté mesure 80 pas."],["Tourner de 80°",false,"80 est une longueur, pas un angle."],["Avancer de 320",false,"320, c'est le périmètre du carré entier."]]},
+   {q:"À chaque coin, le lutin doit tourner de…",o:[["90°",true,"Les coins d'un carré sont des angles droits."],["45°",false,"Il tracerait un octogone."],["360°",false,"Il ferait un tour complet sur place."]]},
+   {q:"Le programme complet :",o:[["Répéter 4 fois : avancer de 80, tourner de 90°",true,"La boucle répète les 4 côtés."],["Répéter 3 fois : avancer de 80, tourner de 90°",false,"Il manquerait un côté."],["Avancer de 80 puis tourner de 90°, une seule fois",false,"On n'obtiendrait qu'un seul côté."]]}],
+  fin:"Répéter 4 fois : avancer de 80 pas, tourner de 90°. Le lutin revient à son point de départ.",retenir:"Une boucle « répéter » évite d'écrire 4 fois les mêmes instructions."}
+];
+
+/* ---------- Figures (jeu « symboles » renommé) ---------- */
+C.symboles=[
+ ["Triangle isocèle","<path d='M50 6L24 54H76Z'/><path d='M34 28l5 3M66 28l-5 3'/>","Deux côtés de même longueur (codés par un trait)."],
+ ["Triangle équilatéral","<path d='M50 5L20 55H80Z'/><path d='M32 28l5 3M68 28l-5 3M50 51v8'/>","Trois côtés de même longueur."],
+ ["Triangle rectangle","<path d='M25 8V52H82Z'/><path d='M25 44H33V52'/>","Un angle droit (codé par un petit carré)."],
+ ["Carré","<rect x='30' y='8' width='44' height='44'/><path d='M30 16H38V8'/><path d='M52 4v8M52 48v8M26 30h8M70 30h8'/>","Quatre côtés égaux et quatre angles droits."],
+ ["Rectangle","<rect x='14' y='14' width='72' height='32'/><path d='M14 22H22V14'/>","Quatre angles droits."],
+ ["Losange","<path d='M50 4L80 30L50 56L20 30Z'/><path d='M63 15l5-3M63 45l5 3M37 15l-5-3M37 45l-5 3'/>","Quatre côtés de même longueur."],
+ ["Cercle avec un rayon","<circle cx='50' cy='30' r='25'/><path d='M50 30L71 17'/><circle cx='50' cy='30' r='2.5' class='f'/>","Le rayon relie le centre à un point du cercle."],
+ ["Angle droit","<path d='M25 50H85M25 50V5'/><path d='M25 40H35V50'/>","90°, codé par un petit carré."],
+ ["Angle aigu","<path d='M20 50H85M20 50L75 12'/><path d='M40 50A20 20 0 0 0 36 39'/>","Moins de 90°."],
+ ["Angle obtus","<path d='M55 50H95M55 50L15 15'/><path d='M70 50A15 15 0 0 0 44 40'/>","Entre 90° et 180°."],
+ ["Angle plat","<path d='M8 40H92'/><circle cx='50' cy='40' r='2.5' class='f'/><path d='M62 40A12 12 0 0 0 38 40'/>","180° : les deux côtés sont alignés."],
+ ["Droites parallèles","<path d='M10 20L90 10M10 52L90 42'/>","Elles ne se coupent jamais."],
+ ["Droites perpendiculaires","<path d='M10 40H90M45 5V58'/><path d='M45 32H53V40'/>","Elles se coupent à angle droit."],
+ ["Segment","<path d='M15 30H85'/><circle cx='15' cy='30' r='3' class='f'/><circle cx='85' cy='30' r='3' class='f'/>","Limité par deux points."],
+ ["Médiatrice d'un segment","<path d='M15 35H85'/><path d='M50 3V58'/><path d='M50 27H58V35'/><path d='M30 31v8M70 31v8'/>","Perpendiculaire au segment, en son milieu."],
+ ["Cube","<path d='M22 22H58V56H22Z'/><path d='M22 22L36 10H72L58 22M72 10V44L58 56'/>","6 faces carrées identiques."],
+ ["Pavé droit","<path d='M12 26H64V54H12Z'/><path d='M12 26L28 12H80L64 26M80 12V40L64 54'/>","6 faces rectangulaires."],
+ ["Axe de symétrie","<path d='M50 2V58' style='stroke-dasharray:5 4'/><path d='M44 15L22 28L40 48Z'/><path d='M56 15L78 28L60 48Z'/>","Les deux figures se superposent par pliage."]
+];
+
+/* ---------- Classements ---------- */
+C.tri=[
+ {t:"Quel type d'angle ?",ic:"📐",d:"Classe l'angle selon sa mesure.",cats:["Aigu","Droit","Obtus","Plat"],items:[["45°","Aigu","Moins de 90°."],["89°","Aigu","Juste sous 90°."],["10°","Aigu","Moins de 90°."],["90°","Droit","Exactement 90°."],["91°","Obtus","Juste au-dessus de 90°."],["120°","Obtus","Entre 90° et 180°."],["170°","Obtus","Entre 90° et 180°."],["180°","Plat","Côtés alignés."]]},
+ {t:"Quel triangle ?",ic:"🔺",d:"Quelle est la nature de ce triangle ?",cats:["Isocèle","Équilatéral","Rectangle","Quelconque"],items:[["Côtés 5 cm, 5 cm, 8 cm","Isocèle","Deux côtés égaux."],["Côtés 6 cm, 6 cm, 6 cm","Équilatéral","Trois côtés égaux."],["Angles 90°, 30°, 60°","Rectangle","Un angle droit."],["Côtés 4 cm, 5 cm, 7 cm","Quelconque","Aucun côté égal, pas d'angle droit."],["Angles 60°, 60°, 60°","Équilatéral","Trois angles de 60°."],["Angles 70°, 70°, 40°","Isocèle","Deux angles égaux."],["Angles 50°, 60°, 70°","Quelconque","Rien de particulier."],["Angles 35°, 55°, 90°","Rectangle","Un angle de 90°."]]},
+ {t:"Divisible par 2, par 3 ou par 5 ?",ic:"➗",d:"Parmi 2, 3 et 5, par quel SEUL nombre est-il divisible ?",cats:["Par 2","Par 3","Par 5"],items:[["14","Par 2","Pair ; 1 + 4 = 5 (pas par 3) ; ne finit ni par 0 ni par 5."],["22","Par 2","Pair ; 2 + 2 = 4."],["38","Par 2","Pair ; 3 + 8 = 11."],["21","Par 3","2 + 1 = 3 ; impair ; ne finit pas par 0 ou 5."],["27","Par 3","2 + 7 = 9."],["33","Par 3","3 + 3 = 6."],["25","Par 5","Finit par 5 ; 2 + 5 = 7."],["35","Par 5","Finit par 5 ; 3 + 5 = 8."],["55","Par 5","Finit par 5 ; 5 + 5 = 10."]]},
+ {t:"Quelle grandeur ?",ic:"📏",d:"Que mesure cette unité ?",cats:["Longueur","Aire","Volume","Durée"],items:[["km","Longueur",""],["mm","Longueur",""],["cm²","Aire","Le petit 2 = carré : une surface."],["m²","Aire",""],["cm³","Volume","Le petit 3 = cube : un volume."],["dm³","Volume",""],["min","Durée",""],["s","Durée","La seconde."]]},
+ {t:"Écritures égales",ic:"🔟",d:"À quel nombre décimal est-ce égal ?",cats:["0,1","0,25","0,5","0,75"],items:[["1/2","0,5",""],["50 %","0,5",""],["2/4","0,5","2/4 = 1/2."],["1/4","0,25",""],["25 %","0,25",""],["25/100","0,25",""],["3/4","0,75",""],["75 %","0,75",""],["1/10","0,1",""],["10 %","0,1",""]]},
+ {t:"Impossible, possible ou certain ?",ic:"🎲",d:"Classe chaque événement.",cats:["Impossible","Possible","Certain"],items:[["Obtenir 7 avec un dé à 6 faces","Impossible","Probabilité 0."],["Obtenir 6 avec un dé à 6 faces","Possible","Probabilité 1/6."],["Obtenir un nombre entre 1 et 6 avec un dé à 6 faces","Certain","Probabilité 1."],["Obtenir pile avec une pièce","Possible","Probabilité 1/2."],["Tirer une bille rouge dans un sac de billes bleues","Impossible","Il n'y a pas de rouge."],["Tirer une bille verte dans un sac de billes toutes vertes","Certain","Toutes les billes sont vertes."]]},
+ {t:"Proportionnel ou pas ?",ic:"⚖️",d:"Ces deux grandeurs sont-elles proportionnelles ?",cats:["Proportionnel","Pas proportionnel"],items:[["Prix et nombre de baguettes à 1,20 € pièce","Proportionnel","On multiplie toujours par 1,20."],["Taille et âge d'un enfant","Pas proportionnel","On ne double pas sa taille en doublant son âge."],["Périmètre d'un carré et longueur du côté","Proportionnel","Périmètre = 4 × côté."],["Aire d'un carré et longueur du côté","Pas proportionnel","Côté × 2 → aire × 4."],["Distance et durée à vitesse constante","Proportionnel","Deux fois plus de temps, deux fois plus de distance."],["Note à un contrôle et temps de révision","Pas proportionnel","Aucune règle fixe."]]}
+];
+
+/* ---------- Exercices à l'infini (atelier) ---------- */
+C.atelier=[
+ {t:"Fraction d'une quantité",ic:"🍕",d:"a/b de N = (N ÷ b) × a",gen:R=>{const b=R.pick([2,3,4,5,10]),a=R.r(1,b-1),n=b*R.r(2,12);return {q:`Combien font <b>${a}/${b} de ${n}</b> ?`,r:n/b*a,u:"",tol:0.01,ex:`${n} ÷ ${b} = ${n/b}, puis × ${a} = <b>${n/b*a}</b>.`}}},
+ {t:"× et ÷ par 10, 100, 1 000",ic:"🔟",d:"Les chiffres changent de rang",gen:R=>{const x=R.pick([3.7,0.45,12.5,7.08,0.6,25]),k=R.pick([10,100,1000]),m=R.r(0,1);const r=m?x*k:x/k;return {q:`Calcule : <b>${R.f(x,2)} ${m?'×':'÷'} ${k.toLocaleString('fr-FR')}</b>`,r,u:"",tol:Math.abs(r)*1e-6+1e-9,ex:`Chaque chiffre prend une valeur ${k.toLocaleString('fr-FR')} fois plus ${m?'grande':'petite'} : <b>${R.f(r,6)}</b>.`}}},
+ {t:"Multiplier des décimaux",ic:"✖️",d:"Sans virgule, puis on la place",gen:R=>{const a=R.r(11,49)/10,b=R.r(2,9)/10+R.r(0,2);const r=Math.round(a*b*100)/100;return {q:`Calcule : <b>${R.f(a,1)} × ${R.f(b,1)}</b>`,r,u:"",tol:0.001,ex:`On calcule ${Math.round(a*10)} × ${Math.round(b*10)} = ${Math.round(a*10)*Math.round(b*10)}, puis on place la virgule (2 chiffres après) : <b>${R.f(r,2)}</b>.`}}},
+ {t:"Division euclidienne",ic:"➗",d:"a = b × q + r",gen:R=>{const b=R.r(3,9),q=R.r(5,30),re=R.r(0,b-1),a=b*q+re,ask=R.r(0,1);return {q:`Dans la division euclidienne de <b>${a}</b> par <b>${b}</b>, quel est ${ask?'le <b>reste</b>':'le <b>quotient</b>'} ?`,r:ask?re:q,u:"",tol:0.01,ex:`${a} = ${b} × ${q} + ${re} : quotient <b>${q}</b>, reste <b>${re}</b>.`}}},
+ {t:"Convertir des longueurs",ic:"📏",d:"km, m, cm, mm",gen:R=>{const c=R.pick([["km","m",1000],["m","cm",100],["cm","mm",10],["m","mm",1000],["m","km",0.001],["cm","m",0.01]]),x=R.pick([1.5,2.4,35,0.8,120,7]),r=x*c[2];return {q:`Convertis : <b>${R.f(x,2)} ${c[0]}</b> = ? ${c[1]}`,r,u:c[1],tol:Math.abs(r)*1e-6+1e-9,ex:`1 ${c[0]} = ${c[2].toLocaleString('fr-FR')} ${c[1]}, donc ${R.f(x,2)} ${c[0]} = <b>${R.f(r,4)} ${c[1]}</b>.`}}},
+ {t:"Périmètres",ic:"🔲",d:"Rectangle, carré",gen:R=>{if(R.r(0,1)){const c=R.r(3,25);return {q:`Périmètre d'un <b>carré</b> de <b>${c} cm</b> de côté ?`,r:4*c,u:"cm",tol:0.01,ex:`4 × ${c} = <b>${4*c} cm</b>.`}}const L=R.r(5,30),l=R.r(2,L-1);return {q:`Périmètre d'un <b>rectangle</b> de <b>${L} m</b> sur <b>${l} m</b> ?`,r:2*(L+l),u:"m",tol:0.01,ex:`2 × (${L} + ${l}) = <b>${2*(L+l)} m</b>.`}}},
+ {t:"Aires",ic:"🟩",d:"Rectangle, carré",gen:R=>{if(R.r(0,1)){const c=R.r(2,15);return {q:`Aire d'un <b>carré</b> de <b>${c} cm</b> de côté ?`,r:c*c,u:"cm²",tol:0.01,ex:`${c} × ${c} = <b>${c*c} cm²</b>.`}}const L=R.r(4,20),l=R.r(2,L-1);return {q:`Aire d'un <b>rectangle</b> de <b>${L} m</b> sur <b>${l} m</b> ?`,r:L*l,u:"m²",tol:0.01,ex:`${L} × ${l} = <b>${L*l} m²</b>.`}}},
+ {t:"Périmètre du cercle",ic:"⭕",d:"π × diamètre (π ≈ 3,14)",gen:R=>{const ray=R.r(0,1),v=R.r(2,20),d=ray?2*v:v,r=3.14*d;return {q:`Un cercle a un ${ray?'<b>rayon</b>':'<b>diamètre</b>'} de <b>${v} cm</b>. Calcule son périmètre avec π ≈ 3,14.`,r,u:"cm",tol:0.02,ex:`${ray?`Diamètre = 2 × ${v} = ${d} cm. `:''}Périmètre ≈ 3,14 × ${d} = <b>${R.f(r,2)} cm</b>.`}}},
+ {t:"Le 3e angle du triangle",ic:"🔺",d:"Somme des angles = 180°",gen:R=>{const a=R.r(20,100),b=R.r(10,170-a-5);return {q:`Un triangle a deux angles de <b>${a}°</b> et <b>${b}°</b>. Combien mesure le troisième ?`,r:180-a-b,u:"°",tol:0.01,ex:`180 − ${a} − ${b} = <b>${180-a-b}°</b>.`}}},
+ {t:"Durées",ic:"⏰",d:"Passer par les heures rondes",gen:R=>{const h=R.r(7,18),m=R.r(5,55),d=R.r(25,190),f=h*60+m+d,fh=Math.floor(f/60),fm=f%60;return {q:`Un film commence à <b>${h} h ${String(m).padStart(2,'0')}</b> et finit à <b>${fh} h ${String(fm).padStart(2,'0')}</b>. Combien de minutes dure-t-il ?`,r:d,u:"min",tol:0.01,ex:`Durée : ${Math.floor(d/60)} h ${d%60} min, soit <b>${d} minutes</b>.`}}},
+ {t:"Proportionnalité",ic:"⚖️",d:"Retour à l'unité",gen:R=>{const n=R.pick([2,4,5]),p=R.pick([1.2,1.5,2,2.5,3]),k=R.r(3,12),r=Math.round(p*k*100)/100;return {q:`<b>${n}</b> croissants coûtent <b>${R.f(p*n,2)} €</b>. Combien coûtent <b>${k}</b> croissants ?`,r,u:"€",tol:0.01,ex:`1 croissant : ${R.f(p*n,2)} ÷ ${n} = ${R.f(p,2)} € ; ${k} croissants : ${k} × ${R.f(p,2)} = <b>${R.f(r,2)} €</b>.`}}},
+ {t:"Pourcentages",ic:"💯",d:"10 %, 20 %, 25 %, 50 %",gen:R=>{const pc=R.pick([10,20,25,50,75]),n=R.pick([20,40,60,80,120,200,36,48]),r=n*pc/100;return {q:`Combien font <b>${pc} % de ${n}</b> ?`,r,u:"",tol:0.01,ex:`${pc} % de ${n} = ${n} × ${pc} ÷ 100 = <b>${R.f(r,2)}</b>${pc===25?' (le quart)':pc===50?' (la moitié)':pc===10?' (on divise par 10)':''}.`}}},
+ {t:"Échelles",ic:"🗺️",d:"Plan → réalité",gen:R=>{const e=R.pick([100,1000,10000]),cm=R.r(2,15),r=cm*e/100;return {q:`Sur un plan à l'échelle <b>1/${e.toLocaleString('fr-FR')}</b>, une distance mesure <b>${cm} cm</b>. Quelle est la distance réelle en mètres ?`,r,u:"m",tol:0.01,ex:`${cm} × ${e.toLocaleString('fr-FR')} = ${(cm*e).toLocaleString('fr-FR')} cm = <b>${R.f(r,2)} m</b>.`}}},
+ {t:"Probabilités",ic:"🎲",d:"Favorables ÷ possibles (en décimal)",gen:R=>{const t=R.pick([2,4,5,10]),f=R.r(1,t-1);return {q:`Un sac contient <b>${t}</b> jetons dont <b>${f}</b> gagnants. On en tire un au hasard. Probabilité de tirer un jeton gagnant, <b>en nombre décimal</b> ?`,r:f/t,u:"",tol:0.001,ex:`${f}/${t} = <b>${R.f(f/t,2)}</b>.`}}},
+ {t:"Volumes en cubes",ic:"🧊",d:"Cubes par couche × couches",gen:R=>{const a=R.r(2,8),b=R.r(2,6),c=R.r(2,6);return {q:`Un pavé est rempli de cubes de 1 cm³ : <b>${a}</b> cubes de long, <b>${b}</b> de large, <b>${c}</b> couches. Volume ?`,r:a*b*c,u:"cm³",tol:0.01,ex:`Une couche : ${a} × ${b} = ${a*b} cubes ; ${c} couches : <b>${a*b*c} cm³</b>.`}}},
+ {t:"Le nombre caché",ic:"❓",d:"La balance",gen:R=>{const x=R.r(3,40),k=R.r(0,1);if(k){const b=R.r(5,60);return {q:`<b>? + ${b} = ${x+b}</b>. Quel est le nombre caché ?`,r:x,u:"",tol:0.01,ex:`${x+b} − ${b} = <b>${x}</b>.`}}const a=R.r(2,9);return {q:`<b>${a} × ? = ${a*x}</b>. Quel est le nombre caché ?`,r:x,u:"",tol:0.01,ex:`${a*x} ÷ ${a} = <b>${x}</b>.`}}}
+];
+
+/* ---------- Instruments (fiches + « Qui suis-je ? ») ---------- */
+C.appareils=[
+ {n:"Règle graduée",ic:"📏",f:"Je sers à tracer des traits droits et à mesurer des longueurs.",c:"Graduée en centimètres et millimètres.",p:"Placer le zéro (et non le bord) sur le premier point.",s:"Vérifier qu'on commence bien à 0."},
+ {n:"Équerre",ic:"📐",f:"Je sers à tracer et à vérifier les angles droits.",c:"Un angle droit, parfois graduée.",p:"Un côté de l'angle droit le long de la droite, puis on trace le long de l'autre côté.",s:"Bien plaquer l'angle droit sur le point."},
+ {n:"Compas",ic:"🧭",f:"Je trace des cercles et je reporte des longueurs.",c:"Une pointe et une mine ; l'écartement donne le rayon.",p:"Pointe sur le centre, on tourne sans changer l'écartement.",s:"Pointe sèche : attention aux doigts."},
+ {n:"Rapporteur",ic:"🌗",f:"Je mesure et je trace des angles en degrés.",c:"Demi-disque gradué de 0 à 180° dans les deux sens.",p:"Centre sur le sommet, zéro sur un côté, lecture sur la bonne graduation.",s:"Vérifier si l'angle est aigu ou obtus avant de lire."},
+ {n:"Calculatrice",ic:"🧮",f:"Je fais les calculs longs, mais je ne réfléchis pas à ta place.",c:"Respecte les priorités de calcul.",p:"Toujours vérifier le résultat avec un ordre de grandeur.",s:"Une faute de frappe donne un résultat faux."},
+ {n:"Tableur",ic:"📊",f:"Logiciel en cellules (A1, B2…) qui calcule avec des formules et les recopie.",c:"Une formule commence par =.",p:"Écrire la formule une fois et la recopier vers le bas.",s:"Vérifier les cellules utilisées par la formule."},
+ {n:"Papier calque",ic:"📄",f:"Feuille transparente qui aide à vérifier une symétrie par pliage ou à reproduire une figure.",c:"On voit la figure à travers.",p:"Décalquer la figure, plier le long de l'axe, comparer.",s:"Bien tenir la feuille pour ne pas décaler."}
+];
 
 
 /* =====================================================================
@@ -538,7 +1324,7 @@ function def(k){const w=C.lexique.find(x=>x[0]===k);$('modalIn').innerHTML=`<spa
 /* ----- WIKI : lexique, fiches appareils (C.appareils), symboles (C.symboles) ----- */
 let LX='mots';
 function renderLex(){
-  const segs=[['mots','📖 Mots']].concat(C.appareils?[['app','🧰 Appareils']]:[]).concat(C.symboles?[['sym','🔣 Symboles']]:[]);
+  const segs=[['mots','📖 Mots']].concat(C.appareils?[['app',C.appareilsNom||'🧰 Appareils']]:[]).concat(C.symboles?[['sym',(((C.jeux||{}).sym||{}).e||'🔣')+' '+(((C.jeux||{}).sym||{}).t||'Symboles')]]:[]);
   if(!segs.some(s=>s[0]===LX))LX='mots';
   $('lexSeg').style.display=segs.length>1?'':'none';
   $('lexSeg').innerHTML=segs.map(([k,t])=>`<button class="${LX===k?'on':''}" onclick="LX='${k}';renderLex()">${t}</button>`).join('');
@@ -557,22 +1343,23 @@ function appFiche(i){const a=C.appareils[i],sy=a.sym&&(C.symboles||[]).find(s=>s
    <button class="btn ghost" onclick="$('modal').classList.remove('on')">Fermer</button>`;$('modal').classList.add('on');$('modalIn').scrollTop=0}
 
 /* ----- ÉCRAN JEUX ----- */
+/* C.jeux (facultatif) = {sym:{e,t,s}, diag:{…}} : renomme un jeu pour une appli (ex. maths) */
 const JEUX=[
- {e:'❓',t:'Quiz',s:'QCM + explications',c:'#ffc83d',go:'startQuiz()'},
- {e:'⏱️',t:'Vrai / Faux',s:'Contre la montre',c:'#3db5ff',go:'startVF()'},
- {e:'🔎',t:'Dépannage',s:'Enquêtes avec bon de travail',c:'#ff8a3d',go:'listDiag()',si:()=>C.diag&&C.diag.length},
- {e:'🔧',t:'Câblage',s:'Tire les fils toi-même',c:'#7be0d0',go:'listCab()',si:()=>C.cablage&&C.cablage.length},
- {e:'🔗',t:'Associer',s:'Mot ↔ définition',c:'#2ed47a',go:'startMatch()'},
- {e:'🪜',t:'Dans l\'ordre',s:'Les bonnes étapes',c:'#ff8fab',go:'pickOrdre()'},
- {e:'🗂️',t:'Classement',s:'Range au bon endroit',c:'#ffd6a5',go:'listTri()',si:()=>C.tri&&C.tri.length},
- {e:'🔣',t:'Symboles',s:'Lis les schémas',c:'#c3b1ff',go:'startSym()',si:()=>C.symboles&&C.symboles.length>=4},
- {e:'📐',t:'Atelier calcul',s:'Exercices à l\'infini',c:'#9be15d',go:'listAtelier()',si:()=>C.atelier&&C.atelier.length},
- {e:'🕵️',t:'Qui suis-je ?',s:'Devine l\'appareil',c:'#ffb3c7',go:'startQui()',si:()=>C.appareils&&C.appareils.length>=4},
- {e:'🧮',t:'Calcul mental',s:'Réponds vite',c:'#b18cff',go:'startCalc()',si:()=>C.calcul},
- {e:'⚡',t:'Chrono 60 s',s:'Un max de bonnes réponses',c:'#ff7b7b',go:'startChrono()'}
+ {k:'quiz',e:'❓',t:'Quiz',s:'QCM + explications',c:'#ffc83d',go:'startQuiz()'},
+ {k:'vf',e:'⏱️',t:'Vrai / Faux',s:'Contre la montre',c:'#3db5ff',go:'startVF()'},
+ {k:'diag',e:'🔎',t:'Dépannage',s:'Enquêtes avec bon de travail',c:'#ff8a3d',go:'listDiag()',si:()=>C.diag&&C.diag.length},
+ {k:'cab',e:'🔧',t:'Câblage',s:'Tire les fils toi-même',c:'#7be0d0',go:'listCab()',si:()=>C.cablage&&C.cablage.length},
+ {k:'match',e:'🔗',t:'Associer',s:'Mot ↔ définition',c:'#2ed47a',go:'startMatch()'},
+ {k:'ordre',e:'🪜',t:'Dans l\'ordre',s:'Les bonnes étapes',c:'#ff8fab',go:'pickOrdre()'},
+ {k:'tri',e:'🗂️',t:'Classement',s:'Range au bon endroit',c:'#ffd6a5',go:'listTri()',si:()=>C.tri&&C.tri.length},
+ {k:'sym',e:'🔣',t:'Symboles',s:'Lis les schémas',c:'#c3b1ff',go:'startSym()',si:()=>C.symboles&&C.symboles.length>=4},
+ {k:'atel',e:'📐',t:'Atelier calcul',s:'Exercices à l\'infini',c:'#9be15d',go:'listAtelier()',si:()=>C.atelier&&C.atelier.length},
+ {k:'qui',e:'🕵️',t:'Qui suis-je ?',s:'Devine l\'appareil',c:'#ffb3c7',go:'startQui()',si:()=>C.appareils&&C.appareils.length>=4},
+ {k:'calc',e:'🧮',t:'Calcul mental',s:'Réponds vite',c:'#b18cff',go:'startCalc()',si:()=>C.calcul},
+ {k:'chrono',e:'⚡',t:'Chrono 60 s',s:'Un max de bonnes réponses',c:'#ff7b7b',go:'startChrono()'}
 ];
 function renderJeux(){
-  $('jeuxGrid').innerHTML=JEUX.filter(j=>!j.si||j.si()).map(j=>`<button class="game" style="background:${j.c}" onclick="${j.go}"><span class="e">${j.e}</span>${j.t}<small>${j.s}</small></button>`).join('');
+  $('jeuxGrid').innerHTML=JEUX.filter(j=>!j.si||j.si()).map(j=>Object.assign({},j,(C.jeux||{})[j.k])).map(j=>`<button class="game" style="background:${j.c}" onclick="${j.go}"><span class="e">${j.e}</span>${j.t}<small>${j.s}</small></button>`).join('');
   const ne=errList().length;
   $('jeuxTop').innerHTML=(C.examen?`<button class="btn" onclick="startExam()">📝 ${C.examen.titre||'Examen blanc'} (${examN()} questions)</button>`:'')+
     (ne?`<button class="row" onclick="startErr()"><span class="ic">🧠</span><span class="tx"><b>Revoir mes erreurs</b><span>${ne} question${ne>1?'s':''} à retravailler</span></span><span class="mut">›</span></button>`:'');
@@ -682,13 +1469,15 @@ function ordA(b){
    C.diag = [{id,t,ic,niv:1|2|3,bon:{lieu,qui,heure,prio:1|2|3,pb,contrainte},
              etapes:[{info?,fig?,q,o:[['choix',true|false,'résultat ou pourquoi c\'est faux'],…]}],fin:'rapport',retenir?}]
    Une seule bonne réponse par étape ; une mauvaise piste coûte des points mais on peut réessayer. */
-function listDiag(){liste('🔎 Dépannage','Tu reçois un bon de travail. Trouve la panne avec méthode : chaque fausse piste te coûte des étoiles.',C.diag.map((d,i)=>[d.ic||'🔎',d.t,(NIV[d.niv]||'')+' · '+d.bon.lieu,`startDiag(${i})`,P.diag[d.id]]))}
+/* C.diagTextes (facultatif) : adapte le jeu Dépannage à une autre matière (ex. « Problèmes pas à pas ») */
+function DT(){return Object.assign({titre:'🔎 Dépannage',sous:'Tu reçois un bon de travail. Trouve la panne avec méthode : chaque fausse piste te coûte des étoiles.',entete:'📋 Nouveau bon de travail',carte:'BON DE TRAVAIL N°',prio:true,champs:[['lieu','📍 Lieu'],['qui','👤 Demandeur'],['heure','🕐 Appel'],['pb','⚠️ Symptôme'],['contrainte','⛓️ Contrainte']],go:'🧰 Commencer l\'intervention',fin:'Terminer l\'intervention',parfait:'Panne trouvée sans fausse piste !',ok:'Panne réparée !',rapport:'📝 Rapport d\'intervention',autre:'Autre intervention',piste:'fausse piste'},C.diagTextes||{})}
+function listDiag(){liste(DT().titre,DT().sous,C.diag.map((d,i)=>[d.ic||'🔎',d.t,(NIV[d.niv]||'')+' · '+d.bon.lieu,`startDiag(${i})`,P.diag[d.id]]))}
 function startDiag(i){const d=C.diag[i],b=d.bon;G={type:'diag',d,k:i,i:0,err:0};show('play');
-  $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><b>📋 Nouveau bon de travail</b><span style="width:24px"></span></div>
-  <div class="bt"><div class="bth"><b>BON DE TRAVAIL N° ${2600+i*7}</b><span class="prio p${b.prio||2}">${['','🚨 Urgent','Normal','Planifié'][b.prio||2]}</span></div>
-   ${[['📍 Lieu',b.lieu],['👤 Demandeur',b.qui],['🕐 Appel',b.heure],['⚠️ Symptôme',b.pb],['⛓️ Contrainte',b.contrainte]].filter(x=>x[1]).map(x=>`<div class="btl"><span>${x[0]}</span><p>${x[1]}</p></div>`).join('')}</div>
+  $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><b>${DT().entete}</b><span style="width:24px"></span></div>
+  <div class="bt"><div class="bth"><b>${DT().carte} ${2600+i*7}</b>${DT().prio?`<span class="prio p${b.prio||2}">${['','🚨 Urgent','Normal','Planifié'][b.prio||2]}</span>`:''}</div>
+   ${DT().champs.map(([k,t])=>[t,b[k]]).filter(x=>x[1]).map(x=>`<div class="btl"><span>${x[0]}</span><p>${x[1]}</p></div>`).join('')}</div>
   <p class="mut" style="text-align:center">${d.etapes.length} étapes · ${NIV[d.niv]||''}</p>
-  <button class="btn" onclick="diagQ()">🧰 Commencer l'intervention</button>`}
+  <button class="btn" onclick="diagQ()">${DT().go}</button>`}
 function diagQ(){const d=G.d,e=d.etapes[G.i];
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><div class="prog"><i style="width:${G.i/d.etapes.length*100}%"></i></div><span class="pill">${G.i+1}/${d.etapes.length}</span></div>
    <div class="card mini"><span class="mut">📋 ${d.t}</span><span style="font-size:14px;line-height:1.4">${d.bon.pb}</span></div>
@@ -699,13 +1488,13 @@ function diagQ(){const d=G.d,e=d.etapes[G.i];
   initFigs($('playBody'));$('playBody').querySelectorAll('.fig').forEach(playFig)}
 function diagA(b){const e=G.d.etapes[G.i],o=e.o[+b.dataset.i];if(b.disabled)return;
   if(o[1]){document.querySelectorAll('#playBody .ans').forEach(x=>x.disabled=true);b.classList.add('ok');gain(G.ko?5:15,b);G.ko=0;
-    $('ex').innerHTML='✅ '+o[2]+`<button class="btn" style="margin-top:12px" onclick="diagNext()">${G.i+1<G.d.etapes.length?'Étape suivante →':'Terminer l\'intervention'}</button>`;$('ex').classList.add('on');$('ex').scrollIntoView({behavior:'smooth',block:'nearest'})}
+    $('ex').innerHTML='✅ '+o[2]+`<button class="btn" style="margin-top:12px" onclick="diagNext()">${G.i+1<G.d.etapes.length?'Étape suivante →':DT().fin}</button>`;$('ex').classList.add('on');$('ex').scrollIntoView({behavior:'smooth',block:'nearest'})}
   else{G.err++;G.ko=1;b.disabled=true;b.classList.add('ko');shake('qc');$('ex').innerHTML='❌ '+o[2]+'<div class="mut" style="margin-top:6px">Essaie une autre piste.</div>';$('ex').classList.add('on')}}
 function diagNext(){G.i++;if(G.i<G.d.etapes.length)return diagQ();
   const d=G.d,st=G.err===0?3:G.err<=2?2:1;P.diag[d.id]=Math.max(P.diag[d.id]||0,st);P.parties++;save();badgeCheck();if(st>=2)confetti();
-  pubInterstitiel(()=>{show('play');$('playBody').innerHTML=`<div class="big">${st===3?'🏆':st===2?'🔧':'💪'}</div><h1 style="text-align:center">${st===3?'Panne trouvée sans fausse piste !':'Panne réparée !'}</h1><div class="stars">${stars(st)}</div><p class="mut" style="text-align:center">${G.err} fausse${G.err>1?'s':''} piste${G.err>1?'s':''}</p>
-   <div class="sec"><h3>📝 Rapport d'intervention</h3><p>${d.fin}</p></div>${d.retenir?`<div class="box ret"><b>📌 À retenir</b>${d.retenir}</div>`:''}
-   <button class="btn" onclick="listDiag()">Autre intervention</button><button class="btn ghost" onclick="tab('jeux')">Retour aux jeux</button>${pubBanniere()}`;pubB()})}
+  pubInterstitiel(()=>{show('play');$('playBody').innerHTML=`<div class="big">${st===3?'🏆':st===2?'🔧':'💪'}</div><h1 style="text-align:center">${st===3?DT().parfait:DT().ok}</h1><div class="stars">${stars(st)}</div><p class="mut" style="text-align:center">${G.err} ${DT().piste}${G.err>1?'s':''}</p>
+   <div class="sec"><h3>${DT().rapport}</h3><p>${d.fin}</p></div>${d.retenir?`<div class="box ret"><b>📌 À retenir</b>${d.retenir}</div>`:''}
+   <button class="btn" onclick="listDiag()">${DT().autre}</button><button class="btn ghost" onclick="tab('jeux')">Retour aux jeux</button>${pubBanniere()}`;pubB()})}
 
 /* ----- CÂBLAGE (si C.cablage est défini) -----
    C.cablage = [{id,t,ic,niv,d:'consigne',aide:'indice',fin:'explication',h:hauteur du plan (défaut 400),
@@ -830,12 +1619,13 @@ function calcQ1(g){
 function startCalc(){G={type:'calc',list:Array.from({length:10},()=>calcQ1(C.calcul[rand(0,C.calcul.length-1)])),i:0,score:0};G.n=10;show('play');quizQ()}
 
 /* ----- EXAMEN BLANC (si C.examen est défini) -----
-   C.examen = {titre, questions:60, seuil:42, minutes:60}
+   C.examen = {titre, questions:60, seuil:42, minutes:60, modules?:['id',…]} (modules : ne tirer que ces modules)
    Questions tirées de tout le quiz, pas de correction pendant l'épreuve, verdict + corrections à la fin. */
-function examN(){return Math.min(C.examen.questions,C.quiz.length)}
+function examPool(){return C.quiz.filter(q=>!C.examen.modules||C.examen.modules.includes(q[0]))}
+function examN(){return Math.min(C.examen.questions,examPool().length)}
 function examSeuil(){return Math.ceil(C.examen.seuil/C.examen.questions*examN())}
 function startExam(){
-  G={type:'exam',list:shuf(C.quiz).slice(0,examN()),i:0,score:0,err:[],t0:Date.now()};G.n=G.list.length;show('play');examQ();
+  G={type:'exam',list:shuf(examPool()).slice(0,examN()),i:0,score:0,err:[],t0:Date.now()};G.n=G.list.length;show('play');examQ();
   const D=C.examen.minutes*60000*G.n/C.examen.questions;
   G.tm=setInterval(()=>{const r=D-(Date.now()-G.t0);if($('chr'))$('chr').textContent=Math.max(0,Math.ceil(r/60000))+' min';if(r<=0){clearInterval(G.tm);examEnd(true)}},1000);
 }
@@ -884,8 +1674,8 @@ const BADGES=[
  ['🔥','Régulier','Apprendre 7 jours de suite',()=>P.serie>=7],
  ['⚡','Éclair','15 bonnes réponses au Chrono 60 s',()=>(P.best.chrono||0)>=15],
  ['🧠','J\'apprends de mes erreurs','Corriger 15 erreurs',()=>P.fix>=15],
- ['🔎','Détective','Réussir 5 dépannages',()=>Object.keys(P.diag).length>=5,()=>C.diag&&C.diag.length>=5],
- ['🕵️','Dépanneur expert','3 étoiles à tous les dépannages',()=>C.diag.every(d=>P.diag[d.id]===3),()=>C.diag],
+ ['🔎','Détective','Réussir 5 '+(((C.jeux||{}).diag||{}).t||'dépannages').toLowerCase(),()=>Object.keys(P.diag).length>=5,()=>C.diag&&C.diag.length>=5],
+ ['🕵️','Dépanneur expert','3 étoiles à tous les '+(((C.jeux||{}).diag||{}).t||'dépannages').toLowerCase(),()=>C.diag.every(d=>P.diag[d.id]===3),()=>C.diag],
  ['🔧','Mains d\'or','Réussir tous les câblages',()=>C.cablage.every(c=>P.cab[c.id]),()=>C.cablage],
  ['🗂️','Bien rangé','3 étoiles à tous les classements',()=>C.tri.every(t=>P.tri[t.t]===3),()=>C.tri],
  ['🔣','Lecteur de schémas','10/10 aux symboles',()=>(P.best.sym||0)>=10,()=>C.symboles],
