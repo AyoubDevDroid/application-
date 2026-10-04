@@ -617,7 +617,7 @@ function quizQ(){
    <div class="ex" id="ex"></div>`;
 }
 function quizA(b){
-  const q=G.list[G.i],bs=[...document.querySelectorAll('.ans')];if(bs[0].disabled)return;bs.forEach(x=>x.disabled=true);
+  const q=G.list[G.i],bs=[...document.querySelectorAll('#playBody .ans')];if(bs[0].disabled)return;bs.forEach(x=>x.disabled=true);
   const ok=+b.dataset.i===q[3];
   bs.forEach(x=>{if(+x.dataset.i===q[3])x.classList.add('ok');else if(x!==b)x.classList.add('dim')});
   if(G.track){const k=(q.vf?'v:':'q:')+q[1];if(ok){if(remErr(k))P.fix++}else addErr(k)}
@@ -642,7 +642,7 @@ function vfQ(){
   G.tm=setInterval(()=>{const p=1-(Date.now()-t0)/D;$('tb').style.width=Math.max(0,p*100)+'%';if(p<=0)vfA(null)},50);
 }
 function vfA(v){
-  clearInterval(G.tm);const q=G.list[G.i];const bs=document.querySelectorAll('.vf button');if(bs[0].disabled)return;bs.forEach(b=>b.disabled=true);
+  clearInterval(G.tm);const q=G.list[G.i];const bs=document.querySelectorAll('#playBody .vf button');if(bs[0].disabled)return;bs.forEach(b=>b.disabled=true);
   const ok=v===q[1];if(ok){G.score++;gain(10,bs[v?0:1]);if(remErr('v:'+q[0]))P.fix++}else{shake('qc');addErr('v:'+q[0])}
   $('ex').innerHTML=(ok?'✅ Bien vu ! ':v===null?'⏰ Trop lent ! ':'❌ ')+`C'est <b>${q[1]?'VRAI':'FAUX'}</b>. ${q[2]}<button class="btn" style="margin-top:12px" onclick="nextQ(vfQ)">Continuer</button>`;$('ex').classList.add('on');
 }
@@ -653,7 +653,7 @@ function startChrono(){G={type:'chrono',list:shuf(C.quiz.concat(C.vf.map(vfQz)))
 function chronoQ(){const q=G.list[G.i%G.list.length],order=q.vf?q[2].map((t,i)=>({t,i})):shuf(q[2].map((t,i)=>({t,i})));
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="tab('jeux')">✕</button><div class="timer" style="flex:1"><i id="cb"></i></div><span class="pill" id="cs">60 s</span><span class="pill">${G.score} ✓</span></div>
    <div class="qcard" id="qc" style="font-size:18px"><div>${q[1]}</div></div><div style="display:flex;flex-direction:column;gap:10px">${order.map(o=>`<button class="ans" data-i="${o.i}" onclick="chronoA(this)">${o.t}</button>`).join('')}</div>`}
-function chronoA(b){const q=G.list[G.i%G.list.length],bs=[...document.querySelectorAll('.ans')];if(bs[0].disabled||G.done)return;bs.forEach(x=>x.disabled=true);const ok=+b.dataset.i===q[3];
+function chronoA(b){const q=G.list[G.i%G.list.length],bs=[...document.querySelectorAll('#playBody .ans')];if(bs[0].disabled||G.done)return;bs.forEach(x=>x.disabled=true);const ok=+b.dataset.i===q[3];
   if(ok){G.score++;b.classList.add('ok');beep(1)}else{G.err++;b.classList.add('ko');bs.forEach(x=>{if(+x.dataset.i===q[3])x.classList.add('ok')});shake('qc')}
   setTimeout(()=>{if(G.type!=='chrono'||G.done)return;G.i++;chronoQ()},ok?350:1100)}
 function chronoEnd(){G.done=1;const s=G.score;if(s>(P.best.chrono||0))P.best.chrono=s;P.xp+=s*3;jour(s*3);save();end(Math.min(s,15),15,`${s} bonne${s>1?'s':''} réponse${s>1?'s':''} en 60 s · ${G.err} erreur${G.err>1?'s':''}`)}
