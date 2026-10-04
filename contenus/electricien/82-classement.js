@@ -1,0 +1,75 @@
+/* JEU — Classement : ranger chaque élément dans la bonne catégorie. [élément, catégorie, explication] */
+C.tri=[
+ {t:"Les volumes de la salle de bain",ic:"🛁",d:"Dans quel volume se trouve cet endroit ?",cats:["Volume 0","Volume 1","Volume 2","Hors volume"],items:[
+  ["L'intérieur de la baignoire","Volume 0","Là où il y a de l'eau."],
+  ["Le fond du receveur de douche","Volume 0","L'intérieur du receveur est le volume 0."],
+  ["Au-dessus de la baignoire, à 1,80 m du sol","Volume 1","Le volume 1 monte jusqu'à 2,25 m au-dessus du volume 0."],
+  ["Au-dessus du receveur de douche, à 2 m du sol","Volume 1","Toujours sous 2,25 m, juste au-dessus du volume 0."],
+  ["À 40 cm du bord de la baignoire, à 1,50 m de haut","Volume 2","Le volume 2 est une bande de 0,60 m autour du volume 1."],
+  ["À 30 cm du bord de la douche, à 1 m de haut","Volume 2","Moins de 0,60 m du volume 1."],
+  ["À 1 m du bord de la baignoire","Hors volume","Au-delà de 0,60 m, on sort du volume 2."],
+  ["À 80 cm du bord de la douche, au niveau du lavabo","Hors volume","Plus de 0,60 m : hors volume."]]},
+ {t:"Qui protège quoi ?",ic:"🛡️",d:"Quel appareil réagit à cette situation ?",cats:["Disjoncteur divisionnaire","Différentiel 30 mA","Disjoncteur de branchement","Parafoudre"],items:[
+  ["Trop d'appareils sur le même circuit","Disjoncteur divisionnaire","Surcharge : la partie thermique coupe."],
+  ["Une personne touche un fil de phase","Différentiel 30 mA","Le courant fuit par la personne : aller ≠ retour."],
+  ["La puissance de l'abonnement est dépassée","Disjoncteur de branchement","Il est réglé selon l'abonnement."],
+  ["Une surtension due à la foudre","Parafoudre","Il écoule la surtension vers la terre."],
+  ["Un court-circuit dans une prise","Disjoncteur divisionnaire","Partie magnétique : coupure instantanée."],
+  ["La carcasse d'un lave-linge passe sous tension","Différentiel 30 mA","Le défaut s'écoule à la terre : le différentiel le détecte."],
+  ["Couper tout le logement en urgence","Disjoncteur de branchement","Il sert d'appareil général de commande."]]},
+ {t:"Section et calibre",ic:"📏",d:"Quelle section et quel calibre pour ce circuit ?",cats:["1,5 mm² / 16 A","2,5 mm² / 20 A","6 mm² / 32 A","1,5 mm² / 2 A"],items:[
+  ["Circuit d'éclairage","1,5 mm² / 16 A","Éclairage : 1,5 mm² protégé en 16 A."],
+  ["Volets roulants","1,5 mm² / 16 A","Comme l'éclairage."],
+  ["Lave-linge","2,5 mm² / 20 A","Circuit spécialisé."],
+  ["Four","2,5 mm² / 20 A","Circuit spécialisé."],
+  ["Chauffe-eau électrique","2,5 mm² / 20 A","Circuit spécialisé, via le contacteur jour/nuit."],
+  ["Lave-vaisselle","2,5 mm² / 20 A","Circuit spécialisé."],
+  ["Plaque de cuisson (monophasé)","6 mm² / 32 A","Le plus gros circuit du logement."],
+  ["VMC","1,5 mm² / 2 A","Elle consomme très peu."],
+  ["Commande du contacteur heures creuses","1,5 mm² / 2 A","Simple circuit de commande de la bobine."]]},
+ {t:"Quelle habilitation ?",ic:"🦺",d:"Quelle habilitation pour cette personne ?",cats:["B0","BS","BR","BC","B2"],items:[
+  ["Peintre qui repeint un local électrique sans toucher aux installations","B0","Non-électricien en zone à risque."],
+  ["Maçon qui perce un mur près d'un tableau","B0","Travaux non électriques au voisinage."],
+  ["Gardien qui remplace un fusible ou une prise à l'identique","BS","Intervention élémentaire."],
+  ["Électricien qui recherche une panne en basse tension","BR","Intervention générale BT."],
+  ["Électricien qui consigne une installation pour une équipe","BC","Chargé de consignation."],
+  ["Chef d'équipe qui dirige des travaux électriques sur une installation consignée","B2","Chargé de travaux."]]},
+ {t:"Le courant dans le corps",ic:"❤️",d:"À partir de quel courant apparaît cet effet ?",cats:["0,5 mA","10 mA","30 mA","75 mA","1 A"],items:[
+  ["Seuil de perception : un picotement","0,5 mA","On sent le courant."],
+  ["Contraction : on ne peut plus lâcher","10 mA","Les muscles se contractent."],
+  ["Paralysie respiratoire","30 mA","D'où les différentiels 30 mA."],
+  ["Fibrillation du cœur","75 mA","Le cœur ne pompe plus."],
+  ["Arrêt du cœur","1 A","Effet immédiat et mortel sans secours."]]},
+ {t:"Le bon câble",ic:"🧵",d:"Quel câble pour cet usage ?",cats:["H07V-U","U1000R2V","H07RN-F","Câble cat. 6"],items:[
+  ["Fils tirés dans un conduit encastré","H07V-U","Fil rigide un brin, protégé par le conduit."],
+  ["Câble posé en apparent sur un chemin de câbles","U1000R2V","Câble à gaine épaisse."],
+  ["Alimentation d'un abri de jardin, enterrée sous fourreau","U1000R2V","Il peut être enterré sous fourreau."],
+  ["Rallonge de chantier","H07RN-F","Souple, gaine caoutchouc résistante."],
+  ["Prise RJ45 de la chambre","Câble cat. 6","4 paires torsadées."]]},
+ {t:"Classes des appareils",ic:"🏷️",d:"De quelle classe est cet appareil ?",cats:["Classe I","Classe II","Classe III"],items:[
+  ["Lave-linge à carcasse métallique","Classe I","Relié à la terre."],
+  ["Four encastrable","Classe I","Masse métallique reliée à la terre."],
+  ["Sèche-cheveux à double isolation","Classe II","Pas de fil de terre."],
+  ["Radiateur électrique à fil pilote","Classe II","Double isolation : pas de terre, mais un fil pilote."],
+  ["Lampe de chantier 24 V sur transformateur de sécurité","Classe III","Très basse tension de sécurité."],
+  ["Appareil marqué de deux carrés emboîtés","Classe II","C'est le symbole de la double isolation."]]},
+ {t:"Schémas de liaison à la terre",ic:"🌍",d:"De quel schéma s'agit-il ?",cats:["TT","TN-S","TN-C","IT"],items:[
+  ["Maison raccordée au réseau public","TT","Le schéma des logements en France."],
+  ["Masses à la terre locale, protection par différentiel","TT","Le défaut est faible : le différentiel coupe."],
+  ["Neutre et conducteur de protection séparés, masses reliées au neutre","TN-S","S = séparés."],
+  ["Un seul conducteur PEN fait neutre et protection","TN-C","C = combinés."],
+  ["Bloc opératoire : le premier défaut ne doit pas couper","IT","Continuité de service."],
+  ["Le premier défaut est signalé par un contrôleur permanent d'isolement","IT","Le CPI surveille l'isolement."]]},
+ {t:"Le fil pilote",ic:"♨️",d:"Quel ordre reçoit le radiateur ?",cats:["Confort","Éco","Hors-gel","Arrêt"],items:[
+  ["Aucun signal sur le fil pilote","Confort","Pas de signal = Confort."],
+  ["Alternance complète (230 V)","Éco","Environ 3,5 °C de moins."],
+  ["Demi-alternance négative","Hors-gel","Maintient environ 7 °C."],
+  ["Demi-alternance positive","Arrêt","Utilisé pour le délestage."]]},
+ {t:"Qu'est-ce qui a déclenché ?",ic:"🔎",d:"Quelle est la cause la plus probable ?",cats:["Court-circuit","Surcharge","Fuite à la terre","Abonnement dépassé"],items:[
+  ["Le disjoncteur saute instantanément avec un claquement","Court-circuit","Partie magnétique."],
+  ["Le disjoncteur saute au bout de 20 minutes","Surcharge","Partie thermique."],
+  ["Le différentiel déclenche à chaque pluie","Fuite à la terre","L'humidité crée un défaut d'isolement."],
+  ["Le disjoncteur de branchement saute quand four, lave-linge et sèche-linge tournent","Abonnement dépassé","Trop de puissance appelée en même temps."],
+  ["Le différentiel déclenche dès qu'on branche un vieux grille-pain","Fuite à la terre","L'appareil a un défaut d'isolement."],
+  ["Le disjoncteur saute dès qu'on remet le courant, avant même de brancher quoi que ce soit","Court-circuit","Un défaut franc entre phase et neutre dans le câblage (clou, vis, fil écrasé)."]]}
+];

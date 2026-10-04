@@ -4,7 +4,7 @@ Un seul **moteur** (cours en fiches, lexique, jeux, examen blanc, XP, niveaux, �
 
 | Appli | Contenu | Appli prête à ouvrir |
 |---|---|---|
-| ⚡ Électricien Pro | `contenus/electricien.js` | `dist/electricien.html` |
+| ⚡ Électricien Pro | `contenus/electricien/` (appli complète : 3 niveaux, 24 modules, 16 dépannages, 8 câblages, 10 classements, 25 symboles, 31 fiches appareils, atelier de calcul ; à faire relire) | `dist/electricien.html` |
 | 🔥 Soudeur Pro | `contenus/soudeur.js` (petite appli : métier surtout pratique ; à faire relire) | `dist/soudeur.html` |
 | ❄️ Froid & Clim Pro | `contenus/froid-clim.js` (+ examen blanc attestation fluides ; à faire relire) | `dist/froid-clim.html` |
 | 💶 Paie Pro | `contenus/paie.js` (chiffres 2026, à mettre à jour chaque 1er janvier ; à faire relire) | `dist/paie.html` |
@@ -18,6 +18,7 @@ Les fichiers de `dist/` s'ouvrent directement dans un navigateur, sur ordinateur
 ```
 moteur/template.html   le moteur commun (on n'y touche pas pour une nouvelle appli)
 contenus/*.js          un fichier de contenu par appli
+contenus/xxx/          ou un dossier : ses .js sont mis bout à bout (00-app.js, 11-module.js, 80-jeu.js…)
 build.js               fabrique dist/<appli>.html et vérifie le contenu
 dist/                  les applis prêtes
 docs/                  étude des métiers, planning, règles pub
@@ -37,9 +38,13 @@ docs/                  étude des métiers, planning, règles pub
    - `ordre` — `{t:'Titre',s:['Étape 1','Étape 2',…]}`
    - `examen` *(facultatif)* — ajoute un examen blanc chronométré : `{titre:'Examen blanc',questions:60,seuil:42,minutes:60}`. Les questions sont tirées du quiz ; s'il y en a moins que `questions`, le seuil et la durée sont réduits en proportion
    - `calcul` *(facultatif, pour les maths)* — active le jeu Calcul mental : `[{op:'×',a:[2,10],b:[2,10]}]`, `op` parmi `+ − × ÷`
-   - `C.fiches` *(fortement conseillé)* — les fiches « wiki » : une entrée par module, ajoutée après le bloc `C` (voir la fin de `contenus/electricien.js`) :
+   - `C.fiches` *(fortement conseillé)* — les fiches « wiki » : une entrée par module, ajoutée après le bloc `C` (voir `contenus/electricien/11-bases.js`) :
      `intro` (chapeau), `retenir` (résumé), et `s:[…]` pour compléter chaque partie avec `p` (paragraphe d'explication), `ex` (exemple concret), `att` (attention), `info` (le savais-tu ?), `q` (mini-question `['Question',['Bonne','Faux','Faux'],0,'Explication']`) et `fig` (schéma animé)
-   - Schémas animés `fig` : `{type:'cycle',etapes:[…],centre:'…'}` · `{type:'flux',etapes:['A',['B','valeur']]}` · `{type:'barres',items:[['Libellé',valeur,'unité']]}` · `{type:'chiffres',items:[[valeur,'unité','légende']]}` · `{type:'svg',svg:'<svg…>'}` (classes animées : `flow`, `glow`, `spin`, `pop`, `draw`, `appear`), + `legende`
+   - Schémas animés `fig` : `{type:'cycle',etapes:[…],centre:'…'}` · `{type:'flux',etapes:['A',['B','valeur']]}` · `{type:'barres',items:[['Libellé',valeur,'unité']]}` · `{type:'chiffres',items:[[valeur,'unité','légende']]}` · `{type:'svg',svg:'<svg…>'}` (classes animées : `flow`, `glow`, `spin`, `pop`, `draw`, `appear`) · `{type:'inter',…}` schéma interactif avec boutons (voir le va-et-vient dans `26-schemas.js`) · `{type:'etapes',vues:[{svg,t}]}` pas à pas, + `legende`
+   - `niveaux` + `n` sur chaque module *(facultatif)* — cours regroupés par niveau ; `grades` — noms des niveaux d'XP
+   - Jeux facultatifs (chacun apparaît seulement s'il est rempli ; le format est décrit en commentaire dans `moteur/template.html`) :
+     `diag` (dépannages avec bon de travail) · `cablage` (tirer les fils, vérification des courts-circuits et des couleurs) · `tri` (classement) · `symboles` · `atelier` (calculs générés à l'infini) · `appareils` (fiches appareils + jeu « Qui suis-je ? »)
+   - Toujours présents : quiz, vrai/faux, chrono 60 s, associer, dans l'ordre, révision des erreurs, badges
 3. Fabriquer : `node build.js plaquiste` (ou `node build.js` pour toutes)
 
 Le build refuse un contenu incohérent (mot-clé absent du lexique, module inconnu dans le quiz, pas assez de questions…) et dit quoi corriger.
