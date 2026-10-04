@@ -60,6 +60,15 @@ Le build refuse un contenu incohérent (mot-clé absent du lexique, module incon
 - **Série de jours 🔥 et objectif du jour** (50 XP) sur l'accueil, pour revenir chaque jour.
 - **Examen blanc** : chronométré, sans correction pendant l'épreuve, verdict admis / pas encore, puis correction de chaque erreur.
 
+## Fabriquer les APK Android (test)
+
+```
+node build.js
+node android/apk.js maths-6e maths-3e      (ou electricien, froid-clim…)
+```
+
+Prérequis : SDK Android et Java (ceux d'Android Studio). Le projet Capacitor de chaque appli est créé dans `android/build/<appli>`, les APK de test (signés avec la clé de débogage) sont copiés dans `android/apk/`. Icônes : `android/icones/<appli>.png` (1024 × 1024). Pour le Play Store, il faudra un AAB signé avec une clé de publication.
+
 ## Documents
 
 - `docs/ETUDE-MARCHE.md` — métiers sans appli et avec de la théorie à apprendre, concurrence, priorités

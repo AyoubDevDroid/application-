@@ -17,7 +17,7 @@ const C={
  ],
  grades:["Débutant","Curieux","Explorateur","Explorateur","Calculateur","Calculateur","Géomètre","Géomètre","As des maths","As des maths","Champion","Champion","Expert","Expert","Génie des maths","Génie des maths"],
  jeux:{diag:{e:"🧩",t:"Problèmes",s:"Résous pas à pas"},sym:{e:"🔷",t:"Figures",s:"Reconnais les figures"},qui:{s:"Devine l'instrument"},atel:{t:"Exercices",s:"À l'infini, avec correction"}},
- diagTextes:{titre:"🧩 Problèmes pas à pas",sous:"Lis bien l'énoncé, puis avance étape par étape. Une erreur te coûte une étoile, mais tu peux réessayer.",entete:"🧩 Nouveau problème",carte:"PROBLÈME N°",prio:false,champs:[["lieu","📍 La situation"],["pb","❓ La question"],["qui","💡 Les données"]],go:"✏️ Je commence",fin:"Terminer",parfait:"Résolu sans erreur !",ok:"Problème résolu !",rapport:"📝 La solution complète",autre:"Autre problème",piste:"erreur"},
+ diagTextes:{titre:"🧩 Problèmes pas à pas",sous:"Lis bien l'énoncé, puis avance étape par étape. Une erreur te coûte une étoile, mais tu peux réessayer.",entete:"🧩 Nouveau problème",carte:"PROBLÈME N°",prio:false,champs:[["lieu","📍 La situation"],["pb","❓ La question"],["qui","💡 Les données"]],go:"✏️ Je commence",fin:"Terminer",parfait:"Résolu sans erreur !",ok:"Problème résolu !",rapport:"📝 La solution complète",autre:"Autre problème",piste:"erreur",jour:"Problème du jour"},
  appareilsNom:"📏 Instruments",
  modules:[],lexique:[],quiz:[],vf:[],ordre:[]
 };

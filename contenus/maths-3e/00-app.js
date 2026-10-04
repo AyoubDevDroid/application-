@@ -16,7 +16,7 @@ const C={
  ],
  grades:["Débutant","Curieux","Élève sérieux","Élève sérieux","Bon élève","Bon élève","Matheux","Matheux","Prêt pour le brevet","Prêt pour le brevet","Mention bien","Mention bien","Mention très bien","Mention très bien","Champion des maths","Champion des maths"],
  jeux:{diag:{e:"🧩",t:"Problèmes",s:"Type brevet, pas à pas"},sym:{e:"🔷",t:"Figures",s:"Reconnais la configuration"},qui:{s:"Devine la formule"},atel:{t:"Exercices",s:"À l'infini, avec correction"}},
- diagTextes:{titre:"🧩 Problèmes type brevet",sous:"Comme dans la 2e partie du brevet : une situation, plusieurs questions qui s'enchaînent. Une erreur coûte une étoile, mais tu peux réessayer.",entete:"🧩 Nouveau problème",carte:"EXERCICE N°",prio:false,champs:[["lieu","📍 La situation"],["pb","❓ La question"],["qui","💡 Les données"]],go:"✏️ Je commence",fin:"Terminer",parfait:"Résolu sans erreur !",ok:"Problème résolu !",rapport:"📝 La rédaction attendue",autre:"Autre problème",piste:"erreur"},
+ diagTextes:{titre:"🧩 Problèmes type brevet",sous:"Comme dans la 2e partie du brevet : une situation, plusieurs questions qui s'enchaînent. Une erreur coûte une étoile, mais tu peux réessayer.",entete:"🧩 Nouveau problème",carte:"EXERCICE N°",prio:false,champs:[["lieu","📍 La situation"],["pb","❓ La question"],["qui","💡 Les données"]],go:"✏️ Je commence",fin:"Terminer",parfait:"Résolu sans erreur !",ok:"Problème résolu !",rapport:"📝 La rédaction attendue",autre:"Autre problème",piste:"erreur",jour:"Problème du jour"},
  appareilsNom:"📘 Formules",
  modules:[],lexique:[],quiz:[],vf:[],ordre:[]
 };

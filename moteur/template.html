@@ -2,13 +2,13 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>/*__TITRE__*/</title>
 <style>
-:root{--bg:#10142a;--card:#1c2244;--card2:#252c58;--pri:#ffc83d;--pri2:#d99a00;--acc:#3db5ff;--ok:#2ed47a;--ko:#ff5470;--txt:#fff;--mut:#a9b0d6}
+:root{--sat:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));--sab:max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px));--bg:#10142a;--card:#1c2244;--card2:#252c58;--pri:#ffc83d;--pri2:#d99a00;--acc:#3db5ff;--ok:#2ed47a;--ko:#ff5470;--txt:#fff;--mut:#a9b0d6}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
-.app{max-width:480px;margin:0 auto;padding:16px 16px 96px;min-height:100vh}
+.app{max-width:480px;margin:0 auto;padding:calc(16px + var(--sat)) 16px calc(96px + var(--sab));min-height:100vh}
 .screen{display:none;flex-direction:column;gap:14px;animation:fade .3s}
 .screen.on{display:flex}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -89,21 +89,21 @@ button.pill{border:none;color:#fff;cursor:pointer}
 .float{position:fixed;font-weight:900;font-size:22px;color:var(--pri);pointer-events:none;animation:up 1s forwards;z-index:9}
 @keyframes up{to{transform:translateY(-60px);opacity:0}}
 /* nav */
-nav{position:fixed;bottom:0;left:0;right:0;background:#0b0e20;border-top:1px solid var(--card2);display:flex;justify-content:center;z-index:5;padding-bottom:env(safe-area-inset-bottom)}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0b0e20;border-top:1px solid var(--card2);display:flex;justify-content:center;z-index:5;padding-bottom:var(--sab)}
 nav .in{display:flex;max-width:480px;width:100%}
 nav button{flex:1;background:none;border:none;color:var(--mut);padding:10px 0 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav button span{font-size:22px}
 nav button.on{color:var(--pri)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;z-index:20}
 .modal.on{display:flex}
-.modal .in{background:var(--card);width:100%;max-width:480px;margin:0 auto;border-radius:22px 22px 0 0;padding:20px 16px 28px;display:flex;flex-direction:column;gap:10px;animation:fade .25s;max-height:88vh;overflow:auto}
+.modal .in{background:var(--card);width:100%;max-width:480px;margin:0 auto;border-radius:22px 22px 0 0;padding:20px 16px calc(28px + var(--sab));display:flex;flex-direction:column;gap:10px;animation:fade .25s;max-height:88vh;overflow:auto}
 .pub{background:repeating-linear-gradient(45deg,var(--card),var(--card) 10px,var(--card2) 10px,var(--card2) 20px);border-radius:14px;min-height:60px;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px;font-weight:700;letter-spacing:1px}
 .pub.full{position:fixed;inset:0;z-index:40;border-radius:0;flex-direction:column;gap:16px;font-size:14px}
 /* parcours par niveaux */
 .nvh{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding:0 2px}
 .nvh b{font-size:19px}
 /* fiches wiki */
-.rbar{position:fixed;top:0;left:0;right:0;height:4px;z-index:6;background:transparent}
+.rbar{position:fixed;top:var(--sat);left:0;right:0;height:4px;z-index:6;background:transparent}
 .rbar i{display:block;height:100%;width:0;background:var(--pri);transition:width .1s}
 .fhero{display:flex;gap:14px;align-items:center}
 .fhero .fic{font-size:52px;width:76px;height:76px;border-radius:22px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:bob 3s ease-in-out infinite}
@@ -126,7 +126,7 @@ nav button.on{color:var(--pri)}
 .mq>b{font-size:13px;color:var(--pri)}.mq p{font-weight:700;line-height:1.45}
 .mq .ans{padding:11px 14px;font-size:15px;box-shadow:0 3px 0 #0a0d1d}
 .mq .ex{display:none}.mq .ex.on{display:block}
-.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:var(--ok);color:#10142a;font-weight:900;padding:12px 18px;border-radius:99px;z-index:50;animation:toast 2.6s forwards;white-space:nowrap;max-width:94vw;overflow:hidden;text-overflow:ellipsis}
+.toast{position:fixed;left:50%;top:calc(18px + var(--sat));transform:translateX(-50%);background:var(--ok);color:#10142a;font-weight:900;padding:12px 18px;border-radius:99px;z-index:50;animation:toast 2.6s forwards;white-space:nowrap;max-width:94vw;overflow:hidden;text-overflow:ellipsis}
 @keyframes toast{0%{opacity:0;transform:translate(-50%,-20px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
 .day{display:flex;gap:12px;align-items:center}
 .day .fl{font-size:34px}.day .fl.off{filter:grayscale(1);opacity:.5}
@@ -318,7 +318,7 @@ function renderHome(){
   const m=C.modules.find(m=>!P.fin.has(m.id))||C.modules.find(m=>!P.read.has(m.id))||C.modules[0];
   $('nextMod').innerHTML=modRow(m);
   if(C.diag&&C.diag.length){const k=Math.floor(Date.now()/864e5)%C.diag.length,d=C.diag[k];
-    $('homeDiag').innerHTML=`<h2 style="margin:4px 0 14px">Intervention du jour</h2><button class="row" onclick="startDiag(${k})"><span class="ic">${d.ic||'🔎'}</span><span class="tx"><b>${d.t}</b><span>${d.bon.lieu}</span></span>${P.diag[d.id]?`<span class="st">${stars(P.diag[d.id])}</span>`:'<span class="mut">›</span>'}</button>`}
+    $('homeDiag').innerHTML=`<h2 style="margin:4px 0 14px">${DT().jour}</h2><button class="row" onclick="startDiag(${k})"><span class="ic">${d.ic||'🔎'}</span><span class="tx"><b>${d.t}</b><span>${d.bon.lieu}</span></span>${P.diag[d.id]?`<span class="st">${stars(P.diag[d.id])}</span>`:'<span class="mut">›</span>'}</button>`}
   const auj=P.jour===today(),xj=auj?P.xpJour:0,s=auj||P.jour===today(-1)?P.serie:0;
   $('dayCard').innerHTML=`<div class="day"><span class="fl ${auj?'':'off'}">🔥</span><div style="flex:1"><b>${s} jour${s>1?'s':''} de suite</b><div class="mut">${auj?'Bravo, tu as appris aujourd\'hui !':'Apprends aujourd\'hui pour garder ta série.'}</div></div></div>
    <div class="mut" style="display:flex;justify-content:space-between;margin-top:6px"><span>🎯 Objectif du jour</span><b style="color:#fff">${Math.min(xj,OBJ)} / ${OBJ} XP</b></div><div class="prog" style="flex:none"><i style="width:${Math.min(100,xj/OBJ*100)}%"></i></div>`;
@@ -571,7 +571,7 @@ function ordA(b){
              etapes:[{info?,fig?,q,o:[['choix',true|false,'résultat ou pourquoi c\'est faux'],…]}],fin:'rapport',retenir?}]
    Une seule bonne réponse par étape ; une mauvaise piste coûte des points mais on peut réessayer. */
 /* C.diagTextes (facultatif) : adapte le jeu Dépannage à une autre matière (ex. « Problèmes pas à pas ») */
-function DT(){return Object.assign({titre:'🔎 Dépannage',sous:'Tu reçois un bon de travail. Trouve la panne avec méthode : chaque fausse piste te coûte des étoiles.',entete:'📋 Nouveau bon de travail',carte:'BON DE TRAVAIL N°',prio:true,champs:[['lieu','📍 Lieu'],['qui','👤 Demandeur'],['heure','🕐 Appel'],['pb','⚠️ Symptôme'],['contrainte','⛓️ Contrainte']],go:'🧰 Commencer l\'intervention',fin:'Terminer l\'intervention',parfait:'Panne trouvée sans fausse piste !',ok:'Panne réparée !',rapport:'📝 Rapport d\'intervention',autre:'Autre intervention',piste:'fausse piste'},C.diagTextes||{})}
+function DT(){return Object.assign({titre:'🔎 Dépannage',sous:'Tu reçois un bon de travail. Trouve la panne avec méthode : chaque fausse piste te coûte des étoiles.',entete:'📋 Nouveau bon de travail',carte:'BON DE TRAVAIL N°',prio:true,champs:[['lieu','📍 Lieu'],['qui','👤 Demandeur'],['heure','🕐 Appel'],['pb','⚠️ Symptôme'],['contrainte','⛓️ Contrainte']],go:'🧰 Commencer l\'intervention',fin:'Terminer l\'intervention',parfait:'Panne trouvée sans fausse piste !',ok:'Panne réparée !',rapport:'📝 Rapport d\'intervention',autre:'Autre intervention',piste:'fausse piste',jour:'Intervention du jour'},C.diagTextes||{})}
 function listDiag(){liste(DT().titre,DT().sous,C.diag.map((d,i)=>[d.ic||'🔎',d.t,(NIV[d.niv]||'')+' · '+d.bon.lieu,`startDiag(${i})`,P.diag[d.id]]))}
 function startDiag(i){const d=C.diag[i],b=d.bon;G={type:'diag',d,k:i,i:0,err:0};show('play');
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><b>${DT().entete}</b><span style="width:24px"></span></div>
@@ -823,6 +823,10 @@ function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.he
 document.title=C.app;$('sousTitre').textContent=C.sousTitre||'';
 if(C.appareils||C.symboles){$('navLex').textContent='Wiki';$('lexH').textContent='📖 Wiki'}
 theme();load();renderHome();
+/* Appli Android (Capacitor) : le bouton retour ferme la fenêtre ouverte ou revient à l'accueil avant de quitter */
+(function(){const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(!A)return;
+  A.addListener('backButton',()=>{if($('modal').classList.contains('on'))return $('modal').classList.remove('on');
+    if(!$('home').classList.contains('on'))return tab('home');A.exitApp()})})();
 </script>
 </body>
 </html>
