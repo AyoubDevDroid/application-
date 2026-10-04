@@ -62,7 +62,7 @@ button.pill{border:none;color:#fff;cursor:pointer}
 .prog i{display:block;height:100%;background:var(--ok);transition:width .3s}
 .qcard{background:#fff;color:#10142a;border-radius:22px;padding:24px 18px;text-align:center;font-size:21px;font-weight:800;line-height:1.35;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 0 rgba(0,0,0,.25)}
 .qcard.dq,.qcard.at{font-size:17.5px;min-height:90px;padding:18px 16px}
-.qcard small{font-size:14px;color:#555c80;font-weight:700;margin-top:6px}
+.qcard small{display:block;font-size:14px;color:#555c80;font-weight:700;margin-top:6px}
 .shake{animation:shake .4s}
 @keyframes shake{25%,75%{transform:translateX(-9px)}50%{transform:translateX(9px)}}
 .ans{border:none;border-radius:16px;padding:16px;font-size:16px;font-weight:700;color:#fff;background:var(--card);box-shadow:0 4px 0 #0a0d1d;cursor:pointer;text-align:left;width:100%;line-height:1.35}
@@ -611,7 +611,7 @@ function startQuiz(mod){
 }
 function quizQ(){
   const q=G.list[G.i];const order=q.vf?q[2].map((t,i)=>({t,i})):shuf(q[2].map((t,i)=>({t,i})));
-  $('playBody').innerHTML=head()+`<div class="qcard" id="qc">${q[1]}</div>
+  $('playBody').innerHTML=head()+`<div class="qcard" id="qc"><div>${q[1]}</div></div>
    <div style="display:flex;flex-direction:column;gap:10px">${order.map(o=>`<button class="ans" data-i="${o.i}" onclick="quizA(this)">${o.t}</button>`).join('')}</div>
    <div class="ex" id="ex"></div>`;
 }
@@ -635,7 +635,7 @@ function startErr(){const l=errList();if(!l.length){toast('Aucune erreur à revo
 function startVF(){G={type:'vf',list:shuf(C.vf).slice(0,10),i:0,score:0};G.n=G.list.length;show('play');vfQ()}
 function vfQ(){
   const q=G.list[G.i];
-  $('playBody').innerHTML=head()+`<div class="timer"><i id="tb"></i></div><div class="qcard" id="qc">${q[0]}</div>
+  $('playBody').innerHTML=head()+`<div class="timer"><i id="tb"></i></div><div class="qcard" id="qc"><div>${q[0]}</div></div>
    <div class="vf"><button style="background:var(--ok)" onclick="vfA(true)">VRAI</button><button style="background:var(--ko)" onclick="vfA(false)">FAUX</button></div><div class="ex" id="ex"></div>`;
   const t0=Date.now(),D=Math.max(8000,q[0].length*90);clearInterval(G.tm);
   G.tm=setInterval(()=>{const p=1-(Date.now()-t0)/D;$('tb').style.width=Math.max(0,p*100)+'%';if(p<=0)vfA(null)},50);
@@ -651,7 +651,7 @@ function startChrono(){G={type:'chrono',list:shuf(C.quiz.concat(C.vf.map(vfQz)))
   G.tm=setInterval(()=>{const r=60-(Date.now()-G.t0)/1000;if($('cb'))$('cb').style.width=Math.max(0,r/60*100)+'%';if($('cs'))$('cs').textContent=Math.max(0,Math.ceil(r))+' s';if(r<=0){clearInterval(G.tm);chronoEnd()}},100)}
 function chronoQ(){const q=G.list[G.i%G.list.length],order=q.vf?q[2].map((t,i)=>({t,i})):shuf(q[2].map((t,i)=>({t,i})));
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="tab('jeux')">✕</button><div class="timer" style="flex:1"><i id="cb"></i></div><span class="pill" id="cs">60 s</span><span class="pill">${G.score} ✓</span></div>
-   <div class="qcard" id="qc" style="font-size:18px">${q[1]}</div><div style="display:flex;flex-direction:column;gap:10px">${order.map(o=>`<button class="ans" data-i="${o.i}" onclick="chronoA(this)">${o.t}</button>`).join('')}</div>`}
+   <div class="qcard" id="qc" style="font-size:18px"><div>${q[1]}</div></div><div style="display:flex;flex-direction:column;gap:10px">${order.map(o=>`<button class="ans" data-i="${o.i}" onclick="chronoA(this)">${o.t}</button>`).join('')}</div>`}
 function chronoA(b){const q=G.list[G.i%G.list.length],bs=[...document.querySelectorAll('.ans')];if(bs[0].disabled||G.done)return;bs.forEach(x=>x.disabled=true);const ok=+b.dataset.i===q[3];
   if(ok){G.score++;b.classList.add('ok');beep(1)}else{G.err++;b.classList.add('ko');bs.forEach(x=>{if(+x.dataset.i===q[3])x.classList.add('ok')});shake('qc')}
   setTimeout(()=>{if(G.type!=='chrono'||G.done)return;G.i++;chronoQ()},ok?350:1100)}
@@ -704,7 +704,7 @@ function diagQ(){const d=G.d,e=d.etapes[G.i];
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listDiag()">✕</button><div class="prog"><i style="width:${G.i/d.etapes.length*100}%"></i></div><span class="pill">${G.i+1}/${d.etapes.length}</span></div>
    <div class="card mini"><span class="mut">📋 ${d.t}</span><span style="font-size:14px;line-height:1.4">${d.bon.pb}</span></div>
    ${e.info?`<div class="msg inf">🔍 ${e.info}</div>`:''}${e.fig?figHTML(e.fig):''}
-   <div class="qcard dq" id="qc">${e.q}</div>
+   <div class="qcard dq" id="qc"><div>${e.q}</div></div>
    <div style="display:flex;flex-direction:column;gap:10px">${shuf(e.o.map((o,i)=>({t:o[0],i}))).map(o=>`<button class="ans" data-i="${o.i}" onclick="diagA(this)">${o.t}</button>`).join('')}</div>
    <div class="ex" id="ex"></div>`;
   initFigs($('playBody'));$('playBody').querySelectorAll('.fig').forEach(playFig)}
@@ -784,7 +784,7 @@ function startTri(i){const t=C.tri[i];G={type:'tri',t,k:i,list:shuf(t.items).sli
 function triQ(){const t=G.t,it=G.list[G.i];
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="listTri()">✕</button><div class="prog"><i style="width:${G.i/G.n*100}%"></i></div><span class="pill">${G.i+1}/${G.n}</span></div>
    <div class="card mini"><b>${t.ic||'🗂️'} ${t.t}</b><span class="mut">${t.d||''}</span></div>
-   <div class="qcard dq" id="qc">${it[0]}</div>
+   <div class="qcard dq" id="qc"><div>${it[0]}</div></div>
    <div class="${t.cats.length>3&&t.cats.every(c=>c.length<22)?'grid':''}" style="display:${t.cats.length>3&&t.cats.every(c=>c.length<22)?'grid':'flex'};flex-direction:column;gap:10px" id="trc">${t.cats.map((c,k)=>`<button class="ans" style="text-align:center" data-c="${k}" onclick="triA(this)">${c}</button>`).join('')}</div><div class="ex" id="ex"></div>`}
 function triA(b){const it=G.list[G.i],bs=[...document.querySelectorAll('#trc .ans')];if(bs[0].disabled)return;bs.forEach(x=>x.disabled=true);const ok=G.t.cats[+b.dataset.c]===it[1];
   bs.forEach(x=>{if(G.t.cats[+x.dataset.c]===it[1])x.classList.add('ok');else if(x!==b)x.classList.add('dim')});
@@ -806,7 +806,7 @@ function symA(b){const s=G.list[G.i],bs=[...document.querySelectorAll('#playBody
   $('ex').innerHTML=(ok?'✅ ':'❌ ')+'<b>'+s[0]+'</b>'+(s[2]?' — '+s[2]:'')+`<button class="btn" style="margin-top:12px" onclick="nextQ(symQ)">Continuer</button>`;$('ex').classList.add('on')}
 
 /* ----- QUI SUIS-JE ? (avec C.appareils) ----- */
-function startQui(){G={type:'qui',list:shuf(C.appareils).slice(0,10).map(a=>['qui','<span style="font-size:15px;color:#555c80">🕵️ Qui suis-je ?</span><span style="font-size:17px;margin-top:8px">'+a.f+'</span>',[a.n,...shuf(C.appareils.filter(x=>x!==a)).slice(0,3).map(x=>x.n)],0,'<b>'+a.n+'</b>'+(a.c?' — '+a.c:'')]),i:0,score:0};G.n=G.list.length;show('play');quizQ()}
+function startQui(){G={type:'qui',list:shuf(C.appareils).slice(0,10).map(a=>['qui','<div style="font-size:15px;color:#555c80">🕵️ Qui suis-je ?</div><div style="font-size:17px;margin-top:8px">'+a.f+'</div>',[a.n,...shuf(C.appareils.filter(x=>x!==a)).slice(0,3).map(x=>x.n)],0,'<b>'+a.n+'</b>'+(a.c?' — '+a.c:'')]),i:0,score:0};G.n=G.list.length;show('play');quizQ()}
 
 /* ----- ATELIER DE CALCUL (si C.atelier est défini) -----
    C.atelier = [{t:'Thème',ic,d:'formule',gen:R=>({q:'énoncé',r:nombre,u:'unité',tol?:tolérance,ex:'correction'})}]
@@ -815,7 +815,7 @@ const R={r:rand,pick:a=>a[rand(0,a.length-1)],f:(x,d=2)=>(+(+x).toFixed(d)).toLo
 function listAtelier(){liste('📐 Atelier de calcul','Des exercices générés à l\'infini, avec la correction détaillée.',[['🎲','Tout mélanger','10 exercices de tous les thèmes','startAt(-1)']].concat(C.atelier.map((a,i)=>[a.ic||'📐',a.t,a.d||'',`startAt(${i})`])))}
 function startAt(i){G={type:'atel',th:i,i:0,score:0,n:10};show('play');atQ()}
 function atQ(){const th=G.th<0?C.atelier[rand(0,C.atelier.length-1)]:C.atelier[G.th];G.x=th.gen(R);const x=G.x;
-  $('playBody').innerHTML=head()+`<div class="card mini"><span class="mut">${th.ic||'📐'} ${th.t}${th.d?' · '+th.d:''}</span></div><div class="qcard at" id="qc">${x.q}</div>
+  $('playBody').innerHTML=head()+`<div class="card mini"><span class="mut">${th.ic||'📐'} ${th.t}${th.d?' · '+th.d:''}</span></div><div class="qcard at" id="qc"><div>${x.q}</div></div>
    <div class="atin"><input id="atv" inputmode="decimal" autocomplete="off" placeholder="Ta réponse" onkeydown="if(event.key==='Enter')atA()"><span>${x.u||''}</span></div>
    <button class="btn" id="atb" onclick="atA()">Valider</button><div class="ex" id="ex"></div>`;setTimeout(()=>{if($('atv'))$('atv').focus()},150)}
 function atA(){const x=G.x,v=parseFloat(($('atv').value||'').replace(',','.').replace(/\s/g,''));if($('atb').disabled)return;if(isNaN(v)){shake('atv');return}
@@ -853,7 +853,7 @@ function startExam(){
 function examQ(){
   const q=G.list[G.i];const order=shuf(q[2].map((t,i)=>({t,i})));
   $('playBody').innerHTML=`<div class="top"><button class="back" onclick="if(confirm('Abandonner l\\'examen ?'))tab('jeux')">✕</button><div class="prog"><i style="width:${G.i/G.n*100}%"></i></div><span class="pill">${G.i+1}/${G.n}</span><span class="pill" id="chr">⏱</span></div>
-   <div class="qcard">${q[1]}</div>
+   <div class="qcard"><div>${q[1]}</div></div>
    <div style="display:flex;flex-direction:column;gap:10px">${order.map(o=>`<button class="ans" data-i="${o.i}" onclick="examA(this)">${o.t}</button>`).join('')}</div>`;
 }
 function examA(b){

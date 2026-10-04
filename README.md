@@ -6,7 +6,7 @@ Un seul **moteur** (cours en fiches, lexique, jeux, examen blanc, XP, niveaux, �
 |---|---|---|
 | ⚡ Électricien Pro | `contenus/electricien/` (appli complète : 3 niveaux, 24 modules, 16 dépannages, 8 câblages, 10 classements, 25 symboles, 31 fiches appareils, atelier de calcul ; à faire relire) | `dist/electricien.html` |
 | 🔥 Soudeur Pro | `contenus/soudeur.js` (petite appli : métier surtout pratique ; à faire relire) | `dist/soudeur.html` |
-| ❄️ Froid & Clim Pro | `contenus/froid-clim.js` (+ examen blanc attestation fluides ; à faire relire) | `dist/froid-clim.html` |
+| ❄️ Froid & Clim Pro | `contenus/froid-clim/` (appli complète : 3 niveaux, 20 modules, 13 dépannages, 3 câblages, 7 classements, 26 fiches, atelier de calcul ; réglementation F-Gas III vérifiée en octobre 2026, tables pression/température calculées avec CoolProp) | `dist/froid-clim.html` |
 | 💶 Paie Pro | `contenus/paie.js` (chiffres 2026, à mettre à jour chaque 1er janvier ; à faire relire) | `dist/paie.html` |
 | 📐 Maths 6e | `contenus/maths-6e.js` | `dist/maths-6e.html` |
 | 🎯 Maths 3e Brevet | `contenus/maths-3e.js` (+ brevet blanc express) | `dist/maths-3e.html` |
