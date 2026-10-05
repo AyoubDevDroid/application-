@@ -1,4 +1,4 @@
-// Produit store/<appli>/ pour la Play Console : textes, icône 512, bannière 1024 × 500, captures 1080 × 1920.
+// Produit store/<appli>/ pour la Play Console : textes, icône 512, bannière 1024 × 500, captures 1080 × 1920 (+ captures iPhone 1320 × 2868 pour l'App Store).
 //   node store/generer.js            (toutes les applis de store/textes.js)
 //   node store/generer.js maths-5e   (une seule)
 // Prérequis : node build.js (dist/*.html), icônes android/icones/<appli>.png, Chromium de Playwright.
@@ -19,8 +19,8 @@ if (ko) process.exit(1);
 (async () => {
   const b = await chromium.launch({ executablePath: process.env.LOCALAPPDATA + '/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
   for (const a of apps) {
-    const t = T[a], dir = path.join(__dirname, a), cap = path.join(dir, 'captures');
-    fs.mkdirSync(cap, { recursive: true });
+    const t = T[a], dir = path.join(__dirname, a);
+    fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'titre.txt'), t.titre);
     fs.writeFileSync(path.join(dir, 'description_courte.txt'), t.courte);
     fs.writeFileSync(path.join(dir, 'description_complete.txt'), t.complete);
@@ -31,11 +31,14 @@ if (ko) process.exit(1);
     await p.setContent(`<body style="margin:0"><img src="${ico}" style="width:512px;height:512px;display:block">`);
     await p.screenshot({ path: path.join(dir, 'icone-512.png') }); await p.close();
 
-    // Captures téléphone (360 × 640 × 3 = 1080 × 1920)
-    p = await b.newPage({ viewport: { width: 360, height: 640 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
+    // Captures : Android 360 × 640 × 3 = 1080 × 1920 ; iPhone 6,9 pouces 440 × 956 × 3 = 1320 × 2868 (App Store)
+    let theme;
+    for (const [cap, width, height] of [[path.join(dir, 'captures'), 360, 640], [path.join(dir, 'captures-iphone'), 440, 956]]) {
+    fs.mkdirSync(cap, { recursive: true });
+    p = await b.newPage({ viewport: { width, height }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
     await p.goto('file:///' + path.join(ROOT, 'dist', a + '.html').replace(/\\/g, '/'));
     await p.evaluate(() => { window.PUB = { banniere() {}, interstitiel(s) { s() } }; window.confetti = () => {} });
-    const theme = await p.evaluate(() => ({ pri: getComputedStyle(document.documentElement).getPropertyValue('--pri').trim() || '#5ad1ff', nom: C.app }));
+    theme = await p.evaluate(() => ({ pri: getComputedStyle(document.documentElement).getPropertyValue('--pri').trim() || '#5ad1ff', nom: C.app }));
     const shot = async n => { await p.waitForTimeout(900); await p.screenshot({ path: path.join(cap, n + '.png') }) };
     await p.evaluate(() => tab('home')); await shot(1);
     await p.evaluate(() => tab('cours')); await shot(2);
@@ -48,6 +51,7 @@ if (ko) process.exit(1);
     await p.evaluate(() => { tab('home'); startQuiz() }); await p.waitForTimeout(400);
     await p.evaluate(() => { const q = G.list[G.i], bs = [...document.querySelectorAll('#playBody .ans')]; (bs.find(x => +x.dataset.i === q[3]) || bs[0]).click() });
     await shot(6); await p.close();
+    }
 
     // Bannière 1024 × 500
     p = await b.newPage({ viewport: { width: 1024, height: 500 } });
@@ -57,7 +61,7 @@ if (ko) process.exit(1);
       <div style="font-size:34px;margin-top:18px;color:${theme.pri};font-weight:700">${t.accroche}</div>
       <div style="font-size:24px;margin-top:22px;opacity:.85">Cours · Jeux · Exercices corrigés · Hors connexion</div></div></body>`);
     await p.screenshot({ path: path.join(dir, 'banniere-1024x500.png') }); await p.close();
-    console.log('✓ store/' + a + '/ (' + fs.readdirSync(cap).length + ' captures)');
+    console.log('✓ store/' + a + '/ (captures Android + iPhone)');
   }
   await b.close();
 })();
