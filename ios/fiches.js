@@ -19,7 +19,10 @@ let ko = 0;
 for (const [slug, i] of Object.entries(IOS)) {
   const t = T[slug];
   const info = { name: t.titre, subtitle: i.sous, privacyPolicyUrl: POLITIQUE };
-  const version = { description: t.complete, keywords: i.cles, promotionalText: t.courte, supportUrl: SITE, marketingUrl: SITE };
+
+  // Apple refuse les emojis dans la description (« invalid characters ») : on les retire
+  const description = t.complete.replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}]+\s*/gu, '');
+  const version = { description, keywords: i.cles, promotionalText: t.courte, supportUrl: SITE, marketingUrl: SITE };
   for (const [k, v, max] of [['nom', info.name, 30], ['sous-titre', info.subtitle, 30], ['mots-clés', version.keywords, 100],
     ['promo', version.promotionalText, 170], ['description', version.description, 4000]])
     if ([...v].length > max) { console.log(`✘ ${slug} : ${k} trop long (${[...v].length}/${max})`); ko++; }
