@@ -6,7 +6,7 @@
 //   node ios/ios.js maths-6e --preparer      → crée seulement le projet Xcode (fonctionne aussi sous Windows, pour tester)
 //   node ios/ios.js --identifiants           → enregistre les 6 identifiants (bundle ID) chez Apple avec la clé API
 //
-// Variables d'environnement (sauf --preparer) :
+// Variables d'environnement (facultatives : sans elles, on utilise le compte Apple connecté dans Xcode) :
 //   APPLE_TEAM_ID   identifiant d'équipe Apple (10 caractères, developer.apple.com → Membership)
 //   ASC_KEY_PATH    chemin du fichier AuthKey_XXXXXXXXXX.p8 (clé API App Store Connect)
 //   ASC_KEY_ID      Key ID de cette clé
@@ -53,7 +53,8 @@ if (IDENTIFIANTS) { identifiants().catch(e => { console.error(e.message); proces
 
 if (!slugs.length) { console.log('Usage : node ios/ios.js ' + Object.keys(APPS).join(' ') + ' [--version=1:1.0.0] [--preparer]'); process.exit(1); }
 if (!PREPARER && process.platform !== 'darwin') throw new Error('La compilation iOS demande un Mac avec Xcode (utilise --preparer pour seulement créer le projet).');
-const KEY = PREPARER ? null : { team: env('APPLE_TEAM_ID'), path: env('ASC_KEY_PATH'), id: env('ASC_KEY_ID'), issuer: env('ASC_ISSUER_ID') };
+// Sans clé API (ASC_KEY_*), Xcode signe et envoie avec le compte Apple connecté dans Xcode → Réglages → Comptes
+const KEY = PREPARER ? null : { team: process.env.APPLE_TEAM_ID || '837GNF3332', path: process.env.ASC_KEY_PATH, id: process.env.ASC_KEY_ID, issuer: process.env.ASC_ISSUER_ID };
 
 for (const slug of slugs) {
   const app = APPS[slug]; if (!app) throw new Error('Appli inconnue : ' + slug);
@@ -104,7 +105,7 @@ for (const slug of slugs) {
   // 4. Archive signée (signature automatique : Xcode crée l'identifiant et le profil grâce à la clé API)
   const ios = path.join(dir, 'ios', 'App'), out = path.join(dir, 'sortie');
   fs.rmSync(out, { recursive: true, force: true }); fs.mkdirSync(out, { recursive: true });
-  const auth = `-allowProvisioningUpdates -authenticationKeyPath "${KEY.path}" -authenticationKeyID ${KEY.id} -authenticationKeyIssuerID ${KEY.issuer}`;
+  const auth = '-allowProvisioningUpdates' + (KEY.path && KEY.id && KEY.issuer ? ` -authenticationKeyPath "${KEY.path}" -authenticationKeyID ${KEY.id} -authenticationKeyIssuerID ${KEY.issuer}` : '');
   run(`xcodebuild -project App.xcodeproj -scheme App -configuration Release -destination "generic/platform=iOS" -archivePath "${out}/App.xcarchive" DEVELOPMENT_TEAM=${KEY.team} CODE_SIGN_STYLE=Automatic ${auth} archive`, ios);
 
   // 5. Export + envoi direct sur App Store Connect (la fiche de l'appli doit exister)
