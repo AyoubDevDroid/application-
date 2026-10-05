@@ -1,0 +1,24 @@
+Froid & Clim Pro t'apprend le métier de frigoriste et de climaticien, de la théorie au dépannage sur le terrain.
+
+📚 20 MODULES EN 3 NIVEAUX
+• Les bases : le froid, le cycle frigorifique, la sécurité, l'outillage, les fluides frigorigènes, les mesures sur un circuit
+• Les composants et l'installation : compresseurs, échangeurs, détendeurs, accessoires et sécurités, tuyauterie, mise en service, installation d'une clim, pompes à chaleur, électricité frigorifique
+• Le pro : froid commercial, diagnostic, réglementation des fluides, récupération, fluides inflammables et CO₂, maintenance, économies d'énergie et relation client
+
+Tables pression / température des fluides (R32, R410A, R134a, R290, R404A, R407C) calculées avec la bibliothèque scientifique CoolProp. Réglementation F-Gas (règlement européen 2024) et attestation de capacité vérifiées sur des sources officielles à jour.
+
+🎮 DES JEUX POUR APPRENDRE VRAIMENT
+• Dépannages réels avec bon de travail : relève les pressions, surchauffe et sous-refroidissement, trouve la panne
+• Câblage interactif de circuits de commande
+• Symboles, classements, « Qui suis-je ? » sur les composants
+• Atelier de calcul à l'infini : surchauffe, sous-refroidissement, puissances, COP
+• Quiz, vrai/faux, chrono, mise en ordre des étapes, examen blanc
+
+⭐ PROGRESSION MOTIVANTE
+Niveaux, grades, badges et révision automatique de tes erreurs. Wiki de près de 100 mots du métier.
+
+✅ SIMPLE ET RESPECTUEUX
+• Fonctionne hors connexion
+• Sans compte, sans publicité, aucune donnée collectée : ta progression reste sur ton téléphone
+
+⚠️ Froid & Clim Pro est un outil d'apprentissage. La manipulation des fluides frigorigènes exige une attestation de capacité et une formation agréée. Respecte toujours les consignes de sécurité du fabricant.

@@ -6,7 +6,7 @@
 const C={
  id:"electricien",app:"Électricien Pro",icon:"⚡",
  sousTitre:"De zéro à électricien confirmé : 3 niveaux, 24 modules, des jeux et des dépannages réels.",
- pub:{actif:true,toutesLes:3},
+ pub:{actif:false,toutesLes:3},   // v1 Play Store sans pub (AdMob pas encore branché, voir docs/PUBLICITE.md)
  examen:{titre:"Examen blanc Électricien",questions:40,seuil:28,minutes:40},
  niveaux:[
   {ic:"🟢",t:"Niveau 1 — Les bases",d:"Comprendre l'électricité, le danger, les outils et les plans."},

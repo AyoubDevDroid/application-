@@ -21,7 +21,12 @@ const SDK = process.env.ANDROID_HOME || path.join(process.env.LOCALAPPDATA || ''
 const JAVA = process.env.JAVA_HOME || 'C:\\Program Files\\Android\\Android Studio\\jbr';
 const run = (cmd, cwd, env) => { console.log('  $ ' + cmd); execSync(cmd, { cwd, stdio: 'inherit', env: Object.assign({}, process.env, env || {}) }); };
 
-const slugs = process.argv.slice(2);
+// --aab : fichier signé pour le Play Store (android/aab/<appli>.aab) ; --version=2:1.0.1 (versionCode:versionName)
+const AAB = process.argv.includes('--aab');
+const VERSION = ((process.argv.find(a => a.startsWith('--version=')) || '--version=1:1.0.0').slice(10)).split(':');
+const KEYS = path.join(__dirname, 'keys');
+if (AAB && !fs.existsSync(path.join(KEYS, 'key.properties'))) throw new Error('Clé d\'upload absente : android/keys/key.properties');
+const slugs = process.argv.slice(2).filter(a => !a.startsWith('--'));
 if (!slugs.length) { console.log('Usage : node android/apk.js ' + Object.keys(APPS).join(' ')); process.exit(1); }
 fs.mkdirSync(path.join(__dirname, 'apk'), { recursive: true });
 
@@ -59,7 +64,22 @@ for (const slug of slugs) {
   // 3. Compilation de l'APK de test
   const adir = path.join(dir, 'android');
   fs.writeFileSync(path.join(adir, 'local.properties'), 'sdk.dir=' + SDK.replace(/\\/g, '\\\\').replace(/:/g, '\\:') + '\n');
-  run('"' + path.join(adir, process.platform === 'win32' ? 'gradlew.bat' : 'gradlew') + '" assembleDebug --console=plain', adir, { JAVA_HOME: JAVA });
+  const gradlew = '"' + path.join(adir, process.platform === 'win32' ? 'gradlew.bat' : 'gradlew') + '"';
+  if (AAB) {
+    // Version : versionCode entier croissant à chaque envoi sur le Play Store
+    const g = path.join(adir, 'app', 'build.gradle');
+    fs.writeFileSync(g, fs.readFileSync(g, 'utf8').replace(/versionCode \d+/, 'versionCode ' + VERSION[0]).replace(/versionName "[^"]*"/, `versionName "${VERSION[1]}"`));
+    run(gradlew + ' bundleRelease --console=plain', adir, { JAVA_HOME: JAVA });
+    // Signature avec la clé d'upload (android/keys, hors git)
+    const kp = Object.fromEntries(fs.readFileSync(path.join(KEYS, 'key.properties'), 'utf8').split(/\r?\n/).filter(Boolean).map(l => l.split('=')));
+    fs.mkdirSync(path.join(__dirname, 'aab'), { recursive: true });
+    const dest = path.join(__dirname, 'aab', slug + '.aab');
+    fs.copyFileSync(path.join(adir, 'app', 'build', 'outputs', 'bundle', 'release', 'app-release.aab'), dest);
+    run(`"${path.join(JAVA, 'bin', 'jarsigner')}" -sigalg SHA256withRSA -digestalg SHA-256 -keystore "${path.join(KEYS, kp.storeFile)}" -storepass "${kp.storePassword}" -keypass "${kp.keyPassword}" "${dest}" ${kp.keyAlias}`, adir);
+    console.log(`✓ ${dest} (version ${VERSION[1]}, code ${VERSION[0]}, ${Math.round(fs.statSync(dest).size / 1024)} Ko)`);
+    continue;
+  }
+  run(gradlew + ' assembleDebug --console=plain', adir, { JAVA_HOME: JAVA });
   const out = path.join(adir, 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk');
   const dest = path.join(__dirname, 'apk', app.nom.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9]+/g, '-') + '.apk');
   fs.copyFileSync(out, dest);

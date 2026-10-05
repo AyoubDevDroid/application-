@@ -7,7 +7,7 @@ const C={
  id:"froidclim",app:"Froid & Clim Pro",icon:"❄️",
  sousTitre:"De zéro à technicien frigoriste : 3 niveaux, 20 modules, des dépannages réels et la préparation de l'attestation fluides.",
  theme:{pri:"#6fe3ff",pri2:"#1fa6c9",acc:"#ffc83d"},
- pub:{actif:true,toutesLes:3},
+ pub:{actif:false,toutesLes:3},   // v1 Play Store sans pub (AdMob pas encore branché, voir docs/PUBLICITE.md)
  examen:{titre:"Examen blanc fluides frigorigènes",questions:60,seuil:42,minutes:60},
  niveaux:[
   {ic:"🟢",t:"Niveau 1 — Les bases",d:"Chaleur, pression, cycle frigorifique, sécurité, outils et fluides."},
