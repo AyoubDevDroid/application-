@@ -95,7 +95,7 @@ for (const slug of slugs) {
     .replace(/CURRENT_PROJECT_VERSION = [^;]+;/g, `CURRENT_PROJECT_VERSION = ${VERSION[0]};`));
   const plist = path.join(dir, 'ios', 'App', 'App', 'Info.plist');
   let p = fs.readFileSync(plist, 'utf8');
-  p = p.replace(/(<key>CFBundleDisplayName<\/key>\s*<string>)[^<]*(<\/string>)/, `$1${app.court}$2`);
+  p = p.replace(/(<key>CFBundleDisplayName<\/key>\s*<string>)[^<]*(<\/string>)/, `$1${app.court.replace(/&(?!amp;)/g, '&amp;')}$2`);
   if (!p.includes('ITSAppUsesNonExemptEncryption')) p = p.replace(/<dict>/, '<dict>\n\t<key>ITSAppUsesNonExemptEncryption</key>\n\t<false/>');
   // Portrait uniquement sur iPhone (l'appli est pensée pour le portrait)
   p = p.replace(/(<key>UISupportedInterfaceOrientations<\/key>\s*<array>)[\s\S]*?(<\/array>)/, '$1\n\t\t<string>UIInterfaceOrientationPortrait</string>\n\t$2');
