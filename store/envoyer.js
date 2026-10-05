@@ -35,9 +35,15 @@ const LANG = 'fr-FR';
   }
   if (!fs.existsSync(AAB)) throw new Error('AAB introuvable : ' + AAB + ' (node android/apk.js ' + app + ' --aab)');
 
-  // 1. Fichier
-  const bundle = (await play.edits.bundles.upload({ ...P, media: { mimeType: 'application/octet-stream', body: fs.createReadStream(AAB) } })).data;
-  console.log('AAB envoyé, versionCode', bundle.versionCode);
+  // 1. Fichier (réutilisé s'il a déjà été envoyé, par exemple à la main dans la Console : même versionCode = refusé)
+  const deja = ((await play.edits.bundles.list(P)).data.bundles || []).map(b => b.versionCode);
+  const vc = +fs.readFileSync(path.join(__dirname, '..', 'android', 'build', app, 'android', 'app', 'build.gradle'), 'utf8').match(/versionCode\s+(\d+)/)[1];
+  let bundle;
+  if (deja.includes(vc)) { bundle = { versionCode: vc }; console.log('AAB déjà présent, versionCode', vc); }
+  else {
+    bundle = (await play.edits.bundles.upload({ ...P, media: { mimeType: 'application/octet-stream', body: fs.createReadStream(AAB) } })).data;
+    console.log('AAB envoyé, versionCode', bundle.versionCode);
+  }
   await play.edits.tracks.update({ ...P, track, requestBody: { track, releases: [{ name: 'Version ' + bundle.versionCode, versionCodes: [String(bundle.versionCode)], status,
     releaseNotes: [{ language: LANG, text: 'Première version : cours illustrés, jeux, problèmes pas à pas et exercices à l\'infini.' }] }] } });
   console.log('Piste', track, '→', status);
