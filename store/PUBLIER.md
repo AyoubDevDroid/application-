@@ -62,17 +62,13 @@ Catégorie : **Enseignement** · E-mail : contact@762sup.com · Site : https://7
 Programme Familles : répondre « Non » aux pubs et à la collecte de données ; l'appli ne contient ni lien externe, ni
 achat, ni connexion. On peut ensuite demander le badge facultatif « Approuvé par les enseignants ».
 
-## 5. Tester, puis publier en production
+## 5. Publier en production
 
-Pour un **compte développeur personnel** créé après novembre 2023, Google impose pour **chaque appli** un **test fermé**
-avec au moins **12 testeurs inscrits pendant 14 jours d'affilée** avant d'ouvrir la production.
+Notre compte Play Console est un **compte d'entreprise (D-U-N-S)** : pas de test fermé obligatoire (la règle des
+12 testeurs pendant 14 jours ne vise que les comptes personnels créés après novembre 2023). On publie directement :
 
-1. Tests → **Test fermé** → créer une piste, ajouter une liste d'adresses Gmail (12 minimum), envoyer le fichier `.aab`.
-2. Partager le lien d'inscription aux testeurs ; ils doivent rester inscrits 14 jours.
-3. Ensuite : **Production** → Pays : France (et territoires d'outre-mer : Guadeloupe, Martinique, Guyane, La Réunion,
-   Mayotte…) ; pour les applis métier, on peut ajouter Belgique, Suisse, Luxembourg.
-
-Conseil : démarrer par 1 ou 2 applis pour roder le parcours (par exemple Maths 6e + Électricien Pro), puis les autres.
+**Production** → Pays : France (et territoires d'outre-mer : Guadeloupe, Martinique, Guyane, La Réunion, Mayotte…) ;
+pour les applis métier, on peut ajouter Belgique, Suisse, Luxembourg. Puis **Envoyer pour examen**.
 
 ## 6. Envoi automatique (une fois l'appli créée dans la Console)
 
@@ -80,7 +76,7 @@ Le compte de service doit être invité sur l'appli (Utilisateurs et autorisatio
 
 ```
 PLAY_KEY=chemin/compte-de-service.json node store/envoyer.js maths-6e --verifier   # lecture seule : accès OK ?
-PLAY_KEY=chemin/compte-de-service.json node store/envoyer.js maths-6e alpha draft  # fichier + fiche en brouillon (test fermé)
+PLAY_KEY=chemin/compte-de-service.json node store/envoyer.js maths-6e production draft  # fichier + fiche en brouillon (production)
 ```
 
 ## 7. Mettre à jour plus tard
