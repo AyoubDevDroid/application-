@@ -75,6 +75,8 @@ for (const slug of slugs) {
     ios: { backgroundColor: FOND, contentInset: 'never', scrollEnabled: true },
     plugins: { SystemBars: { style: 'DARK' } }
   }, null, 2));
+  // Demande d'avis officielle (Apple / Google) : avis() dans moteur/template.html
+  if (!fs.existsSync(path.join(dir, 'node_modules', '@capacitor-community', 'in-app-review'))) run('npm install --no-audit --no-fund @capacitor-community/in-app-review@8.0.0', dir);
   if (!fs.existsSync(path.join(dir, 'ios'))) run('npx cap add ios', dir);
   run('npx cap sync ios', dir);
 

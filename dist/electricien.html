@@ -17,6 +17,8 @@ h1{font-size:26px}h2{font-size:21px}h3{font-size:17px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .pill{background:rgba(255,255,255,.08);padding:6px 12px;border-radius:99px;font-weight:700;font-size:14px;white-space:nowrap}
 button.pill{border:none;color:#fff;cursor:pointer}
+button.pill.lk{background:var(--pri);color:#1b1640}
+.pin{letter-spacing:14px;font-size:30px!important}
 .back{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:2px 8px 2px 0}
 .hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#1b1640;border-radius:22px;padding:18px;display:flex;gap:14px;align-items:center}
 .hero .ic{font-size:54px;animation:zap 2.5s infinite}
@@ -228,7 +230,7 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:30}
 <div class="app">
 
 <section class="screen on" id="home">
-  <div class="top"><h1 id="appName"></h1><button class="pill" id="xpP" onclick="profil()"></button></div>
+  <div class="top"><h1 id="appName" style="flex:1"></h1><button class="pill" id="lockB" onclick="enfant()" hidden aria-label="Mode enfant">🔒</button><button class="pill" id="xpP" onclick="profil()"></button></div>
   <div class="hero"><div class="ic" id="appIc"></div><div style="flex:1"><b id="gradeTx">Ta progression</b><span id="progTx"></span><div class="bar"><i id="progBar"></i></div></div></div>
   <div class="card" id="dayCard"></div>
   <div class="card word"><span class="mut">💡 Mot du jour</span><h3 id="wotdM"></h3><p id="wotdD" style="line-height:1.5"></p></div>
@@ -2752,7 +2754,7 @@ function head(){return `<div class="top"><button class="back" onclick="tab('jeux
 function nextQ(f){G.i++;if(G.i>=G.n){if(G.score>(P.best[G.type]||0))P.best[G.type]=G.score;end(G.score,G.n,G.score+' / '+G.n+' bonnes réponses')}else f()}
 function end(sc,n,txt){P.parties++;save();badgeCheck();pubInterstitiel(()=>endScreen(sc,n,txt))}
 function endScreen(sc,n,txt){
-  const r=sc/n,st=r>=.9?3:r>=.6?2:r>0?1:0;if(st>=2)confetti();
+  const r=sc/n,st=r>=.9?3:r>=.6?2:r>0?1:0;if(st>=2){confetti();avis()}
   show('play');
   $('playBody').innerHTML=`<div style="height:30px"></div><div class="big">${st===3?'🏆':st===2?'🎉':'💪'}</div>
   <h1 style="text-align:center">${st===3?'Parfait !':st===2?'Bien joué !':'Continue comme ça !'}</h1>
@@ -2768,14 +2770,58 @@ let AC;function beep(ok){try{AC=AC||new(window.AudioContext||window.webkitAudioC
 function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const cols=['#ffc83d','#2ed47a','#3db5ff','#ff5470'];
  const ps=Array.from({length:120},()=>({x:c.width/2,y:c.height/3,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,s:rand(5,10),c:cols[rand(0,3)],r:0}));let f=0;
  (function l(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.vy+=.4;p.x+=p.vx;p.y+=p.vy;p.r+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore()});if(++f<110)requestAnimationFrame(l);else x.clearRect(0,0,c.width,c.height)})()}
+/* ----- mode enfant (applis avec C.enfant) : l'enfant reste dans l'appli, un code parent à 4 chiffres pour sortir.
+   Android : épinglage de l'appli (plugin natif KidLock ajouté par android/apk.js).
+   iPhone : Apple interdit à une appli de se verrouiller seule → guide vers l'Accès guidé d'iOS. */
+const KL=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.KidLock;
+const IOS=(window.Capacitor&&Capacitor.getPlatform&&Capacitor.getPlatform()==='ios')||/iPhone|iPad|iPod/.test(navigator.userAgent);
+let LOCK=false;
+function pinGet(){try{return localStorage.getItem(KEY+'_pin')||''}catch(e){return''}}
+function pinSet(v){try{localStorage.setItem(KEY+'_pin',v)}catch(e){}}
+function lockUi(){const b=$('lockB');if(!b)return;b.hidden=!C.enfant||!(KL||IOS);b.classList.toggle('lk',LOCK);b.title=LOCK?'Mode enfant activé':'Mode enfant'}
+function lockSync(){if(!KL)return lockUi();KL.state().then(r=>{LOCK=!!r.locked;lockUi()}).catch(lockUi)}
+function pinBox(id,ok){return `<div class="atin"><input id="${id}" class="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="····" oninput="this.value=this.value.replace(/\D/g,'');if(this.value.length===4)(${ok})()"></div>`}
+function modal(h){$('modalIn').innerHTML=h;$('modal').classList.add('on')}
+const fermer=`<button class="btn ghost" onclick="$('modal').classList.remove('on')">Fermer</button>`;
+function enfant(){
+  if(!KL)return modal(`<span class="mut">🔒 Mode enfant</span><h2>Garder l'enfant dans l'appli</h2>
+   <p style="line-height:1.5">Sur iPhone et iPad, c'est l'<b>Accès guidé</b> d'Apple qui bloque l'appareil sur une seule appli, avec <b>votre propre code</b> :</p>
+   <p style="line-height:1.6">1. <b>Réglages → Accessibilité → Accès guidé</b> : activez-le.<br>2. Touchez <b>Réglages des codes</b> et choisissez un code à 4 chiffres (ou Face ID).<br>3. Revenez dans ${C.app} et <b>appuyez 3 fois</b> sur le bouton latéral (ou principal), puis <b>Démarrer</b>.<br>4. Pour sortir : 3 appuis sur le bouton, puis votre code.</p>${fermer}`);
+  if(LOCK)return modal(`<span class="mut">🔒 Mode enfant activé</span><h2>Code parent</h2><p class="mut">Tapez le code à 4 chiffres pour quitter le mode enfant.</p>${pinBox('pinA','pinSortie')}
+   <button class="btn ghost" onclick="pinOubli()">Code oublié ?</button>${fermer}`);
+  if(!pinGet())return pinNouveau();
+  modal(`<span class="mut">🔒 Mode enfant</span><h2>Garder l'enfant dans l'appli</h2>
+   <p style="line-height:1.5">L'enfant ne pourra plus quitter ${C.app} (accueil, autres applis, notifications) sans votre code à 4 chiffres.</p>
+   <button class="btn" onclick="lockOn()">Activer le mode enfant</button><button class="btn ghost" onclick="pinNouveau()">Changer le code</button>${fermer}`)}
+function pinNouveau(){modal(`<span class="mut">🔒 Mode enfant</span><h2>Choisissez un code parent</h2><p class="mut">4 chiffres, à garder pour vous : il servira à sortir du mode enfant.</p>${pinBox('pinA','pinConf')}${fermer}`);setTimeout(()=>$('pinA').focus(),50)}
+let PIN1='';
+function pinConf(){PIN1=$('pinA').value;modal(`<span class="mut">🔒 Mode enfant</span><h2>Retapez le code</h2>${pinBox('pinA','pinFin')}${fermer}`);setTimeout(()=>$('pinA').focus(),50)}
+function pinFin(){if($('pinA').value!==PIN1){toast('Les deux codes sont différents');return pinNouveau()}pinSet(PIN1);toast('✅ Code enregistré');enfant()}
+function lockOn(){KL.start().then(()=>{LOCK=true;lockUi();$('modal').classList.remove('on');
+  modal(`<span class="mut">🔒 Mode enfant activé</span><h2>C'est parti !</h2><p style="line-height:1.5">${C.app} reste à l'écran. Pour sortir, touchez le cadenas <b>🔒</b> (en couleur) en haut de l'accueil et tapez votre code.</p>
+   <p class="mut" style="line-height:1.5">💡 Conseil : dans les <b>Paramètres</b> du téléphone, cherchez « <b>épinglage</b> » et activez « <b>Demander le code avant de retirer l'épinglage</b> ». Sinon, un enfant malin peut sortir en restant appuyé sur Retour et Récents.</p>
+   <button class="btn" onclick="$('modal').classList.remove('on')">Compris</button>`)}).catch(()=>toast('Impossible d\'activer le mode enfant sur ce téléphone'))}
+function pinSortie(){if($('pinA').value!==pinGet()){$('pinA').value='';shake('pinA');return}
+  KL.stop().then(()=>{LOCK=false;lockUi();$('modal').classList.remove('on');toast('🔓 Mode enfant désactivé')}).catch(()=>toast('Impossible de quitter le mode enfant'))}
+function pinOubli(){modal(`<span class="mut">🔒 Code oublié</span><h2>Sortir sans le code</h2><p style="line-height:1.5">Restez appuyé <b>en même temps</b> sur les boutons <b>Retour</b> et <b>Récents</b> (ou balayez vers le haut et maintenez, selon le téléphone). Si Android le demande, tapez le <b>code de déverrouillage du téléphone</b>.</p>
+   <p class="mut" style="line-height:1.5">Ensuite, touchez 🔒 puis « Changer le code » pour en choisir un nouveau.</p>${fermer}`)}
+
+/* ----- demande d'avis (fenêtre officielle Apple / Google, plugin InAppReview) : seulement après une bonne partie,
+   à partir de la 4e, au plus une fois tous les 60 jours (Apple et Google limitent encore en plus) ----- */
+function avis(){const R=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.InAppReview;if(!R||P.parties<4)return;
+  let d=0;try{d=+localStorage.getItem(KEY+'_avis')||0}catch(e){}
+  if(Date.now()-d<60*864e5)return;try{localStorage.setItem(KEY+'_avis',Date.now())}catch(e){}
+  setTimeout(()=>R.requestReview().catch(()=>{}),1800)}
+
 /* démarrage */
 document.title=C.app;$('sousTitre').textContent=C.sousTitre||'';
 if(C.appareils||C.symboles){$('navLex').textContent='Wiki';$('lexH').textContent='📖 Wiki'}
-theme();load();renderHome();
+theme();load();renderHome();lockSync();
 /* Appli Android (Capacitor) : le bouton retour ferme la fenêtre ouverte ou revient à l'accueil avant de quitter */
 (function(){const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(!A)return;
   A.addListener('backButton',()=>{if($('modal').classList.contains('on'))return $('modal').classList.remove('on');
-    if(!$('home').classList.contains('on'))return tab('home');A.exitApp()})})();
+    if(!$('home').classList.contains('on'))return tab('home');if(!LOCK)A.exitApp()});
+  A.addListener('resume',lockSync)})();
 </script>
 </body>
 </html>

@@ -1,0 +1,57 @@
+# Compile les applis iPhone sur un Mac de GitHub et les envoie sur App Store Connect (TestFlight).
+# Lancement : onglet Actions → « iOS : compiler et envoyer » → Run workflow,
+# ou depuis le PC : gh workflow run ios.yml -f applis="maths-6e maths-5e" -f version=2:1.0.1
+# Secrets du dépôt : ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8 (contenu du fichier AuthKey_XXXX.p8), APPLE_TEAM_ID.
+name: "iOS : compiler et envoyer"
+
+on:
+  workflow_dispatch:
+    inputs:
+      applis:
+        description: "Applis, séparées par des espaces (maths-6e maths-5e maths-4e maths-3e electricien froid-clim)"
+        default: "maths-6e maths-5e maths-4e maths-3e"
+        required: true
+      version:
+        description: "build:version (le build doit augmenter à chaque envoi, ex. 2:1.0.1)"
+        default: "2:1.0.1"
+        required: true
+
+jobs:
+  ios:
+    runs-on: macos-26
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Version de Xcode
+        run: xcodebuild -version
+
+      - name: Fabriquer les applis (dist/)
+        run: node build.js
+
+      - name: Clé API App Store Connect
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/cles"
+          printf '%s\n' "$ASC_KEY_P8" > "$RUNNER_TEMP/cles/AuthKey_$ASC_KEY_ID.p8"
+
+      - name: Compiler, signer et envoyer
+        env:
+          APPLIS: ${{ inputs.applis }}
+          VERSION: ${{ inputs.version }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          export ASC_KEY_PATH="$RUNNER_TEMP/cles/AuthKey_$ASC_KEY_ID.p8"
+          node ios/ios.js $APPLIS "--version=$VERSION"
+
+      - name: Effacer la clé
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/cles"

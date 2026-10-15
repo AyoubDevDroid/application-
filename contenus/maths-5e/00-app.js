@@ -10,6 +10,7 @@ const C={
  id:"maths5",app:"Maths 5e",icon:"🧭",
  sousTitre:"Tout le nouveau programme de 5e (rentrée 2026) : cours illustrés, jeux, problèmes pas à pas et exercices à l'infini.",
  theme:{pri:"#2ed47a",pri2:"#18995a",acc:"#ffc83d"},
+ enfant:true,                     // bouton « Mode enfant » (code parent pour sortir de l'appli)
  pub:{actif:false,toutesLes:3},   // public mineur : voir docs/PUBLICITE.md avant d'activer
  examen:{titre:"Évaluation de fin de 5e",questions:30,seuil:18,minutes:30},
  calcul:[{op:"+",a:[25,180],b:[16,99]},{op:"−",a:[60,250],b:[15,99]},{op:"×",a:[3,12],b:[3,12]},{op:"×",a:[12,25],b:[3,9]},{op:"÷",a:[3,12],b:[2,12]}],

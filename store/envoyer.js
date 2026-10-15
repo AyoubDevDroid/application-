@@ -45,7 +45,7 @@ const LANG = 'fr-FR';
     console.log('AAB envoyé, versionCode', bundle.versionCode);
   }
   await play.edits.tracks.update({ ...P, track, requestBody: { track, releases: [{ name: 'Version ' + bundle.versionCode, versionCodes: [String(bundle.versionCode)], status,
-    releaseNotes: [{ language: LANG, text: 'Première version : cours illustrés, jeux, problèmes pas à pas et exercices à l\'infini.' }] }] } });
+    releaseNotes: [{ language: LANG, text: process.env.NOTES || 'Première version : cours illustrés, jeux, problèmes pas à pas et exercices à l\'infini.' }] }] } });
   console.log('Piste', track, '→', status);
 
   // 2. Fiche du Store

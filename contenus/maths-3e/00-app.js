@@ -6,6 +6,7 @@ const C={
  id:"maths3",app:"Maths 3e Brevet",icon:"🎯",
  sousTitre:"Tout le programme de 3e et la préparation du brevet : cours, automatismes, problèmes type brevet et exercices à l'infini.",
  theme:{pri:"#ff9d5c",pri2:"#d9661c",acc:"#5ad1ff"},
+ enfant:true,                     // bouton « Mode enfant » (code parent pour sortir de l'appli)
  pub:{actif:false,toutesLes:3},   // public mineur : voir docs/PUBLICITE.md avant d'activer
  examen:{titre:"Épreuve d'automatismes (sans calculatrice)",questions:15,seuil:9,minutes:20,modules:["automatismes"]},
  calcul:[{op:"×",a:[6,15],b:[6,15]},{op:"÷",a:[6,15],b:[3,12]},{op:"+",a:[120,480],b:[45,390]},{op:"−",a:[200,600],b:[35,190]}],

@@ -9,6 +9,7 @@ const C={
  id:"maths4",app:"Maths 4e",icon:"🚀",
  sousTitre:"Tout le programme de 4e : cours illustrés, jeux, problèmes pas à pas et exercices à l'infini. Inclut les chapitres encore étudiés en 2026-2027.",
  theme:{pri:"#b18cff",pri2:"#7a4fd6",acc:"#ffc83d"},
+ enfant:true,                     // bouton « Mode enfant » (code parent pour sortir de l'appli)
  pub:{actif:false,toutesLes:3},   // public mineur : voir docs/PUBLICITE.md avant d'activer
  examen:{titre:"Évaluation de fin de 4e",questions:30,seuil:18,minutes:30},
  calcul:[{op:"×",a:[3,12],b:[3,12]},{op:"×",a:[11,19],b:[3,9]},{op:"÷",a:[3,12],b:[3,12]},{op:"+",a:[45,250],b:[38,190]},{op:"−",a:[120,400],b:[35,190]}],

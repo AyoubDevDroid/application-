@@ -7,6 +7,7 @@ const C={
  id:"maths6",app:"Maths 6e",icon:"📐",
  sousTitre:"Tout le programme de 6e (rentrée 2025) : cours illustrés, jeux, problèmes pas à pas et exercices à l'infini.",
  theme:{pri:"#5ad1ff",pri2:"#1a8fc4",acc:"#ffc83d"},
+ enfant:true,                     // bouton « Mode enfant » (code parent pour sortir de l'appli)
  pub:{actif:false,toutesLes:3},   // public mineur : voir docs/PUBLICITE.md avant d'activer
  examen:{titre:"Évaluation de fin de 6e",questions:30,seuil:18,minutes:30},
  calcul:[{op:"+",a:[12,99],b:[11,99]},{op:"−",a:[30,150],b:[11,60]},{op:"×",a:[2,10],b:[2,10]},{op:"×",a:[11,25],b:[2,5]},{op:"÷",a:[2,10],b:[2,10]}],

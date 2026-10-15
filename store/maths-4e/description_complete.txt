@@ -21,3 +21,4 @@ Grades, badges, série de bonnes réponses et lexique des mots de maths.
 • Sans publicité, sans compte, sans achat
 • Aucune donnée collectée : la progression reste sur l'appareil
 • Fonctionne hors connexion
+• Mode enfant : un code parent à 4 chiffres pour que l'enfant reste dans l'appli

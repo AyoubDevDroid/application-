@@ -50,8 +50,62 @@ for (const slug of slugs) {
     android: { backgroundColor: '#10142a' },
     plugins: { SystemBars: { style: 'DARK' } }
   }, null, 2));
+  // Demande d'avis officielle (Apple / Google) : avis() dans moteur/template.html
+  if (!fs.existsSync(path.join(dir, 'node_modules', '@capacitor-community', 'in-app-review'))) run('npm install --no-audit --no-fund @capacitor-community/in-app-review@8.0.0', dir);
   if (!fs.existsSync(path.join(dir, 'android'))) run('npx cap add android', dir);
   run('npx cap sync android', dir);
+
+  // 1 bis. Plugin natif KidLock (mode enfant : épinglage de l'appli, voir enfant() dans moteur/template.html)
+  const jdir = path.join(dir, 'android', 'app', 'src', 'main', 'java', ...app.id.split('.'));
+  fs.writeFileSync(path.join(jdir, 'MainActivity.java'), `package ${app.id};
+
+import android.os.Bundle;
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(KidLockPlugin.class);
+        super.onCreate(savedInstanceState);
+    }
+}
+`);
+  fs.writeFileSync(path.join(jdir, 'KidLockPlugin.java'), `package ${app.id};
+
+import android.app.ActivityManager;
+import android.content.Context;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+
+// Mode enfant : épingle l'appli à l'écran (Activity.startLockTask) ; le code parent est vérifié côté appli.
+@CapacitorPlugin(name = "KidLock")
+public class KidLockPlugin extends Plugin {
+    @PluginMethod
+    public void start(PluginCall call) {
+        getActivity().runOnUiThread(() -> {
+            try { getActivity().startLockTask(); call.resolve(); } catch (Exception e) { call.reject(e.getMessage()); }
+        });
+    }
+
+    @PluginMethod
+    public void stop(PluginCall call) {
+        getActivity().runOnUiThread(() -> {
+            try { getActivity().stopLockTask(); call.resolve(); } catch (Exception e) { call.reject(e.getMessage()); }
+        });
+    }
+
+    @PluginMethod
+    public void state(PluginCall call) {
+        ActivityManager am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        JSObject r = new JSObject();
+        r.put("locked", am.getLockTaskModeState() != ActivityManager.LOCK_TASK_MODE_NONE);
+        call.resolve(r);
+    }
+}
+`);
 
   // 2. Icône et écran de démarrage (android/icones/<appli>.png, 1024 × 1024)
   const ico = path.join(__dirname, 'icones', slug + '.png');
